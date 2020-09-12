@@ -1,3 +1,6 @@
 [submodule "contrib/lggm"]
 	path = contrib/lggm
 	url = https://github.com/lktrgl/lggm.git
+[submodule "contrib/rapidjson"]
+	path = contrib/rapidjson
+	url = https://github.com/lktrgl/rapidjson.git
