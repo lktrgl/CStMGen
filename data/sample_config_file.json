@@ -1,0 +1,79 @@
+{
+	"machine-name": "SENSOR_COMM",
+	"states": [
+		{
+			"id": "INIT",
+			"value": "0"
+		},
+		{
+			"id": "SEARCH_DEVICE",
+			"value": "1"
+		},
+		{
+			"id": "IDLE",
+			"value": "2"
+		},
+		{
+			"id": "READ_DEVICE",
+			"value": "3"
+		},
+		{
+			"id": "WRITE_DEVICE",
+			"value": "4"
+		},
+		{
+			"id": "FAILURE",
+			"value": "5"
+		}
+	],
+	"transitions": [
+		{
+			"from": "INIT",
+			"to": "SEARCH_DEVICE"
+		},
+		{
+			"from": "INIT",
+			"to": "FAILURE"
+		},
+		{
+			"from": "SEARCH_DEVICE",
+			"to": "IDLE"
+		},
+		{
+			"from": "SEARCH_DEVICE",
+			"to": "FAILURE"
+		},
+		{
+			"from": "IDLE",
+			"to": "READ_DEVICE"
+		},
+		{
+			"from": "IDLE",
+			"to": "WRITE_DEVICE"
+		},
+		{
+			"from": "IDLE",
+			"to": "FAILURE"
+		},
+		{
+			"from": "READ_DEVICE",
+			"to": "IDLE"
+		},
+		{
+			"from": "READ_DEVICE",
+			"to": "FAILURE"
+		},
+		{
+			"from": "WRITE_DEVICE",
+			"to": "IDLE"
+		},
+		{
+			"from": "WRITE_DEVICE",
+			"to": "FAILURE"
+		},
+		{
+			"from": "FAILURE",
+			"to": "SEARCH_DEVICE"
+		}
+	]
+}
