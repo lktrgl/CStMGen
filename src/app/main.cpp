@@ -1,9 +1,8 @@
-#include <string>
-#include <vector>
+#include <CStMGen/cstmgen_params.h>
 
 int main ( int argc, char** argv )
 {
-  std::vector<std::string> const args ( argv, argv + argc );
+  cfg::cstmgen_params_t args ( argc, argv );
 
   return 0;
 }
