@@ -19,6 +19,7 @@ add_subdirectory( contrib/lggm )
 include_directories (
      include
      contrib/lggm/include
+     contrib/rapidjson/include
      )
 
 set (ascii_to_hex_files_sources
@@ -52,6 +53,8 @@ set (cstmgen_libsources
      include/CStMGen/cstmgen_main.h
      src/CStMGen/cstmgen_params.cpp
      include/CStMGen/cstmgen_params.h
+     src/CStMGen/json_machine_structure.cpp
+     include/CStMGen/json_machine_structure.h
      )
 
 add_library ( cstmgen
