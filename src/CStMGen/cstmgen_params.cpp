@@ -1,5 +1,8 @@
 #include <CStMGen/cstmgen_params.h>
 
+#include <iostream>
+#include <sstream>
+
 namespace cfg
 {
 
@@ -9,8 +12,61 @@ cstmgen_params_t::cstmgen_params_t ( int argc, char** argv )
   process_params();
 }
 
+std::string cstmgen_params_t::usage()
+{
+  std::stringstream ss;
+  ss
+      << m_param_json_machine_config_file << " File pathname to the state machine structure description in JSON format" <<
+      std::endl;
+  ss
+      << m_param_produce_state_enum << " Whether producing a file with the state machine states enumeration" << std::endl;
+  ss
+      << m_param_produce_state_header << " Whether producing a file with the state machine state declaration per state" <<
+      std::endl;
+  ss
+      << m_param_produce_state_implementation <<
+      " Whether producing a file with the state machine state implementation per state" << std::endl;
+  ss
+      << m_param_header_folder << " Folder pathname where to store the declaration files to" << std::endl;
+  ss
+      << m_param_implementation_folder << " Folder pathname where to store the implementation files to" << std::endl;
+
+  return ss.str();
+}
+
 void cstmgen_params_t::process_params()
 {
+  for ( auto const& p : m_args )
+  {
+    if ( p.starts_with ( m_param_json_machine_config_file ) )
+    {
+      m_json_machine_config_file.assign ( p.substr ( m_param_json_machine_config_file.length() ) );
+    }
+    else if ( m_param_produce_state_enum == p )
+    {
+      m_produce_state_enum.assign ( p );
+    }
+    else if ( m_param_produce_state_header == p )
+    {
+      m_produce_state_header.assign ( p );
+    }
+    else if ( m_param_produce_state_implementation == p )
+    {
+      m_produce_state_implementation.assign ( p );
+    }
+    else if ( p.starts_with ( m_param_header_folder ) )
+    {
+      m_header_folder.assign ( p.substr ( m_param_header_folder.length() ) );
+    }
+    else if ( p.starts_with ( m_param_implementation_folder ) )
+    {
+      m_implementation_folder.assign ( p.substr ( m_param_implementation_folder.length() ) );
+    }
+    else
+    {
+      std::cerr << "Unknown option: '" << p << "'" << std::endl;
+    }
+  }
 }
 
 } // namespace cfg
