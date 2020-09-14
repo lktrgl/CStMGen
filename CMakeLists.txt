@@ -21,6 +21,32 @@ include_directories (
      contrib/lggm/include
      )
 
+set (ascii_to_hex_files_sources
+  templates/cstm_state_enum_template_h
+  templates/cstm_state_transition_template_c
+  templates/cstm_state_template_h
+  templates/cstm_state_template_c
+)
+
+set (conv_util data/templates/conv/template_to_hex.sh)
+set (ascii_files_src_folder data/templates)
+set (hex_files_dest_folder include/CStMGen)
+
+add_custom_command(OUTPUT ${ascii_to_hex_files_sources}
+  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_transition_template_c ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_c ${hex_files_dest_folder}
+
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  DEPENDS data/sample_config_file.json
+  COMMENT "Converting to HEX encoded include files"
+  VERBATIM
+)
+
+add_custom_target(ascii_to_hex_files ALL DEPENDS ${ascii_to_hex_files_sources})
+
 set (cstmgen_libsources 
      src/CStMGen/cstmgen_main.cpp
      include/CStMGen/cstmgen_main.h
