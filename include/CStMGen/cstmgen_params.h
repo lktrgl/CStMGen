@@ -24,31 +24,32 @@ public:
   cstmgen_params_t ( cstmgen_params_t&& ) = delete;
   cstmgen_params_t& operator= ( cstmgen_params_t&& ) = delete;
 
-  std::string const& get_json_machine_config_file()
+  std::string const& get_json_machine_config_file() const
   {
     return m_json_machine_config_file;
   }
-  bool get_produce_state_enum()
+  bool get_produce_state_enum() const
   {
     return m_produce_state_enum.length();
   }
-  bool get_produce_state_header()
+  bool get_produce_state_header() const
   {
     return m_produce_state_header.length();
   }
-  bool get_produce_state_implementation()
+  bool get_produce_state_implementation() const
   {
     return m_produce_state_implementation.length();
   }
-  std::string const& get_header_folder()
+  std::string const& get_header_folder() const
   {
     return m_header_folder;
   }
-  std::string const& get_implementation_folder()
+  std::string const& get_implementation_folder() const
   {
     return m_implementation_folder;
   }
 
+  bool valid() const;
   static std::string usage();
 
 private:

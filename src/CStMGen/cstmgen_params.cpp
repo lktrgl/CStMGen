@@ -34,37 +34,73 @@ std::string cstmgen_params_t::usage()
   return ss.str();
 }
 
+bool cstmgen_params_t::valid() const
+{
+  bool const is_valid = get_json_machine_config_file().length()
+                        &&
+                        (
+                          (
+                            get_produce_state_enum()
+                            &&
+                            get_header_folder().length()
+                          )
+                          ||
+                          (
+                            get_produce_state_header()
+                            &&
+                            get_header_folder().length()
+                          )
+                          ||
+                          (
+                            get_produce_state_implementation()
+                            &&
+                            get_implementation_folder().length()
+                          )
+                        );
+
+  return is_valid;
+}
+
 void cstmgen_params_t::process_params()
 {
-  for ( auto const& p : m_args )
+  if ( m_args.size() < 1 )
   {
-    if ( p.starts_with ( m_param_json_machine_config_file ) )
+    std::cerr << "Too few parameters provided'" << std::endl;
+  }
+  else
+  {
+    for ( size_t i = 1; i < m_args.size(); ++i )
     {
-      m_json_machine_config_file.assign ( p.substr ( m_param_json_machine_config_file.length() ) );
-    }
-    else if ( m_param_produce_state_enum == p )
-    {
-      m_produce_state_enum.assign ( p );
-    }
-    else if ( m_param_produce_state_header == p )
-    {
-      m_produce_state_header.assign ( p );
-    }
-    else if ( m_param_produce_state_implementation == p )
-    {
-      m_produce_state_implementation.assign ( p );
-    }
-    else if ( p.starts_with ( m_param_header_folder ) )
-    {
-      m_header_folder.assign ( p.substr ( m_param_header_folder.length() ) );
-    }
-    else if ( p.starts_with ( m_param_implementation_folder ) )
-    {
-      m_implementation_folder.assign ( p.substr ( m_param_implementation_folder.length() ) );
-    }
-    else
-    {
-      std::cerr << "Unknown option: '" << p << "'" << std::endl;
+      auto const p = m_args.at ( i );
+
+      if ( p.starts_with ( m_param_json_machine_config_file ) )
+      {
+        m_json_machine_config_file.assign ( p.substr ( m_param_json_machine_config_file.length() ) );
+      }
+      else if ( m_param_produce_state_enum == p )
+      {
+        m_produce_state_enum.assign ( p );
+      }
+      else if ( m_param_produce_state_header == p )
+      {
+        m_produce_state_header.assign ( p );
+      }
+      else if ( m_param_produce_state_implementation == p )
+      {
+        m_produce_state_implementation.assign ( p );
+      }
+      else if ( p.starts_with ( m_param_header_folder ) )
+      {
+        m_header_folder.assign ( p.substr ( m_param_header_folder.length() ) );
+      }
+      else if ( p.starts_with ( m_param_implementation_folder ) )
+      {
+        m_implementation_folder.assign ( p.substr ( m_param_implementation_folder.length() ) );
+      }
+      else
+      {
+        std::cerr << "Unknown option: '" << p << "'" << std::endl;
+      }
     }
   }
 }
