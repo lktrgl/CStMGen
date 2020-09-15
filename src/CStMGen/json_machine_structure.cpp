@@ -5,14 +5,20 @@
 #include <iostream>
 #include <fstream>
 
+/* ------------------------------------------------------------------------- */
+
 namespace cfg
 {
+
+/* ------------------------------------------------------------------------- */
 
 json_machine_structure_t::json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
   import ( m_config_file_pathname );
 }
+
+/* ------------------------------------------------------------------------- */
 
 void json_machine_structure_t::import ( std::string const& config_file_pathname )
 {
@@ -121,5 +127,7 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
     } // for itr
   }
 }
+
+/* ------------------------------------------------------------------------- */
 
 } // namespace cfg

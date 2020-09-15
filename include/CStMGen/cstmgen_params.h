@@ -4,8 +4,12 @@
 #include <vector>
 #include <string_view>
 
+/* ------------------------------------------------------------------------- */
+
 namespace cfg
 {
+
+/* ------------------------------------------------------------------------- */
 
 class cstmgen_params_t final
 {
@@ -65,5 +69,7 @@ private:
   std::string m_header_folder;
   std::string m_implementation_folder;
 };
+
+/* ------------------------------------------------------------------------- */
 
 } // namespace cfg

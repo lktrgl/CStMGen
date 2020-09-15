@@ -24,6 +24,7 @@ include_directories (
 
 set (ascii_to_hex_files_sources
   templates/cstm_state_enum_template_h
+  templates/cstm_state_enum_state_name_template
   templates/cstm_state_transition_template_c
   templates/cstm_state_template_h
   templates/cstm_state_template_c
@@ -36,6 +37,7 @@ set (hex_files_dest_folder include/CStMGen)
 add_custom_command(OUTPUT ${ascii_to_hex_files_sources}
   COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_enum_state_name_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_transition_template_c ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_c ${hex_files_dest_folder}
@@ -55,6 +57,8 @@ set (cstmgen_libsources
      include/CStMGen/cstmgen_params.h
      src/CStMGen/json_machine_structure.cpp
      include/CStMGen/json_machine_structure.h
+     src/CStMGen/cstmgen_process.cpp
+     include/CStMGen/cstmgen_process.h
      )
 
 add_library ( cstmgen

@@ -3,14 +3,20 @@
 #include <iostream>
 #include <sstream>
 
+/* ------------------------------------------------------------------------- */
+
 namespace cfg
 {
+
+/* ------------------------------------------------------------------------- */
 
 cstmgen_params_t::cstmgen_params_t ( int argc, char** argv )
   : m_args ( argv, argv + argc )
 {
   process_params();
 }
+
+/* ------------------------------------------------------------------------- */
 
 std::string cstmgen_params_t::usage()
 {
@@ -33,6 +39,8 @@ std::string cstmgen_params_t::usage()
 
   return ss.str();
 }
+
+/* ------------------------------------------------------------------------- */
 
 bool cstmgen_params_t::valid() const
 {
@@ -60,6 +68,8 @@ bool cstmgen_params_t::valid() const
 
   return is_valid;
 }
+
+/* ------------------------------------------------------------------------- */
 
 void cstmgen_params_t::process_params()
 {
@@ -104,5 +114,7 @@ void cstmgen_params_t::process_params()
     }
   }
 }
+
+/* ------------------------------------------------------------------------- */
 
 } // namespace cfg
