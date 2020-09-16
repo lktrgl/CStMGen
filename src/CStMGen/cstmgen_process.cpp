@@ -3,7 +3,7 @@
 #include <CStMGen/data/templates/cstm_state_diagram_template_h.h>
 #include <CStMGen/data/templates/cstm_state_diagram_template_c.h>
 #include <CStMGen/data/templates/cstm_state_enum_template_h.h>
-#include <CStMGen/data/templates/cstm_state_enum_state_name_template.h>
+#include <CStMGen/data/templates/cstm_state_enum_state_name_text.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_template_h.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_template_c.h>
 #include <CStMGen/data/templates/cstm_state_template_c.h>
@@ -279,8 +279,8 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
 cstmgen_process_t::buffer_t
 cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name )
 {
-  buffer_t result{data_templates_cstm_state_enum_state_name_template,
-                  data_templates_cstm_state_enum_state_name_template + data_templates_cstm_state_enum_state_name_template_len};
+  buffer_t result{data_templates_cstm_state_enum_state_name_text,
+                  data_templates_cstm_state_enum_state_name_text + data_templates_cstm_state_enum_state_name_text_len};
 
   find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( result, m_machine_structure.get_machine_name() );
   find_and_process_upper_var<m_var_STATE_NAME> ( result, state_name );
