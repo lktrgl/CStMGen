@@ -12,6 +12,13 @@
 #include <CStMGen/data/templates/cstm_state_transition_name_template.h>
 #include <CStMGen/data/templates/cstm_state_include_text_template.h>
 #include <CStMGen/data/templates/cstm_state_node_text_template.h>
+#include <CStMGen/data/templates/cstm_state_file_name_template_h.h>
+#include <CStMGen/data/templates/cstm_state_file_name_template_c.h>
+#include <CStMGen/data/templates/cstm_state_diagram_file_name_template_h.h>
+#include <CStMGen/data/templates/cstm_state_diagram_file_name_template_c.h>
+#include <CStMGen/data/templates/cstm_state_enum_file_name_template_h.h>
+#include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_h.h>
+#include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_c.h>
 
 #include <locale>
 #include <iostream>
