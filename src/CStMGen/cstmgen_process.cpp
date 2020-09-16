@@ -25,6 +25,7 @@
 #include <sstream>
 #include <string_view>
 #include <vector>
+#include <fstream>
 
 /* ------------------------------------------------------------------------- */
 
@@ -226,6 +227,7 @@ void cstmgen_process_t::find_and_process_var
                       data_templates_cstm_state_node_text_template + data_templates_cstm_state_node_text_template_len};
 
       find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, new_machine_name );
+      find_and_process_lower_var<m_var_state_machine_name> ( buffer, new_machine_name );
       find_and_process_upper_var<m_var_STATE_NAME> ( buffer, s.first );
       find_and_process_lower_var<m_var_state_name> ( buffer, s.first );
 
@@ -246,24 +248,133 @@ void cstmgen_process_t::find_and_process_var
 
 void cstmgen_process_t::generate_files()
 {
-  buffer_t buffer{data_templates_cstm_state_diagram_template_c,
-                  data_templates_cstm_state_diagram_template_c + data_templates_cstm_state_diagram_template_c_len};
-  //  buffer_t buffer{data_templates_cstm_state_diagram_template_h,
-  //                  data_templates_cstm_state_diagram_template_h + data_templates_cstm_state_diagram_template_h_len};
-  //  buffer_t buffer{data_templates_cstm_state_data_desc_template_c,
-  //                  data_templates_cstm_state_data_desc_template_c + data_templates_cstm_state_data_desc_template_c_len};
-  //  buffer_t buffer{data_templates_cstm_state_data_desc_template_h,
-  //                  data_templates_cstm_state_data_desc_template_h + data_templates_cstm_state_data_desc_template_h_len};
-  //  buffer_t buffer{data_templates_cstm_state_template_c,
-  //                  data_templates_cstm_state_template_c + data_templates_cstm_state_template_c_len};
-  //  buffer_t buffer{data_templates_cstm_state_enum_template_h,
-  //                  data_templates_cstm_state_enum_template_h + data_templates_cstm_state_enum_template_h_len};
-  //    std::string const state_name{m_machine_structure.get_states().cbegin()->first};
-  std::string const state_name{"SEARCH_DEVICE"};
+  constexpr static auto const out_file_mode = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
 
-  process_all_vars ( buffer, state_name );
+  if ( m_params.get_header_folder().length() )
+  {
+    auto const& header_folder = m_params.get_header_folder();
 
-  std::cout << buffer << std::endl;
+    if ( m_params.get_produce_state_enum() )
+    {
+      buffer_t buffer_file_contents{data_templates_cstm_state_enum_template_h,
+                                    data_templates_cstm_state_enum_template_h + data_templates_cstm_state_enum_template_h_len};
+      process_all_vars ( buffer_file_contents, {} );
+
+      buffer_t buffer_file_name{data_templates_cstm_state_enum_file_name_template_h,
+                                data_templates_cstm_state_enum_file_name_template_h + data_templates_cstm_state_enum_file_name_template_h_len};
+      process_all_vars ( buffer_file_name, {} );
+
+      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+      out.flush();
+    }
+
+    if ( m_params.get_produce_state_machine_data_header() )
+    {
+      buffer_t buffer_file_contents{data_templates_cstm_state_data_desc_template_h,
+                                    data_templates_cstm_state_data_desc_template_h + data_templates_cstm_state_data_desc_template_h_len};
+      process_all_vars ( buffer_file_contents, {} );
+
+      buffer_t buffer_file_name{data_templates_cstm_state_data_desc_file_name_template_h,
+                                data_templates_cstm_state_data_desc_file_name_template_h + data_templates_cstm_state_data_desc_file_name_template_h_len};
+      process_all_vars ( buffer_file_name, {} );
+
+      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+      out.flush();
+    }
+
+    if ( m_params.get_produce_state_header() )
+    {
+      auto const& states = m_machine_structure.get_states();
+
+      for ( auto const& s : states )
+      {
+        buffer_t buffer_file_contents{data_templates_cstm_state_template_h,
+                                      data_templates_cstm_state_template_h + data_templates_cstm_state_template_h_len};
+        process_all_vars ( buffer_file_contents, s.first );
+
+        buffer_t buffer_file_name{data_templates_cstm_state_file_name_template_h,
+                                  data_templates_cstm_state_file_name_template_h + data_templates_cstm_state_file_name_template_h_len};
+        process_all_vars ( buffer_file_name, s.first );
+
+        std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+        out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+        out.flush();
+      }
+    }
+
+    if ( m_params.get_produce_state_diagram_header() )
+    {
+      buffer_t buffer_file_contents{data_templates_cstm_state_diagram_template_h,
+                                    data_templates_cstm_state_diagram_template_h + data_templates_cstm_state_diagram_template_h_len};
+      process_all_vars ( buffer_file_contents, {} );
+
+      buffer_t buffer_file_name{data_templates_cstm_state_diagram_file_name_template_h,
+                                data_templates_cstm_state_diagram_file_name_template_h + data_templates_cstm_state_diagram_file_name_template_h_len};
+      process_all_vars ( buffer_file_name, {} );
+
+      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+      out.flush();
+    }
+  }
+
+  if ( m_params.get_implementation_folder().length() )
+  {
+    auto const& implementation_folder = m_params.get_implementation_folder();
+
+    if ( m_params.get_produce_state_machine_data_implementation() )
+    {
+      buffer_t buffer_file_contents{data_templates_cstm_state_data_desc_template_c,
+                                    data_templates_cstm_state_data_desc_template_c + data_templates_cstm_state_data_desc_template_c_len};
+      process_all_vars ( buffer_file_contents, {} );
+
+      buffer_t buffer_file_name{data_templates_cstm_state_data_desc_file_name_template_c,
+                                data_templates_cstm_state_data_desc_file_name_template_c + data_templates_cstm_state_data_desc_file_name_template_c_len};
+      process_all_vars ( buffer_file_name, {} );
+
+      std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+      out.flush();
+    }
+
+    if ( m_params.get_produce_state_implementation() )
+    {
+      auto const& states = m_machine_structure.get_states();
+
+      for ( auto const& s : states )
+      {
+        buffer_t buffer_file_contents{data_templates_cstm_state_template_c,
+                                      data_templates_cstm_state_template_c + data_templates_cstm_state_template_c_len};
+        process_all_vars ( buffer_file_contents, s.first );
+
+        buffer_t buffer_file_name{data_templates_cstm_state_file_name_template_c,
+                                  data_templates_cstm_state_file_name_template_c + data_templates_cstm_state_file_name_template_c_len};
+        process_all_vars ( buffer_file_name, s.first );
+
+        std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+        out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+        out.flush();
+      }
+    }
+
+    if ( m_params.get_produce_state_diagram_implementation() )
+    {
+      buffer_t buffer_file_contents{data_templates_cstm_state_diagram_template_c,
+                                    data_templates_cstm_state_diagram_template_c + data_templates_cstm_state_diagram_template_c_len};
+      process_all_vars ( buffer_file_contents, {} );
+
+      buffer_t buffer_file_name{data_templates_cstm_state_diagram_file_name_template_c,
+                                data_templates_cstm_state_diagram_file_name_template_c + data_templates_cstm_state_diagram_file_name_template_c_len};
+      process_all_vars ( buffer_file_name, {} );
+
+      std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+      out.flush();
+    }
+  }
+
 }
 
 /* ------------------------------------------------------------------------- */
