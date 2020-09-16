@@ -60,7 +60,19 @@ bool cstmgen_params_t::valid() const
                           )
                           ||
                           (
+                            get_produce_state_diagram_header()
+                            &&
+                            get_header_folder().length()
+                          )
+                          ||
+                          (
                             get_produce_state_implementation()
+                            &&
+                            get_implementation_folder().length()
+                          )
+                          ||
+                          (
+                            get_produce_state_diagram_implementation()
                             &&
                             get_implementation_folder().length()
                           )
@@ -98,6 +110,14 @@ void cstmgen_params_t::process_params()
       else if ( m_param_produce_state_implementation == p )
       {
         m_produce_state_implementation.assign ( p );
+      }
+      else if ( m_param_produce_state_diagram_header == p )
+      {
+        m_produce_state_diagram_header.assign ( p );
+      }
+      else if ( m_param_produce_state_diagram_implementation == p )
+      {
+        m_produce_state_diagram_implementation.assign ( p );
       }
       else if ( p.starts_with ( m_param_header_folder ) )
       {

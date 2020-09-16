@@ -17,6 +17,8 @@ class cstmgen_params_t final
   static constexpr std::string_view const m_param_produce_state_enum = "--state-enum";
   static constexpr std::string_view const m_param_produce_state_header = "--state-header";
   static constexpr std::string_view const m_param_produce_state_implementation = "--state-implementation";
+  static constexpr std::string_view const m_param_produce_state_diagram_header = "--state-diagram-header";
+  static constexpr std::string_view const m_param_produce_state_diagram_implementation = "--state-diagram-implementation";
   static constexpr std::string_view const m_param_header_folder = "--header-folder=";
   static constexpr std::string_view const m_param_implementation_folder = "--implementation-folder=";
 
@@ -44,6 +46,14 @@ public:
   {
     return m_produce_state_implementation.length();
   }
+  bool get_produce_state_diagram_header() const
+  {
+    return m_produce_state_diagram_header.length();
+  }
+  bool get_produce_state_diagram_implementation() const
+  {
+    return m_produce_state_diagram_implementation.length();
+  }
   std::string const& get_header_folder() const
   {
     return m_header_folder;
@@ -66,6 +76,8 @@ private:
   std::string m_produce_state_enum;
   std::string m_produce_state_header;
   std::string m_produce_state_implementation;
+  std::string m_produce_state_diagram_header;
+  std::string m_produce_state_diagram_implementation;
   std::string m_header_folder;
   std::string m_implementation_folder;
 };
