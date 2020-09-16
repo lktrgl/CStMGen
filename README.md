@@ -1,1 +1,29 @@
 # CStMGen
+How to start:
+```
+script_file="${PWD}/do_tune_submodules"
+
+cat << EOF_SCRIPT_FILE > "${script_file}"
+git fetch --all --recurse-submodules \
+    && git stash clear \
+    && git stash \
+    && git checkout master \
+    && git rebase origin/master \
+    && git stash pop || true
+EOF_SCRIPT_FILE
+
+chmod a+x "${script_file}"
+
+git clone --recurse-submodules --verbose --remote --progress https://github.com/lktrgl/CStMGen.git \
+    && cd CStMGen \
+    && git submodule foreach --recursive git status \
+    && git submodule foreach --recursive "${script_file}" \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make all
+
+rm -vf "${script_file}"
+
+unset script_file
+```
