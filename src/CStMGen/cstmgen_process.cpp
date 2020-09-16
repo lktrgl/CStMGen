@@ -11,6 +11,8 @@
 #include <iostream>
 #include <sstream>
 #include <string_view>
+#include <vector>
+#include <algorithm>
 
 /* ------------------------------------------------------------------------- */
 
@@ -36,34 +38,38 @@ void cstmgen_process_t::find_and_process_var
 {
   ( void ) state_name;
 
-  constexpr std::string_view const var{cstmgen_process_t::m_var_STATE_NAMES_LIST};
+  if ( std::string::npos == buffer.find ( m_var_STATE_NAMES_LIST ) )
+  {
+    return;
+  }
 
-  auto STATE_MACHINE_NAME = m_machine_structure.get_machine_name();
-
-  convert_to_upper_case_inplace ( STATE_MACHINE_NAME );
-
-  auto new_str = [this, &STATE_MACHINE_NAME]()
+  auto new_str = [this]()
   {
     std::stringstream ss;
 
     auto const& states = m_machine_structure.get_states();
 
-    auto first_item = true;
+    using jms_t = cfg::json_machine_structure_t;
 
-    for ( auto const& s : states )
+    std::vector<std::pair<jms_t::state_id_t, jms_t::state_value_t>> states_sorted{states.cbegin(), states.cend() };
+    std::sort ( states_sorted.begin(), states_sorted.end(), [] ( auto const & left, auto const & right )
+    {
+      auto const left_value = std::strtoul ( left.second.c_str(), nullptr, 10 );
+      auto const right_value = std::strtoul ( right.second.c_str(), nullptr, 10 );
+      return left_value < right_value;
+    } );
+
+    for ( auto const& s : states_sorted )
     {
       ss
-          << ( first_item ? ( first_item = false, "" ) : ", " )
-          << get_state_enum_state_name ( s.first );
+          << get_state_enum_state_name ( s.first ) << ", ";
     }
 
     return ss.str();
   }
   ();
 
-  convert_to_upper_case_inplace ( new_str );
-
-  replace_all_occurences_inplace ( buffer, var, new_str );
+  find_and_process_upper_var<m_var_STATE_NAMES_LIST> ( buffer, new_str );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -107,7 +113,10 @@ void cstmgen_process_t::generate_files()
 {
   buffer_t buffer{data_templates_cstm_state_template_c,
                   data_templates_cstm_state_template_c + data_templates_cstm_state_template_c_len};
-  std::string const state_name{m_machine_structure.get_states().cbegin()->first};
+  //  buffer_t buffer{data_templates_cstm_state_enum_template_h,
+  //                  data_templates_cstm_state_enum_template_h + data_templates_cstm_state_enum_template_h_len};
+  //    std::string const state_name{m_machine_structure.get_states().cbegin()->first};
+  std::string const state_name{"SEARCH_DEVICE"};
 
   process_all_vars ( buffer, state_name );
 

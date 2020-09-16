@@ -17,6 +17,9 @@ static void s_enter_%{state-name}% ( void* data )
 
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
+  
+  /* put here some code to be executed once 
+     per each entering the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -29,6 +32,8 @@ static void s_input_%{state-name}% ( void* data )
 
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
+  
+  /* put here some code to be executed every time before the 'run' handler */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -42,6 +47,9 @@ static void s_run_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
 
+  /* put here some code to be the contents of the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state;
+     be aware that the code should not lock the execution inside this functioh  */
+
   LGGM_CALL_OUT_C(0);
 }
 
@@ -54,6 +62,8 @@ static void s_output_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
 
+  /* put here some code to be executed every time after the 'run' handler */
+
   LGGM_CALL_OUT_C(0);
 }
 
@@ -65,6 +75,9 @@ static void s_leave_%{state-name}% ( void* data )
 
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
+  
+  /* put here some code to be executed once 
+     per each leaving the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
 
   LGGM_CALL_OUT_C(0);
 }
