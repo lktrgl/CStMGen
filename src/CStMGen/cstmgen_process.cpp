@@ -65,7 +65,7 @@ void cstmgen_process_t::find_and_process_var
     for ( auto const& s : states_sorted )
     {
       ss
-          << get_state_enum_state_name ( s.first ) << ", ";
+          << get_state_enum_state_name ( s.first ) << "=" << s.second << ",\n";
     }
 
     return ss.str();
@@ -99,7 +99,7 @@ void cstmgen_process_t::find_and_process_var
     for ( auto t = transitions_from_state.first; t != transitions_from_state.second; ++t )
     {
       ss
-          << ( first_item ? ( first_item = false, "" ) : ", " )
+          << ( first_item ? ( first_item = false, "" ) : ",\n" )
           << "&" << get_state_transition_name ( state_name, t->second );
     }
 

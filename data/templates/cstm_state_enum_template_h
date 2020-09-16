@@ -6,7 +6,6 @@
 typedef enum state_%{state-machine-name}%_enum_tag
 {
   %{STATE-NAMES-LIST}%
-
   ST_%{STATE-MACHINE-NAME}%_COUNT
 } state_%{state-machine-name}%_enum_t;
 
