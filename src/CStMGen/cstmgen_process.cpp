@@ -31,42 +31,6 @@ cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
 
 template<>
 void cstmgen_process_t::find_and_process_var
-<cstmgen_process_t::m_var_STATE_MACHINE_NAME> (  buffer_t& buffer,
-    std::string const& state_name )
-{
-  ( void ) state_name;
-
-  constexpr std::string_view const var{cstmgen_process_t::m_var_STATE_MACHINE_NAME};
-
-  auto STATE_MACHINE_NAME = m_machine_structure.get_machine_name();
-
-  convert_to_upper_case_inplace ( STATE_MACHINE_NAME );
-
-  replace_all_occurences_inplace ( buffer, var, STATE_MACHINE_NAME );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<>
-void cstmgen_process_t::find_and_process_var
-<cstmgen_process_t::m_var_state_machine_name> (  buffer_t& buffer,
-    std::string const& state_name )
-{
-  ( void ) state_name;
-
-  constexpr std::string_view const var{cstmgen_process_t::m_var_state_machine_name};
-
-  auto state_machine_name = m_machine_structure.get_machine_name();
-
-  convert_to_lower_case_inplace ( state_machine_name );
-
-  replace_all_occurences_inplace ( buffer, var, state_machine_name );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<>
-void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_STATE_NAMES_LIST> (  buffer_t& buffer,
     std::string const& state_name )
 {
@@ -100,38 +64,6 @@ void cstmgen_process_t::find_and_process_var
   convert_to_upper_case_inplace ( new_str );
 
   replace_all_occurences_inplace ( buffer, var, new_str );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<>
-void cstmgen_process_t::find_and_process_var
-<cstmgen_process_t::m_var_STATE_NAME> (  buffer_t& buffer,
-    std::string const& state_name )
-{
-  auto new_state_name{state_name};
-
-  constexpr std::string_view const var{cstmgen_process_t::m_var_STATE_NAME};
-
-  convert_to_upper_case_inplace ( new_state_name );
-
-  replace_all_occurences_inplace ( buffer, var, new_state_name );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<>
-void cstmgen_process_t::find_and_process_var
-<cstmgen_process_t::m_var_state_name> (  buffer_t& buffer,
-    std::string const& state_name )
-{
-  auto new_state_name{state_name};
-
-  constexpr std::string_view const var{cstmgen_process_t::m_var_state_name};
-
-  convert_to_lower_case_inplace ( new_state_name );
-
-  replace_all_occurences_inplace ( buffer, var, new_state_name );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -189,11 +121,11 @@ void cstmgen_process_t::generate_files()
 
 void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& state_name )
 {
-  find_and_process_var<m_var_STATE_MACHINE_NAME> ( buffer, state_name );
-  find_and_process_var<m_var_state_machine_name> ( buffer, state_name );
+  find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, m_machine_structure.get_machine_name() );
+  find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
   find_and_process_var<m_var_STATE_NAMES_LIST> ( buffer, state_name );
-  find_and_process_var<m_var_STATE_NAME> ( buffer, state_name );
-  find_and_process_var<m_var_state_name> ( buffer, state_name );
+  find_and_process_upper_var<m_var_STATE_NAME> ( buffer, state_name );
+  find_and_process_lower_var<m_var_state_name> ( buffer, state_name );
   //  find_and_process_var<m_var_state_name_from> ( buffer, state_name );
   //  find_and_process_var<m_var_STATE_NAME_TO> ( buffer, state_name );
   //  find_and_process_var<m_var_state_name_to> ( buffer, state_name );
@@ -209,19 +141,9 @@ cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name )
   buffer_t result{data_templates_cstm_state_enum_state_name_template,
                   data_templates_cstm_state_enum_state_name_template + data_templates_cstm_state_enum_state_name_template_len};
 
-  {
-    constexpr std::string_view const var_STATE_MACHINE_NAME{cstmgen_process_t::m_var_STATE_MACHINE_NAME};
-    std::string new_state_machine_name{m_machine_structure.get_machine_name() };
-    convert_to_upper_case_inplace ( new_state_machine_name );
-    replace_all_occurences_inplace ( result, var_STATE_MACHINE_NAME, new_state_machine_name );
-  }
+  find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( result, m_machine_structure.get_machine_name() );
 
-  {
-    constexpr std::string_view const var_STATE_NAME{cstmgen_process_t::m_var_STATE_NAME};
-    std::string new_state_name{state_name};
-    convert_to_upper_case_inplace ( new_state_name );
-    replace_all_occurences_inplace ( result, var_STATE_NAME, new_state_name );
-  }
+  find_and_process_upper_var<m_var_STATE_NAME> ( result, state_name );
 
   return result;
 }
@@ -235,19 +157,9 @@ cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
   buffer_t result{data_templates_cstm_state_transition_name_template,
                   data_templates_cstm_state_transition_name_template + data_templates_cstm_state_transition_name_template_len};
 
-  {
-    constexpr std::string_view const var_state_name_from{cstmgen_process_t::m_var_state_name_from};
-    std::string new_state_name_from{state_name_from};
-    convert_to_lower_case_inplace ( new_state_name_from );
-    replace_all_occurences_inplace ( result, var_state_name_from, new_state_name_from );
-  }
+  find_and_process_lower_var<m_var_state_name_from> ( result, state_name_from );
 
-  {
-    constexpr std::string_view const var_state_name_to{cstmgen_process_t::m_var_state_name_to};
-    std::string new_state_name_to{state_name_to};
-    convert_to_lower_case_inplace ( new_state_name_to );
-    replace_all_occurences_inplace ( result, var_state_name_to, new_state_name_to );
-  }
+  find_and_process_lower_var<m_var_state_name_to> ( result, state_name_to );
 
   return result;
 }

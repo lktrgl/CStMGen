@@ -51,12 +51,34 @@ public:
 
 private:
   template<char const* const& VAR_NAME>
-  void find_and_process_var ( buffer_t& buffer, std::string const& state_name )
+  void find_and_process_var ( buffer_t& buffer, std::string const& new_str )
   {
     ( void ) buffer;
-    ( void ) state_name;
+    ( void ) new_str;
 
     static_assert ( details::dependent_false_t<VAR_NAME>::value, "You should define the full specification instead." );
+  }
+
+  template<char const* const& VAR_NAME>
+  void find_and_process_upper_var ( buffer_t& buffer, std::string const& new_str )
+  {
+    constexpr std::string_view const var{VAR_NAME};
+
+    auto local_new_str{new_str};
+    convert_to_upper_case_inplace ( local_new_str );
+
+    replace_all_occurences_inplace ( buffer, var, local_new_str );
+  }
+
+  template<char const* const& VAR_NAME>
+  void find_and_process_lower_var ( buffer_t& buffer, std::string const& new_str )
+  {
+    constexpr std::string_view const var{VAR_NAME};
+
+    auto local_new_str{new_str};
+    convert_to_lower_case_inplace ( local_new_str );
+
+    replace_all_occurences_inplace ( buffer, var, local_new_str );
   }
 
   template <typename OLD_STR_T, typename NEW_STR_T>
