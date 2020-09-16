@@ -26,6 +26,7 @@ set (ascii_to_hex_files_sources
   templates/cstm_state_enum_template_h
   templates/cstm_state_enum_state_name_template
   templates/cstm_state_transition_template_c
+  templates/cstm_state_transition_name_template
   templates/cstm_state_template_h
   templates/cstm_state_template_c
 )
@@ -39,6 +40,7 @@ add_custom_command(OUTPUT ${ascii_to_hex_files_sources}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_enum_state_name_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_transition_template_c ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_transition_name_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${ascii_files_src_folder}/cstm_state_template_c ${hex_files_dest_folder}
 

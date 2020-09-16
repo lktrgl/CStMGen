@@ -1,6 +1,6 @@
 /* ------------------------------------------------------------------------- */
 
-static uint8_t s_transit_%{state-name-from}%_%{state-name-to}% ( void* data )
+static uint8_t s_transit_%{state-name-from}%_to_%{state-name-to}% ( void* data )
 {
   LGGM_CALL_IN_C(0);
 
@@ -16,8 +16,8 @@ static uint8_t s_transit_%{state-name-from}%_%{state-name-to}% ( void* data )
 
 /* ------------------------------------------------------------------------- */
 
-static const state_transition_desc_t s_state_transition_%{state-name-from}%_%{state-name-to}% =
+static const state_transition_desc_t s_state_transition_%{state-name-from}%_to_%{state-name-to}% =
 {
-  .is_transition = s_transit_%{state-name-from}%_%{state-name-to}%,
+  .is_transition = s_transit_%{state-name-from}%_to_%{state-name-to}%,
   .next_state_node_index = %{STATE-NAME-TO}%
 };

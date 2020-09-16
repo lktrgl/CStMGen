@@ -77,6 +77,8 @@ private:
   void process_all_vars ( buffer_t& buffer, buffer_t const& state_name );
 
   buffer_t get_state_enum_state_name ( buffer_t const& state_name );
+  buffer_t get_state_transition_name ( buffer_t const& state_name_from,
+                                       buffer_t const& state_name_to );
 
   void convert_to_lower_case_inplace ( buffer_t& buffer );
   void convert_to_upper_case_inplace ( buffer_t& buffer );
