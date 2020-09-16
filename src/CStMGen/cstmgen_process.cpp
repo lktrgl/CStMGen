@@ -109,6 +109,49 @@ void cstmgen_process_t::find_and_process_var
 
 /* ------------------------------------------------------------------------- */
 
+template<>
+void cstmgen_process_t::find_and_process_var
+<cstmgen_process_t::m_var_state_transitions_definition> (  buffer_t& buffer,
+    std::string const& state_name )
+{
+  if ( std::string::npos == buffer.find ( m_var_state_transitions_definition ) )
+  {
+    return;
+  }
+
+  auto new_str = [this, &state_name]()
+  {
+    std::stringstream ss;
+
+    auto const& transitions_from = m_machine_structure.get_transitions_from();
+    auto const& transitions_from_state = transitions_from.equal_range ( state_name );
+
+    for ( auto t = transitions_from_state.first; t != transitions_from_state.second; ++t )
+    {
+      buffer_t buffer{data_templates_cstm_state_transition_template_c,
+                      data_templates_cstm_state_transition_template_c + data_templates_cstm_state_transition_template_c_len};
+
+      find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, m_machine_structure.get_machine_name() );
+      find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
+      find_and_process_lower_var<m_var_state_name_from> ( buffer, state_name );
+      find_and_process_lower_var<m_var_state_name_to> ( buffer, t->second );
+      find_and_process_upper_var<m_var_STATE_NAME_TO> ( buffer, t->second );
+
+      ss
+          << buffer;
+    }
+
+    return ss.str();
+  }
+  ();
+
+  constexpr std::string_view const var{m_var_state_transitions_definition};
+
+  replace_all_occurences_inplace ( buffer, var, new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
 void cstmgen_process_t::generate_files()
 {
   buffer_t buffer{data_templates_cstm_state_template_c,
@@ -132,10 +175,7 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
   find_and_process_var<m_var_STATE_NAMES_LIST> ( buffer, state_name );
   find_and_process_upper_var<m_var_STATE_NAME> ( buffer, state_name );
   find_and_process_lower_var<m_var_state_name> ( buffer, state_name );
-  //  find_and_process_var<m_var_state_name_from> ( buffer, state_name );
-  //  find_and_process_var<m_var_STATE_NAME_TO> ( buffer, state_name );
-  //  find_and_process_var<m_var_state_name_to> ( buffer, state_name );
-  //  find_and_process_var<m_var_state_transitions_sdefinition> ( buffer, state_name );
+  find_and_process_var<m_var_state_transitions_definition> ( buffer, state_name );
   find_and_process_var<m_var_state_transitions_list> ( buffer, state_name );
 }
 
@@ -148,7 +188,6 @@ cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name )
                   data_templates_cstm_state_enum_state_name_template + data_templates_cstm_state_enum_state_name_template_len};
 
   find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( result, m_machine_structure.get_machine_name() );
-
   find_and_process_upper_var<m_var_STATE_NAME> ( result, state_name );
 
   return result;
@@ -164,7 +203,6 @@ cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
                   data_templates_cstm_state_transition_name_template + data_templates_cstm_state_transition_name_template_len};
 
   find_and_process_lower_var<m_var_state_name_from> ( result, state_name_from );
-
   find_and_process_lower_var<m_var_state_name_to> ( result, state_name_to );
 
   return result;

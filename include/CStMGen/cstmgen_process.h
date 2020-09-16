@@ -37,7 +37,7 @@ class cstmgen_process_t final
   static constexpr char const* const m_var_state_name_from = "%{state-name-from}%";
   static constexpr char const* const m_var_STATE_NAME_TO = "%{STATE-NAME-TO}%";
   static constexpr char const* const m_var_state_name_to = "%{state-name-to}%";
-  static constexpr char const* const m_var_state_transitions_sdefinition = "%{state-transitions-sdefinition}%";
+  static constexpr char const* const m_var_state_transitions_definition = "%{state-transitions-definition}%";
   static constexpr char const* const m_var_state_transitions_list = "%{state-transitions-list}%";
 
 public:
