@@ -73,9 +73,10 @@ void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_state_transitions_list> (  buffer_t& buffer,
     std::string const& state_name )
 {
-  auto new_state_name{state_name};
-
-  constexpr std::string_view const var{cstmgen_process_t::m_var_state_transitions_list};
+  if ( std::string::npos == buffer.find ( m_var_state_transitions_list ) )
+  {
+    return;
+  }
 
   auto new_str = [this, &state_name]()
   {
@@ -88,20 +89,16 @@ void cstmgen_process_t::find_and_process_var
 
     for ( auto t = transitions_from_state.first; t != transitions_from_state.second; ++t )
     {
-      buffer_t state_name_to{t->second};
-      convert_to_lower_case_inplace ( state_name_to );
-
       ss
           << ( first_item ? ( first_item = false, "" ) : ", " )
-          << "&" << get_state_transition_name ( state_name, state_name_to );
+          << "&" << get_state_transition_name ( state_name, t->second );
     }
 
     return ss.str();
   }
   ();
 
-  convert_to_lower_case_inplace ( new_str );
-  replace_all_occurences_inplace ( buffer, var, new_str );
+  find_and_process_lower_var<m_var_state_transitions_list> ( buffer, new_str );
 }
 
 /* ------------------------------------------------------------------------- */
