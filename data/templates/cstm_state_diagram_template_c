@@ -15,7 +15,7 @@ static const state_node_desc_t* state_nodes_%{state-machine-name}%[] =
 
 state_diagram_desc_t g_state_diagram_%{state-machine-name}% =
 {
-  .current_state = &g_state_%{inital-state-name}%,
+  .current_state = &g_state_%{state-machine-name}%_%{inital-state-name}%,
   .states = state_nodes_%{state-machine-name}%,
   .states_count = sizeof ( state_nodes_%{state-machine-name}% ) / sizeof ( state_nodes_%{state-machine-name}%[0] )
 };

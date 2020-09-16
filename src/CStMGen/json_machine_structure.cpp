@@ -110,6 +110,25 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
   }
 
   {
+    // retrieve the "initial-state"
+    rapidjson::Value& s = d[m_key_initial_state.data()];
+
+    if ( not s.IsString() )
+    {
+      std::cerr << "the '" << m_key_initial_state << "' property is not a string." << std::endl;
+      return;
+    }
+
+    m_initial_state = s.GetString();
+
+    if ( not m_initial_state.length() )
+    {
+      std::cerr << "the '" << m_key_initial_state << "' property is empty." << std::endl;
+      return;
+    }
+  }
+
+  {
     // retrieve the "transitions"
     rapidjson::Value& a = d[m_key_transitions.data()];
 

@@ -390,6 +390,7 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
   find_and_process_var<m_var_state_transitions_list> ( buffer, state_name );
   find_and_process_var<m_var_state_includes_list> ( buffer, state_name );
   find_and_process_var<m_var_state_nodes_list> ( buffer, state_name );
+  find_and_process_lower_var<m_var_initial_state_name> ( buffer, m_machine_structure.get_initial_state() );
 }
 
 /* ------------------------------------------------------------------------- */

@@ -41,6 +41,7 @@ class cstmgen_process_t final
   static constexpr char const* const m_var_state_transitions_list = "%{state-transitions-list}%";
   static constexpr char const* const m_var_state_includes_list = "%{state-includes-list}%";
   static constexpr char const* const m_var_state_nodes_list = "%{state-nodes-list}%";
+  static constexpr char const* const m_var_initial_state_name = "%{inital-state-name}%";
 
 public:
   cstmgen_process_t ( cfg::cstmgen_params_t const& params,
