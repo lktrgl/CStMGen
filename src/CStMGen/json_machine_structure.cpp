@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 /* ------------------------------------------------------------------------- */
 
@@ -16,6 +17,21 @@ json_machine_structure_t::json_machine_structure_t ( std::string const& config_f
   : m_config_file_pathname ( config_file_pathname )
 {
   import ( m_config_file_pathname );
+}
+
+/* ------------------------------------------------------------------------- */
+
+json_machine_structure_t::states_sorted_t
+json_machine_structure_t::get_states_sorted() const
+{
+  states_sorted_t result{m_states.cbegin(), m_states.cend() };
+  std::sort ( result.begin(), result.end(), [] ( auto const & left, auto const & right )
+  {
+    auto const left_value = std::strtoul ( left.second.c_str(), nullptr, 10 );
+    auto const right_value = std::strtoul ( right.second.c_str(), nullptr, 10 );
+    return left_value < right_value;
+  } );
+  return result;
 }
 
 /* ------------------------------------------------------------------------- */

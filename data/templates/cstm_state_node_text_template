@@ -1,0 +1,1 @@
+[ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}%] = &g_state_%{state-name}%

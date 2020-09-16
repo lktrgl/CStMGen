@@ -2,7 +2,7 @@
 
 /* ------------------------------------------------------------------------- */
 
-%{state-machine-name}%_data_desc_t g_%{state-machine-name}%_data =
+%{state-machine-name}%_data_desc_t g_state_data_%{state-machine-name}% =
 {
   /* put here all the data fields initialization;
      below is a sample field */

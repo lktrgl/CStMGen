@@ -1,5 +1,7 @@
 #include <CStMGen/cstmgen_process.h>
 
+#include <CStMGen/data/templates/cstm_state_diagram_template_h.h>
+#include <CStMGen/data/templates/cstm_state_diagram_template_c.h>
 #include <CStMGen/data/templates/cstm_state_enum_template_h.h>
 #include <CStMGen/data/templates/cstm_state_enum_state_name_template.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_template_h.h>
@@ -8,13 +10,14 @@
 #include <CStMGen/data/templates/cstm_state_template_h.h>
 #include <CStMGen/data/templates/cstm_state_transition_template_c.h>
 #include <CStMGen/data/templates/cstm_state_transition_name_template.h>
+#include <CStMGen/data/templates/cstm_state_include_text_template.h>
+#include <CStMGen/data/templates/cstm_state_node_text_template.h>
 
 #include <locale>
 #include <iostream>
 #include <sstream>
 #include <string_view>
 #include <vector>
-#include <algorithm>
 
 /* ------------------------------------------------------------------------- */
 
@@ -49,17 +52,7 @@ void cstmgen_process_t::find_and_process_var
   {
     std::stringstream ss;
 
-    auto const& states = m_machine_structure.get_states();
-
-    using jms_t = cfg::json_machine_structure_t;
-
-    std::vector<std::pair<jms_t::state_id_t, jms_t::state_value_t>> states_sorted{states.cbegin(), states.cend() };
-    std::sort ( states_sorted.begin(), states_sorted.end(), [] ( auto const & left, auto const & right )
-    {
-      auto const left_value = std::strtoul ( left.second.c_str(), nullptr, 10 );
-      auto const right_value = std::strtoul ( right.second.c_str(), nullptr, 10 );
-      return left_value < right_value;
-    } );
+    auto const& states_sorted = m_machine_structure.get_states_sorted();
 
     for ( auto const& s : states_sorted )
     {
@@ -154,10 +147,104 @@ void cstmgen_process_t::find_and_process_var
 
 /* ------------------------------------------------------------------------- */
 
+template<>
+void cstmgen_process_t::find_and_process_var
+<cstmgen_process_t::m_var_state_includes_list> (  buffer_t& buffer,
+    std::string const& state_name )
+{
+  ( void ) state_name;
+
+  if ( std::string::npos == buffer.find ( m_var_state_includes_list ) )
+  {
+    return;
+  }
+
+  auto new_str = [this]()
+  {
+    std::stringstream ss;
+
+    auto const& states_sorted = m_machine_structure.get_states_sorted();
+
+    auto const& new_machine_name = m_machine_structure.get_machine_name();
+
+    auto first_item = true;
+
+    for ( auto const& s : states_sorted )
+    {
+      buffer_t buffer{data_templates_cstm_state_include_text_template,
+                      data_templates_cstm_state_include_text_template + data_templates_cstm_state_include_text_template_len};
+
+      find_and_process_lower_var<m_var_state_machine_name> ( buffer, new_machine_name );
+      find_and_process_lower_var<m_var_state_name> ( buffer, s.first );
+
+      ss
+          << ( first_item ? ( first_item = false, "" ) : "\n" )
+          << buffer;
+    }
+
+    return ss.str();
+  }
+  ();
+
+  find_and_process_lower_var<m_var_state_includes_list> ( buffer, new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<>
+void cstmgen_process_t::find_and_process_var
+<cstmgen_process_t::m_var_state_nodes_list> (  buffer_t& buffer,
+    std::string const& state_name )
+{
+  ( void ) state_name;
+
+  if ( std::string::npos == buffer.find ( m_var_state_nodes_list ) )
+  {
+    return;
+  }
+
+  auto new_str = [this]()
+  {
+    std::stringstream ss;
+
+    auto const& states_sorted = m_machine_structure.get_states_sorted();
+
+    auto const& new_machine_name = m_machine_structure.get_machine_name();
+
+    auto first_item = true;
+
+    for ( auto const& s : states_sorted )
+    {
+      buffer_t buffer{data_templates_cstm_state_node_text_template,
+                      data_templates_cstm_state_node_text_template + data_templates_cstm_state_node_text_template_len};
+
+      find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, new_machine_name );
+      find_and_process_upper_var<m_var_STATE_NAME> ( buffer, s.first );
+      find_and_process_lower_var<m_var_state_name> ( buffer, s.first );
+
+      ss
+          << ( first_item ? ( first_item = false, "" ) : ",\n  " )
+          << buffer;
+    }
+
+    return ss.str();
+  }
+  ();
+
+  constexpr std::string_view const var{m_var_state_nodes_list};
+  replace_all_occurences_inplace ( buffer, var, new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
 void cstmgen_process_t::generate_files()
 {
-  buffer_t buffer{data_templates_cstm_state_data_desc_template_c,
-                  data_templates_cstm_state_data_desc_template_c + data_templates_cstm_state_data_desc_template_c_len};
+  buffer_t buffer{data_templates_cstm_state_diagram_template_c,
+                  data_templates_cstm_state_diagram_template_c + data_templates_cstm_state_diagram_template_c_len};
+  //  buffer_t buffer{data_templates_cstm_state_diagram_template_h,
+  //                  data_templates_cstm_state_diagram_template_h + data_templates_cstm_state_diagram_template_h_len};
+  //  buffer_t buffer{data_templates_cstm_state_data_desc_template_c,
+  //                  data_templates_cstm_state_data_desc_template_c + data_templates_cstm_state_data_desc_template_c_len};
   //  buffer_t buffer{data_templates_cstm_state_data_desc_template_h,
   //                  data_templates_cstm_state_data_desc_template_h + data_templates_cstm_state_data_desc_template_h_len};
   //  buffer_t buffer{data_templates_cstm_state_template_c,
@@ -183,6 +270,8 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
   find_and_process_lower_var<m_var_state_name> ( buffer, state_name );
   find_and_process_var<m_var_state_transitions_definition> ( buffer, state_name );
   find_and_process_var<m_var_state_transitions_list> ( buffer, state_name );
+  find_and_process_var<m_var_state_includes_list> ( buffer, state_name );
+  find_and_process_var<m_var_state_nodes_list> ( buffer, state_name );
 }
 
 /* ------------------------------------------------------------------------- */

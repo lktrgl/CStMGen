@@ -39,6 +39,8 @@ class cstmgen_process_t final
   static constexpr char const* const m_var_state_name_to = "%{state-name-to}%";
   static constexpr char const* const m_var_state_transitions_definition = "%{state-transitions-definition}%";
   static constexpr char const* const m_var_state_transitions_list = "%{state-transitions-list}%";
+  static constexpr char const* const m_var_state_includes_list = "%{state-includes-list}%";
+  static constexpr char const* const m_var_state_nodes_list = "%{state-nodes-list}%";
 
 public:
   cstmgen_process_t ( cfg::cstmgen_params_t const& params,

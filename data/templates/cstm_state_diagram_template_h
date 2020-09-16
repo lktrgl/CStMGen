@@ -1,0 +1,12 @@
+#ifndef STATE_DIAGRAM_%{STATE-MACHINE-NAME}%_H_INCLUDED
+#define STATE_DIAGRAM_%{STATE-MACHINE-NAME}%_H_INCLUDED
+
+#include <CStM/state_diagram.h>
+
+/* ------------------------------------------------------------------------- */
+
+extern state_diagram_desc_t g_state_diagram_%{state-machine-name}%;
+
+/* ------------------------------------------------------------------------- */
+
+#endif /* STATE_DIAGRAM_%{STATE-MACHINE-NAME}%_H_INCLUDED */

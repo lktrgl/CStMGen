@@ -18,6 +18,7 @@ public:
   using state_id_t = std::string;
   using state_value_t = std::string;
   using states_t = std::map<state_id_t, state_value_t>;
+  using states_sorted_t = std::vector<std::pair<state_id_t, state_value_t>>;
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
 public:
@@ -36,6 +37,7 @@ public:
   {
     return m_states;
   }
+  states_sorted_t get_states_sorted() const;
   transitions_t const& get_transitions_from() const
   {
     return m_transitions_from;

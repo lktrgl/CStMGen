@@ -1,0 +1,22 @@
+#include <%{state-machine-name}%/state_diagram_%{state-machine-name}%.h>
+
+#include <%{state-machine-name}%/state_%{state-machine-name}%_enum.h>
+
+%{state-includes-list}%
+
+/* ------------------------------------------------------------------------- */
+
+static const state_node_desc_t* state_nodes_%{state-machine-name}%[] =
+{
+  %{state-nodes-list}%
+};
+
+/* ------------------------------------------------------------------------- */
+
+state_diagram_desc_t g_state_diagram_%{state-machine-name}% =
+{
+  .current_state = &g_state_%{inital-state-name}%,
+  .states = state_nodes_%{state-machine-name}%,
+  .states_count = sizeof ( state_nodes_%{state-machine-name}% ) / sizeof ( state_nodes_%{state-machine-name}%[0] )
+};
+

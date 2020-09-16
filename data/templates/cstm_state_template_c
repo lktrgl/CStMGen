@@ -112,7 +112,7 @@ static const state_transition_desc_t* s_state_transitions_%{state-name}%[] =
 
 const state_node_desc_t g_state_%{state-name}% =
 {
-  .data = &g_%{state-machine-name}%_data,
+  .data = &g_state_data_%{state-machine-name}%,
   .state_index = ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}%,
   .state_handler = &s_state_handler_%{state-name}%,
   .transitions = s_state_transitions_%{state-name}%,

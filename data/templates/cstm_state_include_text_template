@@ -1,0 +1,1 @@
+#include <%{state-machine-name}%/state_%{state-name}%.h>
