@@ -1,5 +1,5 @@
 {
-	"machine-name": "SENSOR_COMM",
+	"machine-name": "SENS_COMM",
 	"states": [
 		{
 			"id": "INIT",
