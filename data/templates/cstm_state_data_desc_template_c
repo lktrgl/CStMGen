@@ -1,0 +1,12 @@
+#include <%{state-machine-name}%/state_%{state-machine-name}%_data_desc.h>
+
+/* ------------------------------------------------------------------------- */
+
+%{state-machine-name}%_data_desc_t g_%{state-machine-name}%_data =
+{
+  /* put here all the data fields initialization;
+     below is a sample field */
+
+  .is_ok = 0xFF
+};
+

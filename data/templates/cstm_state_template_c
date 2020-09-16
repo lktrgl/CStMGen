@@ -1,6 +1,7 @@
 #include <%{state-machine-name}%/state_%{state-name}%.h>
 
 #include <%{state-machine-name}%/state_%{state-machine-name}%_enum.h>
+#include <%{state-machine-name}%/state_%{state-machine-name}%_data_desc.h>
 
 #include <CStM/state_default_handler.h>
 

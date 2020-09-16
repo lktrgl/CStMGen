@@ -2,6 +2,8 @@
 
 #include <CStMGen/data/templates/cstm_state_enum_template_h.h>
 #include <CStMGen/data/templates/cstm_state_enum_state_name_template.h>
+#include <CStMGen/data/templates/cstm_state_data_desc_template_h.h>
+#include <CStMGen/data/templates/cstm_state_data_desc_template_c.h>
 #include <CStMGen/data/templates/cstm_state_template_c.h>
 #include <CStMGen/data/templates/cstm_state_template_h.h>
 #include <CStMGen/data/templates/cstm_state_transition_template_c.h>
@@ -154,8 +156,12 @@ void cstmgen_process_t::find_and_process_var
 
 void cstmgen_process_t::generate_files()
 {
-  buffer_t buffer{data_templates_cstm_state_template_c,
-                  data_templates_cstm_state_template_c + data_templates_cstm_state_template_c_len};
+  buffer_t buffer{data_templates_cstm_state_data_desc_template_c,
+                  data_templates_cstm_state_data_desc_template_c + data_templates_cstm_state_data_desc_template_c_len};
+  //  buffer_t buffer{data_templates_cstm_state_data_desc_template_h,
+  //                  data_templates_cstm_state_data_desc_template_h + data_templates_cstm_state_data_desc_template_h_len};
+  //  buffer_t buffer{data_templates_cstm_state_template_c,
+  //                  data_templates_cstm_state_template_c + data_templates_cstm_state_template_c_len};
   //  buffer_t buffer{data_templates_cstm_state_enum_template_h,
   //                  data_templates_cstm_state_enum_template_h + data_templates_cstm_state_enum_template_h_len};
   //    std::string const state_name{m_machine_structure.get_states().cbegin()->first};

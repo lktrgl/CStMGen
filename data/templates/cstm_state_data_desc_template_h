@@ -1,0 +1,24 @@
+#ifndef STATE_%{STATE-MACHINE-NAME}%_DATA_DESC_H_INCLUDED
+#define STATE_%{STATE-MACHINE-NAME}%_DATA_DESC_H_INCLUDED
+
+#include <stdint.h>
+
+/* ------------------------------------------------------------------------- */
+
+typedef struct %{state-machine-name}%_data_desc_tag
+{
+  /* put here all the data fields to be used
+     by %{STATE-MACHINE-NAME}% state machine;
+     below is a sample field */
+
+  uint8_t is_ok;
+
+} %{state-machine-name}%_data_desc_t;
+
+/* ------------------------------------------------------------------------- */
+
+extern %{state-machine-name}%_data_desc_t g_%{state-machine-name}%_data;
+
+/* ------------------------------------------------------------------------- */
+
+#endif /* STATE_%{STATE-MACHINE-NAME}%_DATA_DESC_H_INCLUDED */
