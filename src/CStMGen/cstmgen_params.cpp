@@ -111,8 +111,10 @@ void cstmgen_params_t::process_params()
 {
   if ( m_args.size() < 1 )
   {
+#ifndef NDEBUG
     std::cerr << usage() << std::endl;
     std::cerr << "Too few parameters provided'" << std::endl;
+#endif
   }
   else
   {
@@ -166,8 +168,10 @@ void cstmgen_params_t::process_params()
       }
       else
       {
+#ifndef NDEBUG
         std::cerr << usage() << std::endl;
         std::cerr << "Unknown option: '" << p << "'" << std::endl;
+#endif
       }
     }
   }

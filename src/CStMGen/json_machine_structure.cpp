@@ -62,7 +62,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not s.IsString() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_machine_name << "' property is not a string." << std::endl;
+#endif
       return;
     }
 
@@ -70,7 +72,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not m_machine_name.length() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_machine_name << "' property is empty." << std::endl;
+#endif
       return;
     }
   }
@@ -81,7 +85,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not a.IsArray() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_states << "' property is not an array." << std::endl;
+#endif
       return;
     }
 
@@ -91,7 +97,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
       if ( not obj.IsObject() )
       {
+#ifndef NDEBUG
         std::cerr << "item of the '" << m_key_states << "' array is not a object." << std::endl;
+#endif
         continue;
       }
 
@@ -101,7 +109,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
       if ( obj.MemberEnd() == id or not id->value.IsString()
            or obj.MemberEnd() == value or not value->value.IsString() )
       {
+#ifndef NDEBUG
         std::cerr << "item of the '" << m_key_states << "' does not have expected members." << std::endl;
+#endif
         continue;
       }
 
@@ -115,7 +125,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not s.IsString() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_initial_state << "' property is not a string." << std::endl;
+#endif
       return;
     }
 
@@ -123,7 +135,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not m_initial_state.length() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_initial_state << "' property is empty." << std::endl;
+#endif
       return;
     }
   }
@@ -134,7 +148,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
     if ( not a.IsArray() )
     {
+#ifndef NDEBUG
       std::cerr << "the '" << m_key_transitions << "' property is not an array." << std::endl;
+#endif
       return;
     }
 
@@ -144,7 +160,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
 
       if ( not obj.IsObject() )
       {
+#ifndef NDEBUG
         std::cerr << "item of the '" << m_key_transitions << "' array is not a object." << std::endl;
+#endif
         continue;
       }
 
@@ -154,7 +172,9 @@ void json_machine_structure_t::import ( std::string const& config_file_pathname 
       if ( obj.MemberEnd() == from or not from->value.IsString()
            or obj.MemberEnd() == to or not to->value.IsString() )
       {
+#ifndef NDEBUG
         std::cerr << "item of the '" << m_key_transitions << "' does not have expected members." << std::endl;
+#endif
         continue;
       }
 

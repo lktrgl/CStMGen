@@ -14,8 +14,10 @@ int cstmgen_main ( int argc, char** argv )
 
   if ( not parameters.valid() )
   {
+#ifndef NDEBUG
     std::cerr << parameters.usage() << std::endl;
     std::cerr << "Invalid parameters set occurred" << std::endl;
+#endif
     return 1;
   }
 
@@ -23,7 +25,9 @@ int cstmgen_main ( int argc, char** argv )
 
   if ( not machine_structure.valid() )
   {
+#ifndef NDEBUG
     std::cerr << "Invalid machine structure occurred" << std::endl;
+#endif
     return 1;
   }
 
