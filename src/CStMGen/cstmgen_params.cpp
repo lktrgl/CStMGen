@@ -25,6 +25,12 @@ std::string cstmgen_params_t::usage()
       << m_param_json_machine_config_file << " File pathname to the state machine structure description in JSON format" <<
       std::endl;
   ss
+      << m_param_header_folder << " Folder pathname where to store the declaration files to" << std::endl;
+  ss
+      << m_param_implementation_folder << " Folder pathname where to store the implementation files to" << std::endl;
+  ss
+      << m_param_produce_all << " Whether producing all the file set" << std::endl;
+  ss
       << m_param_produce_state_enum << " Whether producing a file with the state machine states enumeration" << std::endl;
   ss
       << m_param_produce_state_header << " Whether producing a file with the state machine state declaration per state" <<
@@ -33,9 +39,15 @@ std::string cstmgen_params_t::usage()
       << m_param_produce_state_implementation <<
       " Whether producing a file with the state machine state implementation per state" << std::endl;
   ss
-      << m_param_header_folder << " Folder pathname where to store the declaration files to" << std::endl;
+      << m_param_produce_state_diagram_header << "Whether producing a file with the state diagram declaration" << std::endl;
   ss
-      << m_param_implementation_folder << " Folder pathname where to store the implementation files to" << std::endl;
+      << m_param_produce_state_diagram_implementation << "Whether producing a file with the state diagram definition" <<
+      std::endl;
+  ss
+      << m_param_produce_state_machine_data_header << "Whether producing a file with the state data declaration" << std::endl;
+  ss
+      << m_param_produce_state_machine_data_implementation << "Whether producing a file with the state data definition" <<
+      std::endl;
 
   return ss.str();
 }
@@ -99,6 +111,7 @@ void cstmgen_params_t::process_params()
 {
   if ( m_args.size() < 1 )
   {
+    std::cerr << usage() << std::endl;
     std::cerr << "Too few parameters provided'" << std::endl;
   }
   else
@@ -118,6 +131,10 @@ void cstmgen_params_t::process_params()
       else if ( p.starts_with ( m_param_implementation_folder ) )
       {
         m_implementation_folder.assign ( p.substr ( m_param_implementation_folder.length() ) );
+      }
+      else if ( m_param_produce_all == p )
+      {
+        m_produce_all.assign ( p );
       }
       else if ( m_param_produce_state_enum == p )
       {
@@ -149,6 +166,7 @@ void cstmgen_params_t::process_params()
       }
       else
       {
+        std::cerr << usage() << std::endl;
         std::cerr << "Unknown option: '" << p << "'" << std::endl;
       }
     }

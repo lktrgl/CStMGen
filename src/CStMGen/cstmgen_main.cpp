@@ -14,6 +14,7 @@ int cstmgen_main ( int argc, char** argv )
 
   if ( not parameters.valid() )
   {
+    std::cerr << parameters.usage() << std::endl;
     std::cerr << "Invalid parameters set occurred" << std::endl;
     return 1;
   }
