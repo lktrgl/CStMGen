@@ -7,12 +7,15 @@
 
 typedef struct %{state-machine-name}%_data_desc_tag
 {
+  /* USER DATA FIELDS DECL BEGIN */
+
   /* put here all the data fields to be used
      by %{STATE-MACHINE-NAME}% state machine;
      below is a sample field */
 
   uint8_t is_ok;
 
+  /* USER DATA FIELDS DECL END */
 } %{state-machine-name}%_data_desc_t;
 
 /* ------------------------------------------------------------------------- */

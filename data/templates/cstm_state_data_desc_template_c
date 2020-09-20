@@ -4,9 +4,13 @@
 
 %{state-machine-name}%_data_desc_t g_state_data_%{state-machine-name}% =
 {
+  /* USER DATA FIELDS INIT BEGIN */
+
   /* put here all the data fields initialization;
      below is a sample field */
 
   .is_ok = 0xFF
+
+  /* USER DATA FIELDS INIT END */
 };
 

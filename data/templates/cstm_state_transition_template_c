@@ -9,9 +9,13 @@ static uint8_t s_transit_%{state-name-from}%_to_%{state-name-to}% ( void* data )
 
   LGGM_CALL_OUT_C(0);
 
+  /* USER TRANSIT CONDITION  %{STATE-NAME-FROM}% TO %{STATE-NAME-TO}% BEGIN */
+
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
   return 1;
+
+  /* USER TRANSIT CONDITION  %{STATE-NAME-FROM}% TO %{STATE-NAME-TO}% END */
 }
 
 /* ------------------------------------------------------------------------- */

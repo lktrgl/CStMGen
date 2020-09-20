@@ -136,6 +136,7 @@ void cstmgen_process_t::find_and_process_var
 
       find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, m_machine_structure.get_machine_name() );
       find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
+      find_and_process_upper_var<m_var_STATE_NAME_FROM> ( buffer, state_name );
       find_and_process_lower_var<m_var_state_name_from> ( buffer, state_name );
       find_and_process_lower_var<m_var_state_name_to> ( buffer, t->second );
       find_and_process_upper_var<m_var_STATE_NAME_TO> ( buffer, t->second );
