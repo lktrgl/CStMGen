@@ -1,7 +1,5 @@
 #include <CStMGen/cstmgen_process.h>
 
-#include <CStMGen/data/templates/cstm_state_diagram_template_h.h>
-#include <CStMGen/data/templates/cstm_state_diagram_template_c.h>
 #include <CStMGen/data/templates/cstm_state_enum_template_h.h>
 #include <CStMGen/data/templates/cstm_state_enum_state_name_text.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_template_h.h>
@@ -10,11 +8,14 @@
 #include <CStMGen/data/templates/cstm_state_transition_name_template.h>
 #include <CStMGen/data/templates/cstm_state_include_text_template.h>
 #include <CStMGen/data/templates/cstm_state_node_text_template.h>
-#include <CStMGen/data/templates/cstm_state_diagram_file_name_template_h.h>
-#include <CStMGen/data/templates/cstm_state_diagram_file_name_template_c.h>
 #include <CStMGen/data/templates/cstm_state_enum_file_name_template_h.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_h.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_c.h>
+
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_template_h.h>
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_template_c.h>
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_h.h>
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_c.h>
 
 #include <CStMGen/data/templates/state_code/cstm_state_template_c.h>
 #include <CStMGen/data/templates/state_code/cstm_state_template_h.h>
@@ -308,12 +309,12 @@ void cstmgen_process_t::generate_files()
 
     if ( m_params.get_produce_state_diagram_header() )
     {
-      buffer_t buffer_file_contents{data_templates_cstm_state_diagram_template_h,
-                                    data_templates_cstm_state_diagram_template_h + data_templates_cstm_state_diagram_template_h_len};
+      buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h,
+                                    data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h_len};
       process_all_vars ( buffer_file_contents, {} );
 
-      buffer_t buffer_file_name{data_templates_cstm_state_diagram_file_name_template_h,
-                                data_templates_cstm_state_diagram_file_name_template_h + data_templates_cstm_state_diagram_file_name_template_h_len};
+      buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_template_h,
+                                data_templates_state_diagram_code_cstm_state_diagram_template_h + data_templates_state_diagram_code_cstm_state_diagram_template_h_len};
       process_all_vars ( buffer_file_name, {} );
 
       std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
@@ -363,12 +364,12 @@ void cstmgen_process_t::generate_files()
 
     if ( m_params.get_produce_state_diagram_implementation() )
     {
-      buffer_t buffer_file_contents{data_templates_cstm_state_diagram_template_c,
-                                    data_templates_cstm_state_diagram_template_c + data_templates_cstm_state_diagram_template_c_len};
+      buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_c,
+                                    data_templates_state_diagram_code_cstm_state_diagram_template_c + data_templates_state_diagram_code_cstm_state_diagram_template_c_len};
       process_all_vars ( buffer_file_contents, {} );
 
-      buffer_t buffer_file_name{data_templates_cstm_state_diagram_file_name_template_c,
-                                data_templates_cstm_state_diagram_file_name_template_c + data_templates_cstm_state_diagram_file_name_template_c_len};
+      buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c,
+                                data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c_len};
       process_all_vars ( buffer_file_name, {} );
 
       std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );

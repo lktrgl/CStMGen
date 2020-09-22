@@ -27,8 +27,6 @@ set (ascii_files_src_folder data/templates)
 set (hex_files_dest_folder include/CStMGen)
 
 set (ascii_to_hex_files_sources
-  ${ascii_files_src_folder}/cstm_state_diagram_template_h
-  ${ascii_files_src_folder}/cstm_state_diagram_template_c
   ${ascii_files_src_folder}/cstm_state_enum_template_h
   ${ascii_files_src_folder}/cstm_state_enum_state_name_text
   ${ascii_files_src_folder}/cstm_state_data_desc_template_h
@@ -37,12 +35,16 @@ set (ascii_to_hex_files_sources
   ${ascii_files_src_folder}/cstm_state_transition_name_template
   ${ascii_files_src_folder}/cstm_state_include_text_template
   ${ascii_files_src_folder}/cstm_state_node_text_template
-  ${ascii_files_src_folder}/cstm_state_diagram_file_name_template_h
-  ${ascii_files_src_folder}/cstm_state_diagram_file_name_template_c
   ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h
   ${ascii_files_src_folder}/cstm_state_data_desc_file_name_template_h
   ${ascii_files_src_folder}/cstm_state_data_desc_file_name_template_c
  
+  #state diagram code
+  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_h
+  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_c
+  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_h
+  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_c
+
   #state code
   ${ascii_files_src_folder}/state_code/cstm_state_template_h
   ${ascii_files_src_folder}/state_code/cstm_state_template_c
@@ -75,8 +77,8 @@ set (ascii_to_hex_files_outputs
 add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
   COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
   COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_code
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_diagram_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_diagram_template_c ${hex_files_dest_folder}
+  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_diagram_code
+  
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_state_name_text ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_data_desc_template_h ${hex_files_dest_folder}
@@ -85,11 +87,15 @@ add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_transition_name_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_include_text_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_node_text_template ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_diagram_file_name_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_diagram_file_name_template_c ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_data_desc_file_name_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_data_desc_file_name_template_c ${hex_files_dest_folder}
+
+  #state diagram code
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_c ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_c ${hex_files_dest_folder}
 
   #state code
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_template_h ${hex_files_dest_folder}
