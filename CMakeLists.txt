@@ -29,8 +29,6 @@ set (hex_files_dest_folder include/CStMGen)
 set (ascii_to_hex_files_sources
   ${ascii_files_src_folder}/cstm_state_enum_template_h
   ${ascii_files_src_folder}/cstm_state_enum_state_name_text
-  ${ascii_files_src_folder}/cstm_state_transition_template_c
-  ${ascii_files_src_folder}/cstm_state_transition_name_template
   ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h
 
   #state machine data
@@ -52,13 +50,12 @@ set (ascii_to_hex_files_sources
   ${ascii_files_src_folder}/state_code/cstm_state_template_c
   ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_h
   ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_c
+  ${ascii_files_src_folder}/state_code/cstm_state_transition_template_c
+  ${ascii_files_src_folder}/state_code/cstm_state_transition_name_template
 )
 
 set (ascii_to_hex_files_outputs
-  ${hex_files_dest_folder}/data/templates/cstm_state_template_c.h
   ${hex_files_dest_folder}/data/templates/cstm_state_enum_template_h.h
-  ${hex_files_dest_folder}/data/templates/cstm_state_transition_name_template.h
-  ${hex_files_dest_folder}/data/templates/cstm_state_transition_template_c.h
   ${hex_files_dest_folder}/data/templates/cstm_state_enum_state_name_text.h
   ${hex_files_dest_folder}/data/templates/cstm_state_enum_file_name_template_h.h
   
@@ -77,9 +74,12 @@ set (ascii_to_hex_files_outputs
   
   #state code
   ${hex_files_dest_folder}/data/templates/state_code/cstm_state_template_h.h
+  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_template_c.h
   ${hex_files_dest_folder}/data/templates/state_code/cstm_state_file_name_template_c.h
   ${hex_files_dest_folder}/data/templates/state_code/cstm_state_include_text_template.h
   ${hex_files_dest_folder}/data/templates/state_code/cstm_state_file_name_template_h.h
+  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_transition_name_template.h
+  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_transition_template_c.h
 )
 
 add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
@@ -90,8 +90,6 @@ add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
   
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_state_name_text ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_transition_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_transition_name_template ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h ${hex_files_dest_folder}
 
   #state machine data
@@ -113,6 +111,8 @@ add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_template_c ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_h ${hex_files_dest_folder}
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_c ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_transition_template_c ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_transition_name_template ${hex_files_dest_folder}
 
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   DEPENDS ${ascii_to_hex_files_sources}

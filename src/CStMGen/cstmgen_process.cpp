@@ -2,8 +2,6 @@
 
 #include <CStMGen/data/templates/cstm_state_enum_template_h.h>
 #include <CStMGen/data/templates/cstm_state_enum_state_name_text.h>
-#include <CStMGen/data/templates/cstm_state_transition_template_c.h>
-#include <CStMGen/data/templates/cstm_state_transition_name_template.h>
 #include <CStMGen/data/templates/cstm_state_enum_file_name_template_h.h>
 
 #include <CStMGen/data/templates/state_machine_data/cstm_state_data_desc_file_name_template_h.h>
@@ -22,6 +20,8 @@
 #include <CStMGen/data/templates/state_code/cstm_state_template_h.h>
 #include <CStMGen/data/templates/state_code/cstm_state_file_name_template_h.h>
 #include <CStMGen/data/templates/state_code/cstm_state_file_name_template_c.h>
+#include <CStMGen/data/templates/state_code/cstm_state_transition_template_c.h>
+#include <CStMGen/data/templates/state_code/cstm_state_transition_name_template.h>
 
 #include <locale>
 #include <iostream>
@@ -134,8 +134,8 @@ void cstmgen_process_t::find_and_process_var
 
     for ( auto t = transitions_from_state.first; t != transitions_from_state.second; ++t )
     {
-      buffer_t buffer{data_templates_cstm_state_transition_template_c,
-                      data_templates_cstm_state_transition_template_c + data_templates_cstm_state_transition_template_c_len};
+      buffer_t buffer{data_templates_state_code_cstm_state_transition_template_c,
+                      data_templates_state_code_cstm_state_transition_template_c + data_templates_state_code_cstm_state_transition_template_c_len};
 
       find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, m_machine_structure.get_machine_name() );
       find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
@@ -417,8 +417,8 @@ cstmgen_process_t::buffer_t
 cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
     buffer_t const& state_name_to )
 {
-  buffer_t result{data_templates_cstm_state_transition_name_template,
-                  data_templates_cstm_state_transition_name_template + data_templates_cstm_state_transition_name_template_len};
+  buffer_t result{data_templates_state_code_cstm_state_transition_name_template,
+                  data_templates_state_code_cstm_state_transition_name_template + data_templates_state_code_cstm_state_transition_name_template_len};
 
   find_and_process_lower_var<m_var_state_name_from> ( result, state_name_from );
   find_and_process_lower_var<m_var_state_name_to> ( result, state_name_to );
