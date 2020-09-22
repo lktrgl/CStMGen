@@ -27,9 +27,10 @@ set (ascii_files_src_folder data/templates)
 set (hex_files_dest_folder include/CStMGen)
 
 set (ascii_to_hex_files_sources
-  ${ascii_files_src_folder}/cstm_state_enum_template_h
-  ${ascii_files_src_folder}/cstm_state_enum_state_name_text
-  ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h
+  #state machine enum
+  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_template_h
+  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_state_name_text
+  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_file_name_template_h
 
   #state machine data
   ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_h
@@ -55,9 +56,10 @@ set (ascii_to_hex_files_sources
 )
 
 set (ascii_to_hex_files_outputs
-  ${hex_files_dest_folder}/data/templates/cstm_state_enum_template_h.h
-  ${hex_files_dest_folder}/data/templates/cstm_state_enum_state_name_text.h
-  ${hex_files_dest_folder}/data/templates/cstm_state_enum_file_name_template_h.h
+  #state machine enum
+  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_template_h.h
+  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_state_name_text.h
+  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_file_name_template_h.h
   
   #state machine data
   ${hex_files_dest_folder}/data/templates/state_machine_data/cstm_state_data_desc_template_h.h
@@ -84,13 +86,15 @@ set (ascii_to_hex_files_outputs
 
 add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
   COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_code
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_diagram_code
+  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_enum
   COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_data
-  
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_state_name_text ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/cstm_state_enum_file_name_template_h ${hex_files_dest_folder}
+  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_diagram_code
+  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_code
+
+  #state machine enum
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_template_h ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_state_name_text ${hex_files_dest_folder}
+  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_file_name_template_h ${hex_files_dest_folder}
 
   #state machine data
   COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_h ${hex_files_dest_folder}
