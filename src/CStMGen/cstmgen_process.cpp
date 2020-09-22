@@ -6,8 +6,6 @@
 #include <CStMGen/data/templates/cstm_state_data_desc_template_c.h>
 #include <CStMGen/data/templates/cstm_state_transition_template_c.h>
 #include <CStMGen/data/templates/cstm_state_transition_name_template.h>
-#include <CStMGen/data/templates/cstm_state_include_text_template.h>
-#include <CStMGen/data/templates/cstm_state_node_text_template.h>
 #include <CStMGen/data/templates/cstm_state_enum_file_name_template_h.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_h.h>
 #include <CStMGen/data/templates/cstm_state_data_desc_file_name_template_c.h>
@@ -16,6 +14,8 @@
 #include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_template_c.h>
 #include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_h.h>
 #include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_c.h>
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_include_text_template.h>
+#include <CStMGen/data/templates/state_diagram_code/cstm_state_node_text_template.h>
 
 #include <CStMGen/data/templates/state_code/cstm_state_template_c.h>
 #include <CStMGen/data/templates/state_code/cstm_state_template_h.h>
@@ -182,8 +182,8 @@ void cstmgen_process_t::find_and_process_var
 
     for ( auto const& s : states_sorted )
     {
-      buffer_t buffer{data_templates_cstm_state_include_text_template,
-                      data_templates_cstm_state_include_text_template + data_templates_cstm_state_include_text_template_len};
+      buffer_t buffer{data_templates_state_diagram_code_cstm_state_include_text_template,
+                      data_templates_state_diagram_code_cstm_state_include_text_template + data_templates_state_diagram_code_cstm_state_include_text_template_len};
 
       find_and_process_lower_var<m_var_state_machine_name> ( buffer, new_machine_name );
       find_and_process_lower_var<m_var_state_name> ( buffer, s.first );
@@ -226,8 +226,8 @@ void cstmgen_process_t::find_and_process_var
 
     for ( auto const& s : states_sorted )
     {
-      buffer_t buffer{data_templates_cstm_state_node_text_template,
-                      data_templates_cstm_state_node_text_template + data_templates_cstm_state_node_text_template_len};
+      buffer_t buffer{data_templates_state_diagram_code_cstm_state_node_text_template,
+                      data_templates_state_diagram_code_cstm_state_node_text_template + data_templates_state_diagram_code_cstm_state_node_text_template_len};
 
       find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, new_machine_name );
       find_and_process_lower_var<m_var_state_machine_name> ( buffer, new_machine_name );
