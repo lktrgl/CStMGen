@@ -1,10 +1,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef INCLUDECSTMGENDATATEMPLATESCSTMSTATETEMPLATECH
-#define INCLUDECSTMGENDATATEMPLATESCSTMSTATETEMPLATECH
+#ifndef INCLUDECSTMGENDATATEMPLATESSTATECODECSTMSTATETEMPLATECH
+#define INCLUDECSTMGENDATATEMPLATESSTATECODECSTMSTATETEMPLATECH
 
-uint8_t const data_templates_cstm_state_template_c[] =
+uint8_t const data_templates_state_code_cstm_state_template_c[] =
 {
   0x23, 0x69, 0x6e, 0x63, 0x6c, 0x75, 0x64, 0x65, 0x20, 0x3c, 0x25, 0x7b,
   0x73, 0x74, 0x61, 0x74, 0x65, 0x2d, 0x6d, 0x61, 0x63, 0x68, 0x69, 0x6e,
@@ -357,6 +357,6 @@ uint8_t const data_templates_cstm_state_template_c[] =
   0x2d, 0x6e, 0x61, 0x6d, 0x65, 0x7d, 0x25, 0x5b, 0x30, 0x5d, 0x20, 0x29,
   0x0a, 0x7d, 0x3b, 0x0a
 };
-size_t const data_templates_cstm_state_template_c_len = 4192;
+size_t const data_templates_state_code_cstm_state_template_c_len = 4192;
 
-#endif /* INCLUDECSTMGENDATATEMPLATESCSTMSTATETEMPLATECH */
+#endif /* INCLUDECSTMGENDATATEMPLATESSTATECODECSTMSTATETEMPLATECH */

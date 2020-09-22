@@ -1,9 +1,12 @@
 #!/bin/env bash
 
-SRC_FILE="$1"
-DEST_FOLDER="$2"
+WORK_DIR="$1"
 
-DEST_FILE_PATHNAME="${DEST_FOLDER}/${SRC_FILE}.h"
+SRC_FILE="$2"
+DEST_FOLDER="$3"
+
+DEST_FILE_GUARD_NAME="${DEST_FOLDER}/${SRC_FILE}.h"
+DEST_FILE_PATHNAME="${WORK_DIR}/${DEST_FOLDER}/${SRC_FILE}.h"
 
 CMD_SED1="sed 's/unsigned char/uint8_t const/g'"
 CMD_SED2="sed 's/unsigned int/size_t const/g'"
@@ -24,6 +27,25 @@ function print_error()
 
 function check_input_params()
 {
+    if [ -z "$( which xxd )" ] ; then
+        usage
+        print_error "the script depends on the 'xxd' utility availability"
+        exit 1
+    fi
+
+    if [ -z "${WORK_DIR}" ] ; then
+        usage
+        print_error "no work folder has been specified"
+        exit 1
+    fi
+
+    if [ -d "${WORK_DIR}" ] ; then
+        true
+    else
+        usage
+        print_error "no valid work folder has been specified (got '${WORK_DIR}')"
+        exit 1
+    fi
 
     if [ -z "${SRC_FILE}" ] ; then
         usage
@@ -32,11 +54,11 @@ function check_input_params()
     fi
 
 
-    if [ -f "${SRC_FILE}" ] ; then
+    if [ -f "${WORK_DIR}/${SRC_FILE}" ] ; then
         true
     else
         usage
-        print_error "no valid source file has been specified"
+        print_error "no valid source file has been specified (got '${WORK_DIR}/${SRC_FILE}')"
         exit 1
     fi
 
@@ -46,11 +68,11 @@ function check_input_params()
         exit 1
     fi
 
-    if [ -d "${DEST_FOLDER}" ] ; then
+    if [ -d "${WORK_DIR}/${DEST_FOLDER}" ] ; then
         true
     else
         usage
-        print_error "no valid destination folder has been specified"
+        print_error "no valid destination folder has been specified (got '${WORK_DIR}/${DEST_FOLDER}')"
         exit 1
     fi
 
@@ -109,7 +131,7 @@ EOF_OUTPUT_FILE_FOOTER
 
 check_input_params
 
-prepare_output_file_guard "${DEST_FILE_PATHNAME}"
+prepare_output_file_guard "${DEST_FILE_GUARD_NAME}"
 touch_output_file "${DEST_FILE_PATHNAME}"
 prepare_output_file_header "${DEST_FILE_PATHNAME}"
 prepare_output_file_contents "${SRC_FILE}" "${DEST_FILE_PATHNAME}"
