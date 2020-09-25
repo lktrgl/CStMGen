@@ -1,7 +1,7 @@
 #include <CStMGen/cstmgen_main.h>
 
 #include <CStMGen/cstmgen_process.h>
-#include <CStMGen/json_machine_structure.h>
+#include <CStMGen/cstmgen_json_machine_structure.h>
 #include <CStMGen/cstmgen_params.h>
 
 #include <iostream>
@@ -21,7 +21,7 @@ int cstmgen_main ( int argc, char** argv )
     return 1;
   }
 
-  cfg::json_machine_structure_t const machine_structure ( parameters.get_json_machine_config_file() );
+  cfg::cstmgen_json_machine_structure_t const machine_structure ( parameters.get_json_machine_config_file() );
 
   if ( not machine_structure.valid() )
   {

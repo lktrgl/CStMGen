@@ -1,7 +1,7 @@
 #pragma once
 
 #include <CStMGen/cstmgen_params.h>
-#include <CStMGen/json_machine_structure.h>
+#include <CStMGen/cstmgen_json_machine_structure.h>
 
 #include <string>
 
@@ -46,7 +46,7 @@ class cstmgen_process_t final
 
 public:
   cstmgen_process_t ( cfg::cstmgen_params_t const& params,
-                      cfg::json_machine_structure_t const& machine_structure );
+                      cfg::cstmgen_json_machine_structure_t const& machine_structure );
 
   cstmgen_process_t ( cstmgen_process_t const& ) = delete;
   cstmgen_process_t& operator= ( cstmgen_process_t const& ) = delete;
@@ -111,7 +111,7 @@ private:
 
 private:
   cfg::cstmgen_params_t const& m_params;
-  cfg::json_machine_structure_t const& m_machine_structure;
+  cfg::cstmgen_json_machine_structure_t const& m_machine_structure;
 };
 
 /* ------------------------------------------------------------------------- */

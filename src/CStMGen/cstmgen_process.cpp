@@ -38,7 +38,7 @@ namespace gen
 /* ------------------------------------------------------------------------- */
 
 cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
-                                       cfg::json_machine_structure_t const& machine_structure )
+                                       cfg::cstmgen_json_machine_structure_t const& machine_structure )
   : m_params ( params )
   , m_machine_structure ( machine_structure )
 {

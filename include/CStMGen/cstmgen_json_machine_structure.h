@@ -12,7 +12,7 @@ namespace cfg
 
 /* ------------------------------------------------------------------------- */
 
-class json_machine_structure_t final
+class cstmgen_json_machine_structure_t final
 {
   constexpr static std::string_view const m_key_machine_name = "machine-name";
   constexpr static std::string_view const m_key_states = "states";
@@ -33,12 +33,12 @@ public:
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
 public:
-  json_machine_structure_t ( std::string const& config_file_pathname );
+  cstmgen_json_machine_structure_t ( std::string const& config_file_pathname );
 
-  json_machine_structure_t ( json_machine_structure_t const& ) = delete;
-  json_machine_structure_t& operator= ( json_machine_structure_t const& ) = delete;
-  json_machine_structure_t ( json_machine_structure_t&& ) = delete;
-  json_machine_structure_t& operator= ( json_machine_structure_t&& ) = delete;
+  cstmgen_json_machine_structure_t ( cstmgen_json_machine_structure_t const& ) = delete;
+  cstmgen_json_machine_structure_t& operator= ( cstmgen_json_machine_structure_t const& ) = delete;
+  cstmgen_json_machine_structure_t ( cstmgen_json_machine_structure_t&& ) = delete;
+  cstmgen_json_machine_structure_t& operator= ( cstmgen_json_machine_structure_t&& ) = delete;
 
   std::string const& get_machine_name() const
   {

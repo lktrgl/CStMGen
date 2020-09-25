@@ -1,4 +1,4 @@
-#include <CStMGen/json_machine_structure.h>
+#include <CStMGen/cstmgen_json_machine_structure.h>
 
 #include <rapidjson/document.h>
 
@@ -13,7 +13,7 @@ namespace cfg
 
 /* ------------------------------------------------------------------------- */
 
-json_machine_structure_t::json_machine_structure_t ( std::string const& config_file_pathname )
+cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
   import ( m_config_file_pathname );
@@ -21,8 +21,8 @@ json_machine_structure_t::json_machine_structure_t ( std::string const& config_f
 
 /* ------------------------------------------------------------------------- */
 
-json_machine_structure_t::states_sorted_t
-json_machine_structure_t::get_states_sorted() const
+cstmgen_json_machine_structure_t::states_sorted_t
+cstmgen_json_machine_structure_t::get_states_sorted() const
 {
   states_sorted_t result{m_states.cbegin(), m_states.cend() };
   std::sort ( result.begin(), result.end(), [] ( auto const & left, auto const & right )
@@ -36,7 +36,7 @@ json_machine_structure_t::get_states_sorted() const
 
 /* ------------------------------------------------------------------------- */
 
-void json_machine_structure_t::import ( std::string const& config_file_pathname )
+void cstmgen_json_machine_structure_t::import ( std::string const& config_file_pathname )
 {
   std::ifstream in { config_file_pathname, std::ios::binary | std::ios::ate};
 
