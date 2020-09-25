@@ -28,101 +28,54 @@ set (hex_files_dest_folder include/CStMGen)
 
 set (ascii_to_hex_files_sources
   #state machine enum
-  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_template_h
-  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_state_name_text
-  ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_file_name_template_h
+  state_machine_enum/cstm_state_enum_template_h
+  state_machine_enum/cstm_state_enum_state_name_text
+  state_machine_enum/cstm_state_enum_file_name_template_h
 
   #state machine data
-  ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_h
-  ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_c
-  ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_file_name_template_h
-  ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_file_name_template_c
+  state_machine_data/cstm_state_data_desc_template_h
+  state_machine_data/cstm_state_data_desc_template_c
+  state_machine_data/cstm_state_data_desc_file_name_template_h
+  state_machine_data/cstm_state_data_desc_file_name_template_c
  
   #state diagram code
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_h
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_c
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_h
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_c
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_include_text_template
-  ${ascii_files_src_folder}/state_diagram_code/cstm_state_node_text_template
+  state_diagram_code/cstm_state_diagram_template_h
+  state_diagram_code/cstm_state_diagram_template_c
+  state_diagram_code/cstm_state_diagram_file_name_template_h
+  state_diagram_code/cstm_state_diagram_file_name_template_c
+  state_diagram_code/cstm_state_include_text_template
+  state_diagram_code/cstm_state_node_text_template
 
   #state code
-  ${ascii_files_src_folder}/state_code/cstm_state_template_h
-  ${ascii_files_src_folder}/state_code/cstm_state_template_c
-  ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_h
-  ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_c
-  ${ascii_files_src_folder}/state_code/cstm_state_transition_template_c
-  ${ascii_files_src_folder}/state_code/cstm_state_transition_name_template
+  state_code/cstm_state_template_h
+  state_code/cstm_state_template_c
+  state_code/cstm_state_file_name_template_h
+  state_code/cstm_state_file_name_template_c
+  state_code/cstm_state_transition_template_c
+  state_code/cstm_state_transition_name_template
 )
 
-set (ascii_to_hex_files_outputs
-  #state machine enum
-  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_state_name_text.h
-  ${hex_files_dest_folder}/data/templates/state_machine_enum/cstm_state_enum_file_name_template_h.h
-  
-  #state machine data
-  ${hex_files_dest_folder}/data/templates/state_machine_data/cstm_state_data_desc_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_machine_data/cstm_state_data_desc_file_name_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_machine_data/cstm_state_data_desc_template_c.h
-  ${hex_files_dest_folder}/data/templates/state_machine_data/cstm_state_data_desc_file_name_template_c.h
+set(ascii_to_hex_files_outputs)
+foreach(x_ascii_file ${ascii_to_hex_files_sources})
+    set(x_ascii_file "${ascii_files_src_folder}/${x_ascii_file}")
+    set(x_hex_file "${hex_files_dest_folder}/${x_ascii_file}.h")
+    add_custom_command(OUTPUT ${x_hex_file}
 
-  #state diagram code
-  ${hex_files_dest_folder}/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_diagram_code/cstm_state_diagram_file_name_template_c.h
-  ${hex_files_dest_folder}/data/templates/state_diagram_code/cstm_state_diagram_template_c.h
-  ${hex_files_dest_folder}/data/templates/state_diagram_code/cstm_state_node_text_template.h
-  ${hex_files_dest_folder}/data/templates/state_diagram_code/cstm_state_diagram_template_h.h
-  
-  #state code
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_template_c.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_file_name_template_c.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_include_text_template.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_file_name_template_h.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_transition_name_template.h
-  ${hex_files_dest_folder}/data/templates/state_code/cstm_state_transition_template_c.h
-)
+        #dummy all the output folders creation
+        COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
+        COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_enum
+        COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_data
+        COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_diagram_code
+        COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_code
 
-add_custom_command(OUTPUT ${ascii_to_hex_files_outputs}
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_enum
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_machine_data
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_diagram_code
-  COMMAND mkdir -vp ${hex_files_dest_folder}/data/templates/state_code
-
-  #state machine enum
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_state_name_text ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_enum/cstm_state_enum_file_name_template_h ${hex_files_dest_folder}
-
-  #state machine data
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_file_name_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_machine_data/cstm_state_data_desc_file_name_template_c ${hex_files_dest_folder}
-
-  #state diagram code
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_diagram_file_name_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_include_text_template ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_diagram_code/cstm_state_node_text_template ${hex_files_dest_folder}
-
-  #state code
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_h ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_file_name_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_transition_template_c ${hex_files_dest_folder}
-  COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${ascii_files_src_folder}/state_code/cstm_state_transition_name_template ${hex_files_dest_folder}
-
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  DEPENDS ${ascii_to_hex_files_sources}
-  COMMENT "Converting to HEX encoded include files"
-  VERBATIM
-)
+        COMMAND ${conv_util} ${CMAKE_SOURCE_DIR} ${x_ascii_file} ${hex_files_dest_folder}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        DEPENDS ${x_ascii_file}
+        COMMENT "Converting ASCII '${x_ascii_file}' to HEX '${x_hex_file}' file"
+        VERBATIM
+    )
+    list(APPEND ascii_to_hex_files_outputs ${x_hex_file})
+endforeach()
 
 add_custom_target(ascii_to_hex_files ALL DEPENDS ${ascii_to_hex_files_outputs})
 
