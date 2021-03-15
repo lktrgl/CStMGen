@@ -5,6 +5,8 @@ script_file="${PWD}/do_tune_submodules"
 
 cat << EOF_SCRIPT_FILE > "${script_file}"
 git fetch --all --recurse-submodules \
+    && git config user.name "lktrgl" \
+    && git config user.email "32882989+lktrgl@users.noreply.github.com" \
     && git stash clear \
     && git stash \
     && git checkout master \
