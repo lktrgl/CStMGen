@@ -47,6 +47,17 @@ cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
 
 /* ------------------------------------------------------------------------- */
 
+template<char const* const& VAR_NAME>
+void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string const& new_str )
+{
+  ( void ) buffer;
+  ( void ) new_str;
+
+  static_assert ( details::dependent_false_t<VAR_NAME>::value, "You should define the full specification instead." );
+}
+
+/* ------------------------------------------------------------------------- */
+
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_STATE_NAMES_LIST> (  buffer_t& buffer,
@@ -246,6 +257,47 @@ void cstmgen_process_t::find_and_process_var
 
   constexpr std::string_view const var{m_var_state_nodes_list};
   replace_all_occurences_inplace ( buffer, var, new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<char const* const& VAR_NAME>
+void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer, std::string const& new_str )
+{
+  constexpr std::string_view const var{VAR_NAME};
+
+  auto local_new_str{new_str};
+  convert_to_upper_case_inplace ( local_new_str );
+
+  replace_all_occurences_inplace ( buffer, var, local_new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
+template<char const* const& VAR_NAME>
+void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer, std::string const& new_str )
+{
+  constexpr std::string_view const var{VAR_NAME};
+
+  auto local_new_str{new_str};
+  convert_to_lower_case_inplace ( local_new_str );
+
+  replace_all_occurences_inplace ( buffer, var, local_new_str );
+}
+
+/* ------------------------------------------------------------------------- */
+
+template <typename OLD_STR_T, typename NEW_STR_T>
+void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
+    OLD_STR_T const& old_str,
+    NEW_STR_T const& new_str )
+{
+  for ( auto pos = buffer.find ( old_str, 0 );
+        std::string::npos != pos;
+        pos = buffer.find ( old_str, 0 ) )
+  {
+    buffer.replace ( pos, old_str.size(), new_str );
+  }
 }
 
 /* ------------------------------------------------------------------------- */
