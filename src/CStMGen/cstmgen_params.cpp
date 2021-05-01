@@ -18,7 +18,7 @@ cstmgen_params_t::cstmgen_params_t ( int argc, char** argv )
 
 /* ------------------------------------------------------------------------- */
 
-std::string cstmgen_params_t::usage()
+std::string cstmgen_params_t::get_usage_text()
 {
   std::stringstream ss;
   ss
@@ -54,52 +54,25 @@ std::string cstmgen_params_t::usage()
 
 /* ------------------------------------------------------------------------- */
 
-bool cstmgen_params_t::valid() const
+bool cstmgen_params_t::is_valid() const
 {
-  bool const is_valid = get_json_machine_config_file().length()
+
+  bool const is_valid = m_is_valid_config_file_name
                         &&
                         (
-                          (
-                            get_produce_state_enum()
-                            &&
-                            get_header_folder().length()
-                          )
+                          m_is_valid_produce_state_enum
                           ||
-                          (
-                            get_produce_state_header()
-                            &&
-                            get_header_folder().length()
-                          )
+                          m_is_valid_produce_state_header
                           ||
-                          (
-                            get_produce_state_diagram_header()
-                            &&
-                            get_header_folder().length()
-                          )
+                          m_is_valid_produce_state_diagram_header
                           ||
-                          (
-                            get_produce_state_machine_data_header()
-                            &&
-                            get_header_folder().length()
-                          )
+                          m_is_valid_produce_state_machine_data_header
                           ||
-                          (
-                            get_produce_state_implementation()
-                            &&
-                            get_implementation_folder().length()
-                          )
+                          m_is_valid_produce_state_implementation
                           ||
-                          (
-                            get_produce_state_diagram_implementation()
-                            &&
-                            get_implementation_folder().length()
-                          )
+                          m_is_valid_produce_state_diagram_implementation
                           ||
-                          (
-                            get_produce_state_machine_data_implementation()
-                            &&
-                            get_implementation_folder().length()
-                          )
+                          m_is_valid_produce_state_machine_data_implementation
                         );
 
   return is_valid;
@@ -109,12 +82,17 @@ bool cstmgen_params_t::valid() const
 
 void cstmgen_params_t::process_params()
 {
+  m_error_message_text.clear();
+
+  auto append_error_message_text = [this] ( std::string const & msg_txt )
+  {
+    m_error_message_text += ( m_error_message_text.length() ) ? ( " " ) : ( "" );
+    m_error_message_text += msg_txt;
+  };
+
   if ( m_args.size() < 1 )
   {
-#ifndef NDEBUG
-    std::cerr << usage() << std::endl;
-    std::cerr << "Too few parameters provided'" << std::endl;
-#endif
+    append_error_message_text ( "Too few parameters provided." );
   }
   else
   {
@@ -168,11 +146,102 @@ void cstmgen_params_t::process_params()
       }
       else
       {
-#ifndef NDEBUG
-        std::cerr << usage() << std::endl;
-        std::cerr << "Unknown option: '" << p << "'" << std::endl;
-#endif
+        std::string e ( "Unknown option: '" );
+        e += p;
+        e += "' detected.";
+        append_error_message_text ( e );
       }
+    }
+
+    m_is_valid_config_file_name = get_json_machine_config_file_name().length();
+
+    if ( not m_is_valid_config_file_name )
+    {
+      append_error_message_text ( "Configuration file name is invalid." );
+    }
+
+    m_is_valid_produce_state_enum =
+      (
+        is_produce_state_enum()
+        &&
+        get_header_folder_name().length()
+      );
+
+    if ( is_produce_state_enum() && not m_is_valid_produce_state_enum )
+    {
+      append_error_message_text ( "Missing header folder name for the state enum." );
+    }
+
+    m_is_valid_produce_state_header =
+      (
+        is_produce_state_header()
+        &&
+        get_header_folder_name().length()
+      );
+
+    if ( is_produce_state_header() && not m_is_valid_produce_state_header )
+    {
+      append_error_message_text ( "Missing header folder name for the state header." );
+    }
+
+    m_is_valid_produce_state_diagram_header =
+      (
+        is_produce_state_diagram_header()
+        &&
+        get_header_folder_name().length()
+      );
+
+    if ( is_produce_state_diagram_header() && not m_is_valid_produce_state_diagram_header )
+    {
+      append_error_message_text ( "Missing header folder name for the state diagram header." );
+    }
+
+    m_is_valid_produce_state_machine_data_header =
+      (
+        is_produce_state_machine_data_header()
+        &&
+        get_header_folder_name().length()
+      );
+
+    if ( is_produce_state_machine_data_header() && not m_is_valid_produce_state_machine_data_header )
+    {
+      append_error_message_text ( "Missing header folder name for the state machine data header." );
+    }
+
+    m_is_valid_produce_state_implementation =
+      (
+        is_produce_state_implementation()
+        &&
+        get_implementation_folder_name().length()
+      );
+
+    if ( is_produce_state_implementation() && not m_is_valid_produce_state_implementation )
+    {
+      append_error_message_text ( "Missing implementation folder name for the state implementation." );
+    }
+
+    m_is_valid_produce_state_diagram_implementation =
+      (
+        is_produce_state_diagram_implementation()
+        &&
+        get_implementation_folder_name().length()
+      );
+
+    if ( is_produce_state_diagram_implementation() && not m_is_valid_produce_state_diagram_implementation )
+    {
+      append_error_message_text ( "Missing implementation folder name for the state diagram implementation." );
+    }
+
+    m_is_valid_produce_state_machine_data_implementation =
+      (
+        is_produce_state_machine_data_implementation()
+        &&
+        get_implementation_folder_name().length()
+      );
+
+    if ( is_produce_state_machine_data_implementation() && not m_is_valid_produce_state_machine_data_implementation )
+    {
+      append_error_message_text ( "Missing implementation folder name for the state machine data implementation." );
     }
   }
 }

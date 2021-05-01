@@ -12,16 +12,17 @@ int cstmgen_main ( int argc, char** argv )
 {
   cfg::cstmgen_params_t const parameters ( argc, argv );
 
-  if ( not parameters.valid() )
+  if ( not parameters.is_valid() )
   {
 #ifndef NDEBUG
-    std::cerr << parameters.usage() << std::endl;
+    std::cerr << parameters.get_usage_text() << std::endl;
     std::cerr << "Invalid parameters set occurred" << std::endl;
+    std::cerr << parameters.get_error_message_text() << std::endl;
 #endif
     return 1;
   }
 
-  cfg::cstmgen_json_machine_structure_t const machine_structure ( parameters.get_json_machine_config_file() );
+  cfg::cstmgen_json_machine_structure_t const machine_structure ( parameters.get_json_machine_config_file_name() );
 
   if ( not machine_structure.valid() )
   {

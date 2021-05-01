@@ -34,49 +34,54 @@ public:
   cstmgen_params_t ( cstmgen_params_t&& ) = delete;
   cstmgen_params_t& operator= ( cstmgen_params_t&& ) = delete;
 
-  std::string const& get_json_machine_config_file() const
+  std::string const& get_json_machine_config_file_name() const
   {
     return m_json_machine_config_file;
   }
-  std::string const& get_header_folder() const
+  std::string const& get_header_folder_name() const
   {
     return m_header_folder;
   }
-  std::string const& get_implementation_folder() const
+  std::string const& get_implementation_folder_name() const
   {
     return m_implementation_folder;
   }
-  bool get_produce_state_enum() const
+  bool is_produce_state_enum() const
   {
     return m_produce_state_enum.length() || m_produce_all.length();
   }
-  bool get_produce_state_header() const
+  bool is_produce_state_header() const
   {
     return m_produce_state_header.length() || m_produce_all.length();
   }
-  bool get_produce_state_implementation() const
+  bool is_produce_state_implementation() const
   {
     return m_produce_state_implementation.length() || m_produce_all.length();
   }
-  bool get_produce_state_diagram_header() const
+  bool is_produce_state_diagram_header() const
   {
     return m_produce_state_diagram_header.length() || m_produce_all.length();
   }
-  bool get_produce_state_diagram_implementation() const
+  bool is_produce_state_diagram_implementation() const
   {
     return m_produce_state_diagram_implementation.length() || m_produce_all.length();
   }
-  bool get_produce_state_machine_data_header() const
+  bool is_produce_state_machine_data_header() const
   {
     return m_produce_state_machine_data_header.length() || m_produce_all.length();
   }
-  bool get_produce_state_machine_data_implementation() const
+  bool is_produce_state_machine_data_implementation() const
   {
     return m_produce_state_machine_data_implementation.length() || m_produce_all.length();
   }
 
-  bool valid() const;
-  static std::string usage();
+  std::string const& get_error_message_text() const
+  {
+    return m_error_message_text;
+  }
+
+  bool is_valid() const;
+  static std::string get_usage_text();
 
 private:
   void process_params();
@@ -96,6 +101,17 @@ private:
   std::string m_produce_state_diagram_implementation;
   std::string m_produce_state_machine_data_header;
   std::string m_produce_state_machine_data_implementation;
+
+  std::string m_error_message_text;
+
+  bool m_is_valid_config_file_name = false;
+  bool m_is_valid_produce_state_enum = false;
+  bool m_is_valid_produce_state_header = false;
+  bool m_is_valid_produce_state_diagram_header = false;
+  bool m_is_valid_produce_state_machine_data_header = false;
+  bool m_is_valid_produce_state_implementation = false;
+  bool m_is_valid_produce_state_diagram_implementation = false;
+  bool m_is_valid_produce_state_machine_data_implementation = false;
 };
 
 /* ------------------------------------------------------------------------- */

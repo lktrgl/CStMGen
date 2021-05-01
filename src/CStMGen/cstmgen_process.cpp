@@ -306,11 +306,11 @@ void cstmgen_process_t::generate_files()
 {
   constexpr static auto const out_file_mode = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
 
-  if ( m_params.get_header_folder().length() )
+  if ( m_params.get_header_folder_name().length() )
   {
-    auto const& header_folder = m_params.get_header_folder();
+    auto const& header_folder = m_params.get_header_folder_name();
 
-    if ( m_params.get_produce_state_enum() )
+    if ( m_params.is_produce_state_enum() )
     {
       buffer_t buffer_file_contents{data_templates_state_machine_enum_cstm_state_enum_template_h,
                                     data_templates_state_machine_enum_cstm_state_enum_template_h + data_templates_state_machine_enum_cstm_state_enum_template_h_len};
@@ -325,7 +325,7 @@ void cstmgen_process_t::generate_files()
       out.flush();
     }
 
-    if ( m_params.get_produce_state_machine_data_header() )
+    if ( m_params.is_produce_state_machine_data_header() )
     {
       buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_h,
                                     data_templates_state_machine_data_cstm_state_data_desc_template_h + data_templates_state_machine_data_cstm_state_data_desc_template_h_len};
@@ -340,7 +340,7 @@ void cstmgen_process_t::generate_files()
       out.flush();
     }
 
-    if ( m_params.get_produce_state_header() )
+    if ( m_params.is_produce_state_header() )
     {
       auto const& states = m_machine_structure.get_states();
 
@@ -360,7 +360,7 @@ void cstmgen_process_t::generate_files()
       }
     }
 
-    if ( m_params.get_produce_state_diagram_header() )
+    if ( m_params.is_produce_state_diagram_header() )
     {
       buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_h,
                                     data_templates_state_diagram_code_cstm_state_diagram_template_h + data_templates_state_diagram_code_cstm_state_diagram_template_h_len};
@@ -376,11 +376,11 @@ void cstmgen_process_t::generate_files()
     }
   }
 
-  if ( m_params.get_implementation_folder().length() )
+  if ( m_params.get_implementation_folder_name().length() )
   {
-    auto const& implementation_folder = m_params.get_implementation_folder();
+    auto const& implementation_folder = m_params.get_implementation_folder_name();
 
-    if ( m_params.get_produce_state_machine_data_implementation() )
+    if ( m_params.is_produce_state_machine_data_implementation() )
     {
       buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_c,
                                     data_templates_state_machine_data_cstm_state_data_desc_template_c + data_templates_state_machine_data_cstm_state_data_desc_template_c_len};
@@ -395,7 +395,7 @@ void cstmgen_process_t::generate_files()
       out.flush();
     }
 
-    if ( m_params.get_produce_state_implementation() )
+    if ( m_params.is_produce_state_implementation() )
     {
       auto const& states = m_machine_structure.get_states();
 
@@ -415,7 +415,7 @@ void cstmgen_process_t::generate_files()
       }
     }
 
-    if ( m_params.get_produce_state_diagram_implementation() )
+    if ( m_params.is_produce_state_diagram_implementation() )
     {
       buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_c,
                                     data_templates_state_diagram_code_cstm_state_diagram_template_c + data_templates_state_diagram_code_cstm_state_diagram_template_c_len};
