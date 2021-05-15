@@ -105,8 +105,8 @@ void cstmgen_process_t::find_and_process_var
   {
     std::stringstream ss;
 
-    auto const& transitions_from = m_machine_structure.get_transitions_from();
-    auto const& transitions_from_state = transitions_from.equal_range ( state_name );
+    auto const& transitions = m_machine_structure.get_transitions();
+    auto const& transitions_from_state = transitions.equal_range ( state_name );
 
     auto first_item = true;
 
@@ -140,8 +140,8 @@ void cstmgen_process_t::find_and_process_var
   {
     std::stringstream ss;
 
-    auto const& transitions_from = m_machine_structure.get_transitions_from();
-    auto const& transitions_from_state = transitions_from.equal_range ( state_name );
+    auto const& transitions = m_machine_structure.get_transitions();
+    auto const& transitions_from_state = transitions.equal_range ( state_name );
 
     for ( auto t = transitions_from_state.first; t != transitions_from_state.second; ++t )
     {
@@ -446,7 +446,7 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
   find_and_process_var<m_var_state_transitions_list> ( buffer, state_name );
   find_and_process_var<m_var_state_includes_list> ( buffer, state_name );
   find_and_process_var<m_var_state_nodes_list> ( buffer, state_name );
-  find_and_process_lower_var<m_var_initial_state_name> ( buffer, m_machine_structure.get_initial_state() );
+  find_and_process_lower_var<m_var_initial_state_name> ( buffer, m_machine_structure.get_initial_state_name() );
 }
 
 /* ------------------------------------------------------------------------- */
