@@ -94,6 +94,10 @@ add_library ( cstmgen
     ${cstmgen_libsources}
      )
 
+add_dependencies( cstmgen
+    ascii_to_hex_files
+    )
+
 if(NOT IS_SUBPROJECT)
 	add_executable(cstmgen_app
 	     src/app/main.cpp
