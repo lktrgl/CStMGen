@@ -58,15 +58,17 @@ private:
   void find_and_process_var ( buffer_t& buffer, std::string const& new_str );
 
   template<char const* const& VAR_NAME>
-  void find_and_process_upper_var ( buffer_t& buffer, std::string const& new_str );
+  void find_and_process_upper_var ( buffer_t& buffer,
+                                    std::string const& replacement_str );
 
   template<char const* const& VAR_NAME>
-  void find_and_process_lower_var ( buffer_t& buffer, std::string const& new_str );
+  void find_and_process_lower_var ( buffer_t& buffer,
+                                    std::string const& replacement_str );
 
   template <typename OLD_STR_T, typename NEW_STR_T>
   void replace_all_occurences_inplace ( buffer_t& buffer,
-                                        OLD_STR_T const& old_str,
-                                        NEW_STR_T const& new_str );
+                                        OLD_STR_T const& target_str,
+                                        NEW_STR_T const& replacement_str );
 
   void generate_files();
 

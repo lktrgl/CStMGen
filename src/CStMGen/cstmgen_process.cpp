@@ -48,10 +48,10 @@ cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
 /* ------------------------------------------------------------------------- */
 
 template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string const& new_str )
+void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string const& replacement_str )
 {
   ( void ) buffer;
-  ( void ) new_str;
+  ( void ) replacement_str;
 
   static_assert ( details::dependent_false_t<VAR_NAME>::value, "You should define the full specification instead." );
 }
@@ -70,7 +70,7 @@ void cstmgen_process_t::find_and_process_var
     return;
   }
 
-  auto new_str = [this]()
+  auto replacement_str = [this]()
   {
     std::stringstream ss;
 
@@ -86,7 +86,7 @@ void cstmgen_process_t::find_and_process_var
   }
   ();
 
-  find_and_process_upper_var<m_var_STATE_NAMES_LIST> ( buffer, new_str );
+  find_and_process_upper_var<m_var_STATE_NAMES_LIST> ( buffer, replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -101,7 +101,7 @@ void cstmgen_process_t::find_and_process_var
     return;
   }
 
-  auto new_str = [this, &state_name]()
+  auto replacement_str = [this, &state_name]()
   {
     std::stringstream ss;
 
@@ -121,7 +121,7 @@ void cstmgen_process_t::find_and_process_var
   }
   ();
 
-  find_and_process_lower_var<m_var_state_transitions_list> ( buffer, new_str );
+  find_and_process_lower_var<m_var_state_transitions_list> ( buffer, replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -136,7 +136,7 @@ void cstmgen_process_t::find_and_process_var
     return;
   }
 
-  auto new_str = [this, &state_name]()
+  auto replacement_str = [this, &state_name]()
   {
     std::stringstream ss;
 
@@ -163,9 +163,9 @@ void cstmgen_process_t::find_and_process_var
   }
   ();
 
-  constexpr std::string_view const var{m_var_state_transitions_definition};
+  constexpr std::string_view const target_str{m_var_state_transitions_definition};
 
-  replace_all_occurences_inplace ( buffer, var, new_str );
+  replace_all_occurences_inplace ( buffer, target_str, replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -182,7 +182,7 @@ void cstmgen_process_t::find_and_process_var
     return;
   }
 
-  auto new_str = [this]()
+  auto replacement_str = [this]()
   {
     std::stringstream ss;
 
@@ -209,7 +209,7 @@ void cstmgen_process_t::find_and_process_var
   }
   ();
 
-  find_and_process_lower_var<m_var_state_includes_list> ( buffer, new_str );
+  find_and_process_lower_var<m_var_state_includes_list> ( buffer, replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -226,7 +226,7 @@ void cstmgen_process_t::find_and_process_var
     return;
   }
 
-  auto new_str = [this]()
+  auto replacement_str = [this]()
   {
     std::stringstream ss;
 
@@ -255,48 +255,50 @@ void cstmgen_process_t::find_and_process_var
   }
   ();
 
-  constexpr std::string_view const var{m_var_state_nodes_list};
-  replace_all_occurences_inplace ( buffer, var, new_str );
+  constexpr std::string_view const target_str{m_var_state_nodes_list};
+  replace_all_occurences_inplace ( buffer, target_str, replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
 
 template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer, std::string const& new_str )
+void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer,
+    std::string const& replacement_str )
 {
-  constexpr std::string_view const var{VAR_NAME};
+  constexpr std::string_view const target_str{VAR_NAME};
 
-  auto local_new_str{new_str};
-  convert_to_upper_case_inplace ( local_new_str );
+  auto local_replacement_str{replacement_str};
+  convert_to_upper_case_inplace ( local_replacement_str );
 
-  replace_all_occurences_inplace ( buffer, var, local_new_str );
+  replace_all_occurences_inplace ( buffer, target_str, local_replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
 
 template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer, std::string const& new_str )
+void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer,
+    std::string const& replacement_str )
 {
-  constexpr std::string_view const var{VAR_NAME};
+  constexpr std::string_view const target_str{VAR_NAME};
 
-  auto local_new_str{new_str};
-  convert_to_lower_case_inplace ( local_new_str );
+  auto local_replacement_str{replacement_str};
+  convert_to_lower_case_inplace ( local_replacement_str );
 
-  replace_all_occurences_inplace ( buffer, var, local_new_str );
+  replace_all_occurences_inplace ( buffer, target_str, local_replacement_str );
 }
 
 /* ------------------------------------------------------------------------- */
 
 template <typename OLD_STR_T, typename NEW_STR_T>
 void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
-    OLD_STR_T const& old_str,
-    NEW_STR_T const& new_str )
+    OLD_STR_T const& target_str,
+    NEW_STR_T const& replacement_str )
 {
-  for ( auto pos = buffer.find ( old_str, 0 );
+  for ( auto pos = buffer.find ( target_str, 0 );
         std::string::npos != pos;
-        pos = buffer.find ( old_str, 0 ) )
+        pos = buffer.find ( target_str, 0 ) )
   {
-    buffer.replace ( pos, old_str.size(), new_str );
+    buffer.replace ( pos, target_str.size(), replacement_str );
   }
 }
 
