@@ -23,7 +23,12 @@ git clone --recurse-submodules --verbose --remote --progress https://github.com/
     && mkdir build \
     && cd build \
     && cmake .. \
-    && make all
+    && make all \
+    && ./cstmgen_app \
+          --json-machine-config-file=../data/sample_project/config_file.json \
+          --header-folder=../data/sample_project/generated/include \
+          --implementation-folder=../data/sample_project/generated/src \
+          --produce-all
 
 git config user.name "lktrgl"
 git config user.email "32882989+lktrgl@users.noreply.github.com"

@@ -110,11 +110,12 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
   rapidjson::Document d;
   d.Parse ( buff.data() );
 
-  if ( d.Empty() )
+  if ( d.HasParseError() )
   {
 #ifndef NDEBUG
-    std::cerr << "the '" << config_file_pathname << "' file does not contain relevant machine structure or is empty." <<
-              std::endl;
+    std::cerr
+        << "the '" << config_file_pathname << "' file does not contain relevant machine structure or is empty."
+        << std::endl;
 #endif
     return;
   }
