@@ -25,7 +25,7 @@ git clone --recurse-submodules --verbose --remote --progress https://github.com/
     && cmake .. \
     && make all \
     && ./cstmgen_app \
-          --json-machine-config-file=../data/sample_project/config_file.json \
+          --json-machine-config-file=../data/sample_project/definition/config_file.json \
           --header-folder=../data/sample_project/generated/include \
           --implementation-folder=../data/sample_project/generated/src \
           --produce-all
