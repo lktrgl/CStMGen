@@ -4,6 +4,7 @@
 #include <string_view>
 #include <map>
 #include <vector>
+#include <memory>
 
 /* ------------------------------------------------------------------------- */
 
@@ -65,8 +66,9 @@ public:
     state_user_code_t user_code_leave;
   };
 
-  using states_t = std::map<state_id_t, state_property_t>;
-  using states_sorted_t = std::vector<std::pair<state_id_t, state_property_t>>;
+  using state_property_ptr = std::shared_ptr<state_property_t>;
+  using states_t = std::map<state_id_t, state_property_ptr>;
+  using states_sorted_t = std::vector<std::pair<state_id_t, state_property_ptr>>;
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
 public:

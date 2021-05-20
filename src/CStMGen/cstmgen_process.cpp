@@ -86,7 +86,7 @@ void cstmgen_process_t::find_and_process_var
     for ( auto const& s : states_sorted )
     {
       ss
-          << get_state_enum_state_name ( s.first ) << "=" << s.second.value << ",\n";
+          << get_state_enum_state_name ( s.first ) << "=" << s.second->value << ",\n";
     }
 
     return ss.str();
