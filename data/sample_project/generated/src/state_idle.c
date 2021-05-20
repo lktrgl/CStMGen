@@ -17,6 +17,8 @@
 /* put here global code for
    the ST_SENS_COMM_IDLE state scope */
 
+/* %{SENS_COMM_IDLE-GLOBAL-DATA-DECLARATION-AND-CODE-DEFINITION}% */
+
 /* USER GLOBAL DATA AND CODE  FOR 'IDLE' END */
 
 /* ------------------------------------------------------------------------- */
@@ -32,6 +34,8 @@ static void s_enter_idle ( void* data )
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_IDLE state */
+
+  /* %{SENS_COMM_IDLE-ENTER-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'IDLE' 'ENTER' END */
 
@@ -51,6 +55,8 @@ static void s_input_idle ( void* data )
 
   /* put here some code to be executed every time
      before the 'run' handler */
+
+  /* %{SENS_COMM_IDLE-INPUT-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'IDLE' 'INPUT' END */
 
@@ -73,6 +79,8 @@ static void s_run_idle ( void* data )
      be aware that the code should not lock the execution
      inside this function  */
 
+  /* %{SENS_COMM_IDLE-RUN-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR 'IDLE' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
@@ -92,6 +100,8 @@ static void s_output_idle ( void* data )
   /* put here some code to be executed every time
      after the 'run' handler */
 
+  /* %{SENS_COMM_IDLE-OUTPUT-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR 'IDLE' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
@@ -110,6 +120,8 @@ static void s_leave_idle ( void* data )
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_IDLE state */
+
+  /* %{SENS_COMM_IDLE-LEAVE-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'IDLE' 'LEAVE' END */
 

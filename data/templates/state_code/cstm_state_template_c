@@ -17,6 +17,8 @@
   /* put here global code for 
      the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state scope */
 
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-GLOBAL-DATA-DECLARATION-AND-CODE-DEFINITION}% */
+
   /* USER GLOBAL DATA AND CODE  FOR '%{STATE-NAME}%' END */
 
 /* ------------------------------------------------------------------------- */
@@ -32,6 +34,8 @@ static void s_enter_%{state-name}% ( void* data )
 
   /* put here some code to be executed once 
      per each entering the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
+
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-ENTER-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR '%{STATE-NAME}%' 'ENTER' END */
 
@@ -51,6 +55,8 @@ static void s_input_%{state-name}% ( void* data )
 
   /* put here some code to be executed every time
      before the 'run' handler */
+
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-INPUT-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR '%{STATE-NAME}%' 'INPUT' END */
 
@@ -73,6 +79,8 @@ static void s_run_%{state-name}% ( void* data )
      be aware that the code should not lock the execution
      inside this function  */
 
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-RUN-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR '%{STATE-NAME}%' 'RUN' END */
 
   LGGM_CALL_OUT_C(0);
@@ -92,6 +100,8 @@ static void s_output_%{state-name}% ( void* data )
   /* put here some code to be executed every time
      after the 'run' handler */
 
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-OUTPUT-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR '%{STATE-NAME}%' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C(0);
@@ -110,6 +120,8 @@ static void s_leave_%{state-name}% ( void* data )
 
   /* put here some code to be executed once 
      per each leaving the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
+
+  /* %{%{STATE-MACHINE-NAME}%_%{STATE-NAME}%-LEAVE-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR '%{STATE-NAME}%' 'LEAVE' END */
 

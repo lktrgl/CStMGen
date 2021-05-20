@@ -17,6 +17,8 @@
 /* put here global code for
    the ST_SENS_COMM_INIT state scope */
 
+/* %{SENS_COMM_INIT-GLOBAL-DATA-DECLARATION-AND-CODE-DEFINITION}% */
+
 /* USER GLOBAL DATA AND CODE  FOR 'INIT' END */
 
 /* ------------------------------------------------------------------------- */
@@ -32,6 +34,8 @@ static void s_enter_init ( void* data )
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_INIT state */
+
+  /* %{SENS_COMM_INIT-ENTER-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'INIT' 'ENTER' END */
 
@@ -51,6 +55,8 @@ static void s_input_init ( void* data )
 
   /* put here some code to be executed every time
      before the 'run' handler */
+
+  /* %{SENS_COMM_INIT-INPUT-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'INIT' 'INPUT' END */
 
@@ -73,6 +79,8 @@ static void s_run_init ( void* data )
      be aware that the code should not lock the execution
      inside this function  */
 
+  /* %{SENS_COMM_INIT-RUN-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR 'INIT' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
@@ -92,6 +100,8 @@ static void s_output_init ( void* data )
   /* put here some code to be executed every time
      after the 'run' handler */
 
+  /* %{SENS_COMM_INIT-OUTPUT-USER-IMPLEMENTATION}% */
+
   /* USER HANDLER FOR 'INIT' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
@@ -110,6 +120,8 @@ static void s_leave_init ( void* data )
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_INIT state */
+
+  /* %{SENS_COMM_INIT-LEAVE-USER-IMPLEMENTATION}% */
 
   /* USER HANDLER FOR 'INIT' 'LEAVE' END */
 
