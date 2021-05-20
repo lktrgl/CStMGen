@@ -8,8 +8,8 @@ DEST_FOLDER="$3"
 DEST_FILE_GUARD_NAME="${DEST_FOLDER}/${SRC_FILE}.h"
 DEST_FILE_PATHNAME="${WORK_DIR}/${DEST_FOLDER}/${SRC_FILE}.h"
 
-CMD_SED1="sed 's/unsigned char/uint8_t const/g'"
-CMD_SED2="sed 's/unsigned int/size_t const/g'"
+CMD_SED1="sed 's/unsigned char/constexpr uint8_t const/g'"
+CMD_SED2="sed 's/unsigned int/constexpr size_t const/g'"
 
 GUARD_STRING=
 

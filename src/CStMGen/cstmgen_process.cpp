@@ -23,6 +23,13 @@
 #include <CStMGen/data/templates/state_code/cstm_state_transition_template_c.h>
 #include <CStMGen/data/templates/state_code/cstm_state_transition_name_template.h>
 
+#include <CStMGen/data/templates/state_code/cstm_state_global_data_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_handler_enter_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_handler_input_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_handler_leave_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_handler_output_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_handler_run_placeholder_name_template.h>
+
 #include <locale>
 #include <iostream>
 #include <sstream>
