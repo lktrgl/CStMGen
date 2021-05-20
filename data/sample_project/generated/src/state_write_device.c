@@ -12,12 +12,12 @@
 
 /* ------------------------------------------------------------------------- */
 
-/* USER GLOBAL WRITE_DEVICE ENTER BEGIN */
+/* USER GLOBAL DATA AND CODE FOR 'WRITE_DEVICE' BEGIN */
 
 /* put here global code for
    the ST_SENS_COMM_WRITE_DEVICE state scope */
 
-/* USER GLOBAL WRITE_DEVICE ENTER END */
+/* USER GLOBAL DATA AND CODE  FOR 'WRITE_DEVICE' END */
 
 /* ------------------------------------------------------------------------- */
 
@@ -28,12 +28,12 @@ static void s_enter_write_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER WRITE_DEVICE ENTER BEGIN */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'ENTER' BEGIN */
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_WRITE_DEVICE state */
 
-  /* USER HANDLER WRITE_DEVICE ENTER END */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'ENTER' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -47,12 +47,12 @@ static void s_input_write_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER WRITE_DEVICE INPUT BEGIN */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'INPUT' BEGIN */
 
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* USER HANDLER WRITE_DEVICE INPUT END */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'INPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -66,14 +66,14 @@ static void s_run_write_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER WRITE_DEVICE RUN BEGIN */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'RUN' BEGIN */
 
   /* put here some code to be the contents of
      the ST_SENS_COMM_WRITE_DEVICE state;
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* USER HANDLER WRITE_DEVICE RUN END */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -87,12 +87,12 @@ static void s_output_write_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER WRITE_DEVICE OUTPUT BEGIN */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'OUTPUT' BEGIN */
 
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* USER HANDLER WRITE_DEVICE OUTPUT END */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -106,12 +106,12 @@ static void s_leave_write_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER WRITE_DEVICE LEAVE BEGIN */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'LEAVE' BEGIN */
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_WRITE_DEVICE state */
 
-  /* USER HANDLER WRITE_DEVICE LEAVE END */
+  /* USER HANDLER FOR 'WRITE_DEVICE' 'LEAVE' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }

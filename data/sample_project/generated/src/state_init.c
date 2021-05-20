@@ -12,12 +12,12 @@
 
 /* ------------------------------------------------------------------------- */
 
-/* USER GLOBAL INIT ENTER BEGIN */
+/* USER GLOBAL DATA AND CODE FOR 'INIT' BEGIN */
 
 /* put here global code for
    the ST_SENS_COMM_INIT state scope */
 
-/* USER GLOBAL INIT ENTER END */
+/* USER GLOBAL DATA AND CODE  FOR 'INIT' END */
 
 /* ------------------------------------------------------------------------- */
 
@@ -28,12 +28,12 @@ static void s_enter_init ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER INIT ENTER BEGIN */
+  /* USER HANDLER FOR 'INIT' 'ENTER' BEGIN */
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_INIT state */
 
-  /* USER HANDLER INIT ENTER END */
+  /* USER HANDLER FOR 'INIT' 'ENTER' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -47,12 +47,12 @@ static void s_input_init ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER INIT INPUT BEGIN */
+  /* USER HANDLER FOR 'INIT' 'INPUT' BEGIN */
 
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* USER HANDLER INIT INPUT END */
+  /* USER HANDLER FOR 'INIT' 'INPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -66,14 +66,14 @@ static void s_run_init ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER INIT RUN BEGIN */
+  /* USER HANDLER FOR 'INIT' 'RUN' BEGIN */
 
   /* put here some code to be the contents of
      the ST_SENS_COMM_INIT state;
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* USER HANDLER INIT RUN END */
+  /* USER HANDLER FOR 'INIT' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -87,12 +87,12 @@ static void s_output_init ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER INIT OUTPUT BEGIN */
+  /* USER HANDLER FOR 'INIT' 'OUTPUT' BEGIN */
 
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* USER HANDLER INIT OUTPUT END */
+  /* USER HANDLER FOR 'INIT' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -106,12 +106,12 @@ static void s_leave_init ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER INIT LEAVE BEGIN */
+  /* USER HANDLER FOR 'INIT' 'LEAVE' BEGIN */
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_INIT state */
 
-  /* USER HANDLER INIT LEAVE END */
+  /* USER HANDLER FOR 'INIT' 'LEAVE' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }

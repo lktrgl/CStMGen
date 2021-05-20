@@ -12,12 +12,12 @@
 
 /* ------------------------------------------------------------------------- */
 
-/* USER GLOBAL READ_DEVICE ENTER BEGIN */
+/* USER GLOBAL DATA AND CODE FOR 'READ_DEVICE' BEGIN */
 
 /* put here global code for
    the ST_SENS_COMM_READ_DEVICE state scope */
 
-/* USER GLOBAL READ_DEVICE ENTER END */
+/* USER GLOBAL DATA AND CODE  FOR 'READ_DEVICE' END */
 
 /* ------------------------------------------------------------------------- */
 
@@ -28,12 +28,12 @@ static void s_enter_read_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER READ_DEVICE ENTER BEGIN */
+  /* USER HANDLER FOR 'READ_DEVICE' 'ENTER' BEGIN */
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_READ_DEVICE state */
 
-  /* USER HANDLER READ_DEVICE ENTER END */
+  /* USER HANDLER FOR 'READ_DEVICE' 'ENTER' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -47,12 +47,12 @@ static void s_input_read_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER READ_DEVICE INPUT BEGIN */
+  /* USER HANDLER FOR 'READ_DEVICE' 'INPUT' BEGIN */
 
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* USER HANDLER READ_DEVICE INPUT END */
+  /* USER HANDLER FOR 'READ_DEVICE' 'INPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -66,14 +66,14 @@ static void s_run_read_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER READ_DEVICE RUN BEGIN */
+  /* USER HANDLER FOR 'READ_DEVICE' 'RUN' BEGIN */
 
   /* put here some code to be the contents of
      the ST_SENS_COMM_READ_DEVICE state;
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* USER HANDLER READ_DEVICE RUN END */
+  /* USER HANDLER FOR 'READ_DEVICE' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -87,12 +87,12 @@ static void s_output_read_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER READ_DEVICE OUTPUT BEGIN */
+  /* USER HANDLER FOR 'READ_DEVICE' 'OUTPUT' BEGIN */
 
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* USER HANDLER READ_DEVICE OUTPUT END */
+  /* USER HANDLER FOR 'READ_DEVICE' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -106,12 +106,12 @@ static void s_leave_read_device ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER READ_DEVICE LEAVE BEGIN */
+  /* USER HANDLER FOR 'READ_DEVICE' 'LEAVE' BEGIN */
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_READ_DEVICE state */
 
-  /* USER HANDLER READ_DEVICE LEAVE END */
+  /* USER HANDLER FOR 'READ_DEVICE' 'LEAVE' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }

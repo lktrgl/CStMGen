@@ -12,12 +12,12 @@
 
 /* ------------------------------------------------------------------------- */
 
-/* USER GLOBAL IDLE ENTER BEGIN */
+/* USER GLOBAL DATA AND CODE FOR 'IDLE' BEGIN */
 
 /* put here global code for
    the ST_SENS_COMM_IDLE state scope */
 
-/* USER GLOBAL IDLE ENTER END */
+/* USER GLOBAL DATA AND CODE  FOR 'IDLE' END */
 
 /* ------------------------------------------------------------------------- */
 
@@ -28,12 +28,12 @@ static void s_enter_idle ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER IDLE ENTER BEGIN */
+  /* USER HANDLER FOR 'IDLE' 'ENTER' BEGIN */
 
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_IDLE state */
 
-  /* USER HANDLER IDLE ENTER END */
+  /* USER HANDLER FOR 'IDLE' 'ENTER' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -47,12 +47,12 @@ static void s_input_idle ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER IDLE INPUT BEGIN */
+  /* USER HANDLER FOR 'IDLE' 'INPUT' BEGIN */
 
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* USER HANDLER IDLE INPUT END */
+  /* USER HANDLER FOR 'IDLE' 'INPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -66,14 +66,14 @@ static void s_run_idle ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER IDLE RUN BEGIN */
+  /* USER HANDLER FOR 'IDLE' 'RUN' BEGIN */
 
   /* put here some code to be the contents of
      the ST_SENS_COMM_IDLE state;
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* USER HANDLER IDLE RUN END */
+  /* USER HANDLER FOR 'IDLE' 'RUN' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -87,12 +87,12 @@ static void s_output_idle ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER IDLE OUTPUT BEGIN */
+  /* USER HANDLER FOR 'IDLE' 'OUTPUT' BEGIN */
 
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* USER HANDLER IDLE OUTPUT END */
+  /* USER HANDLER FOR 'IDLE' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }
@@ -106,12 +106,12 @@ static void s_leave_idle ( void* data )
   sens_comm_data_desc_t* d = ( sens_comm_data_desc_t* ) data;
   ( void ) d;
 
-  /* USER HANDLER IDLE LEAVE BEGIN */
+  /* USER HANDLER FOR 'IDLE' 'LEAVE' BEGIN */
 
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_IDLE state */
 
-  /* USER HANDLER IDLE LEAVE END */
+  /* USER HANDLER FOR 'IDLE' 'LEAVE' END */
 
   LGGM_CALL_OUT_C ( 0 );
 }

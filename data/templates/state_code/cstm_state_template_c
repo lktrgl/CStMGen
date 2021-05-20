@@ -12,12 +12,12 @@
 
 /* ------------------------------------------------------------------------- */
 
-  /* USER GLOBAL %{STATE-NAME}% ENTER BEGIN */
+  /* USER GLOBAL DATA AND CODE FOR '%{STATE-NAME}%' BEGIN */
 
   /* put here global code for 
      the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state scope */
 
-  /* USER GLOBAL %{STATE-NAME}% ENTER END */
+  /* USER GLOBAL DATA AND CODE  FOR '%{STATE-NAME}%' END */
 
 /* ------------------------------------------------------------------------- */
 
@@ -28,12 +28,12 @@ static void s_enter_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
 
-  /* USER HANDLER %{STATE-NAME}% ENTER BEGIN */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'ENTER' BEGIN */
 
   /* put here some code to be executed once 
      per each entering the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
 
-  /* USER HANDLER %{STATE-NAME}% ENTER END */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'ENTER' END */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -47,12 +47,12 @@ static void s_input_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
   
-  /* USER HANDLER %{STATE-NAME}% INPUT BEGIN */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'INPUT' BEGIN */
 
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* USER HANDLER %{STATE-NAME}% INPUT END */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'INPUT' END */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -66,14 +66,14 @@ static void s_run_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
 
-  /* USER HANDLER %{STATE-NAME}% RUN BEGIN */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'RUN' BEGIN */
 
   /* put here some code to be the contents of
      the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state;
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* USER HANDLER %{STATE-NAME}% RUN END */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'RUN' END */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -87,12 +87,12 @@ static void s_output_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
 
-  /* USER HANDLER %{STATE-NAME}% OUTPUT BEGIN */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'OUTPUT' BEGIN */
 
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* USER HANDLER %{STATE-NAME}% OUTPUT END */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'OUTPUT' END */
 
   LGGM_CALL_OUT_C(0);
 }
@@ -106,12 +106,12 @@ static void s_leave_%{state-name}% ( void* data )
   %{state-machine-name}%_data_desc_t* d = ( %{state-machine-name}%_data_desc_t* ) data;
   (void)d;
   
-  /* USER HANDLER %{STATE-NAME}% LEAVE BEGIN */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'LEAVE' BEGIN */
 
   /* put here some code to be executed once 
      per each leaving the ST_%{STATE-MACHINE-NAME}%_%{STATE-NAME}% state */
 
-  /* USER HANDLER %{STATE-NAME}% LEAVE END */
+  /* USER HANDLER FOR '%{STATE-NAME}%' 'LEAVE' END */
 
   LGGM_CALL_OUT_C(0);
 }
