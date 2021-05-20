@@ -45,8 +45,8 @@ cstmgen_json_machine_structure_t::get_states_sorted() const
   {
     std::sort ( result.begin(), result.end(), [] ( auto const & left, auto const & right )
     {
-      auto const left_value = std::strtoul ( left.second.c_str(), nullptr, 10 );
-      auto const right_value = std::strtoul ( right.second.c_str(), nullptr, 10 );
+      auto const left_value = std::strtoul ( left.second.value.c_str(), nullptr, 10 );
+      auto const right_value = std::strtoul ( right.second.value.c_str(), nullptr, 10 );
       return left_value < right_value;
     } );
   }
@@ -167,11 +167,27 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         continue;
       }
 
-      rapidjson::Value::ConstMemberIterator id = obj.FindMember ( m_key_state_id.data() );
-      rapidjson::Value::ConstMemberIterator value = obj.FindMember ( m_key_state_numeric_value.data() );
+      auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+      {
+        if ( obj.MemberEnd() == it or not it->value.IsString() )
+        {
+          return {};
+        }
+        else
+        {
+          return {it->value.GetString() };
+        }
+      };
 
-      if ( obj.MemberEnd() == id or not id->value.IsString()
-           or obj.MemberEnd() == value or not value->value.IsString() )
+      auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      {
+        rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+        return get_string_by_iter_if_exists ( it );
+      };
+
+      if ( not get_string_if_exists ( m_key_state_id ).length()
+           or
+           not get_string_if_exists ( m_key_state_numeric_value ).length() )
       {
 #ifndef NDEBUG
         std::cerr << "item of the '" << m_key_global_states << "' does not have expected members." << std::endl;
@@ -179,7 +195,21 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         continue;
       }
 
-      m_states.insert ( std::make_pair ( id->value.GetString(), value->value.GetString() ) );
+      state_property_t
+      state_property
+      {
+        get_string_if_exists ( m_key_state_numeric_value ),
+        get_string_if_exists ( m_key_state_user_code_global ),
+        get_string_if_exists ( m_key_state_user_code_enter ),
+        get_string_if_exists ( m_key_state_user_code_input ),
+        get_string_if_exists ( m_key_state_user_code_run ),
+        get_string_if_exists ( m_key_state_user_code_output ),
+        get_string_if_exists ( m_key_state_user_code_leave )
+      };
+
+      m_states.insert (
+        std::make_pair ( get_string_if_exists ( m_key_state_id ), state_property )
+      );
     } // for itr
   }
 

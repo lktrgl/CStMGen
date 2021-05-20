@@ -21,6 +21,12 @@ class cstmgen_json_machine_structure_t final
 
   constexpr static std::string_view const m_key_state_id = "id";
   constexpr static std::string_view const m_key_state_numeric_value = "value";
+  constexpr static std::string_view const m_key_state_user_code_global = "user_code_global";
+  constexpr static std::string_view const m_key_state_user_code_enter = "user_code_enter";
+  constexpr static std::string_view const m_key_state_user_code_input = "user_code_input";
+  constexpr static std::string_view const m_key_state_user_code_run = "user_code_run";
+  constexpr static std::string_view const m_key_state_user_code_output = "user_code_output";
+  constexpr static std::string_view const m_key_state_user_code_leave = "user_code_leave";
 
   constexpr static std::string_view const m_key_transition_from = "from";
   constexpr static std::string_view const m_key_transition_to = "to";
@@ -28,8 +34,39 @@ class cstmgen_json_machine_structure_t final
 public:
   using state_id_t = std::string;
   using state_value_t = std::string;
-  using states_t = std::map<state_id_t, state_value_t>;
-  using states_sorted_t = std::vector<std::pair<state_id_t, state_value_t>>;
+  using state_user_code_t = std::string;
+
+  struct state_property_t
+  {
+    state_property_t ( state_value_t value_,
+                       state_user_code_t user_code_global_,
+                       state_user_code_t user_code_enter_,
+                       state_user_code_t user_code_input_,
+                       state_user_code_t user_code_run_,
+                       state_user_code_t user_code_output_,
+                       state_user_code_t user_code_leave_ )
+      : value ( value_ )
+      , user_code_global ( user_code_global_ )
+      , user_code_enter ( user_code_enter_ )
+      , user_code_input ( user_code_input_ )
+      , user_code_run ( user_code_run_ )
+      , user_code_output ( user_code_output_ )
+      , user_code_leave ( user_code_leave_ )
+    {
+      /* EMPTY */
+    }
+
+    state_value_t value;
+    state_user_code_t user_code_global;
+    state_user_code_t user_code_enter;
+    state_user_code_t user_code_input;
+    state_user_code_t user_code_run;
+    state_user_code_t user_code_output;
+    state_user_code_t user_code_leave;
+  };
+
+  using states_t = std::map<state_id_t, state_property_t>;
+  using states_sorted_t = std::vector<std::pair<state_id_t, state_property_t>>;
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
 public:

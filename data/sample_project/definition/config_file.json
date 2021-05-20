@@ -3,27 +3,63 @@
 	"states": [
 		{
 			"id": "INIT",
-			"value": "0"
+			"value": "0",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		},
 		{
 			"id": "SEARCH_DEVICE",
-			"value": "1"
+			"value": "1",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		},
 		{
 			"id": "IDLE",
-			"value": "2"
+			"value": "2",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		},
 		{
 			"id": "READ_DEVICE",
-			"value": "3"
+			"value": "3",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		},
 		{
 			"id": "WRITE_DEVICE",
-			"value": "4"
+			"value": "4",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		},
 		{
 			"id": "FAILURE",
-			"value": "5"
+			"value": "5",
+			"user_code_global": "",
+			"user_code_enter": "",
+			"user_code_input": "",
+			"user_code_run": "",
+			"user_code_output": "",
+			"user_code_leave": ""
 		}
 	],
 	"initial-state": "INIT",
