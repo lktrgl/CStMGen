@@ -296,10 +296,10 @@ void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer,
 
 /* ------------------------------------------------------------------------- */
 
-template <typename OLD_STR_T, typename NEW_STR_T>
+template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
 void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
-    OLD_STR_T const& target_str,
-    NEW_STR_T const& replacement_str )
+    TARGET_STR_T const& target_str,
+    REPLACEMENT_STR_T const& replacement_str )
 {
   for ( auto pos = buffer.find ( target_str, 0 );
         std::string::npos != pos;

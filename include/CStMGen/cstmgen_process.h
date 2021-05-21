@@ -65,10 +65,10 @@ private:
   void find_and_process_lower_var ( buffer_t& buffer,
                                     std::string const& replacement_str );
 
-  template <typename OLD_STR_T, typename NEW_STR_T>
+  template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
   void replace_all_occurences_inplace ( buffer_t& buffer,
-                                        OLD_STR_T const& target_str,
-                                        NEW_STR_T const& replacement_str );
+                                        TARGET_STR_T const& target_str,
+                                        REPLACEMENT_STR_T const& replacement_str );
 
   void generate_files();
 
