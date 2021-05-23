@@ -26,6 +26,71 @@ cstmgen_json_machine_structure_t::m_state_user_property_names =
 
 /* ------------------------------------------------------------------------- */
 
+cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_value_t value,
+    state_user_code_t user_code_global,
+    state_user_code_t user_code_enter,
+    state_user_code_t user_code_input,
+    state_user_code_t user_code_run,
+    state_user_code_t user_code_output,
+    state_user_code_t user_code_leave )
+  : m_value ( value )
+  , m_user_code_global ( user_code_global )
+  , m_user_code_enter ( user_code_enter )
+  , m_user_code_input ( user_code_input )
+  , m_user_code_run ( user_code_run )
+  , m_user_code_output ( user_code_output )
+  , m_user_code_leave ( user_code_leave )
+{
+  /* EMPTY */
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::state_property_t::get_property ( std::string const& name ) const
+{
+  if ( not name.compare ( m_key_state_numeric_value ) )
+  {
+    return m_value;
+  }
+  else if ( not name.compare ( m_key_state_user_code_global ) )
+  {
+    return m_user_code_global;
+  }
+  else if ( not name.compare ( m_key_state_user_code_enter ) )
+  {
+    return m_user_code_enter;
+  }
+  else if ( not name.compare ( m_key_state_user_code_input ) )
+  {
+    return m_user_code_input;
+  }
+  else if ( not name.compare ( m_key_state_user_code_run ) )
+  {
+    return m_user_code_run;
+  }
+  else if ( not name.compare ( m_key_state_user_code_output ) )
+  {
+    return m_user_code_output;
+  }
+  else if ( not name.compare ( m_key_state_user_code_leave ) )
+  {
+    return m_user_code_leave;
+  }
+
+  return m_value;
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::state_property_t::get_value() const
+{
+  return m_value;
+}
+
+/* ------------------------------------------------------------------------- */
+
 cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
@@ -66,8 +131,8 @@ cstmgen_json_machine_structure_t::get_states_sorted() const
   {
     std::sort ( result.begin(), result.end(), [] ( auto const & left, auto const & right )
     {
-      auto const left_value = std::strtoul ( left.second->value.c_str(), nullptr, 10 );
-      auto const right_value = std::strtoul ( right.second->value.c_str(), nullptr, 10 );
+      auto const left_value = std::strtoul ( left.second->get_value().c_str(), nullptr, 10 );
+      auto const right_value = std::strtoul ( right.second->get_value().c_str(), nullptr, 10 );
       return left_value < right_value;
     } );
   }

@@ -40,31 +40,24 @@ public:
 
   struct state_property_t
   {
-    state_property_t ( state_value_t value_,
-                       state_user_code_t user_code_global_,
-                       state_user_code_t user_code_enter_,
-                       state_user_code_t user_code_input_,
-                       state_user_code_t user_code_run_,
-                       state_user_code_t user_code_output_,
-                       state_user_code_t user_code_leave_ )
-      : value ( value_ )
-      , user_code_global ( user_code_global_ )
-      , user_code_enter ( user_code_enter_ )
-      , user_code_input ( user_code_input_ )
-      , user_code_run ( user_code_run_ )
-      , user_code_output ( user_code_output_ )
-      , user_code_leave ( user_code_leave_ )
-    {
-      /* EMPTY */
-    }
+    state_property_t ( state_value_t value,
+                       state_user_code_t user_code_global,
+                       state_user_code_t user_code_enter,
+                       state_user_code_t user_code_input,
+                       state_user_code_t user_code_run,
+                       state_user_code_t user_code_output,
+                       state_user_code_t user_code_leave );
+    std::string const& get_property ( std::string const& name ) const;
+    std::string const& get_value() const;
 
-    state_value_t value;
-    state_user_code_t user_code_global;
-    state_user_code_t user_code_enter;
-    state_user_code_t user_code_input;
-    state_user_code_t user_code_run;
-    state_user_code_t user_code_output;
-    state_user_code_t user_code_leave;
+  private:
+    state_value_t m_value;
+    state_user_code_t m_user_code_global;
+    state_user_code_t m_user_code_enter;
+    state_user_code_t m_user_code_input;
+    state_user_code_t m_user_code_run;
+    state_user_code_t m_user_code_output;
+    state_user_code_t m_user_code_leave;
   };
 
   using state_property_ptr = std::shared_ptr<state_property_t>;
