@@ -3,6 +3,7 @@
 #include <string>
 #include <string_view>
 #include <map>
+#include <set>
 #include <vector>
 #include <memory>
 
@@ -68,6 +69,7 @@ public:
 
   using state_property_ptr = std::shared_ptr<state_property_t>;
   using states_t = std::map<state_id_t, state_property_ptr>;
+  using state_user_property_names_t = std::set<std::string_view>;
   using states_sorted_t = std::vector<std::pair<state_id_t, state_property_ptr>>;
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
@@ -81,6 +83,7 @@ public:
 
   std::string const& get_machine_name() const;
   states_t const& get_states() const;
+  state_user_property_names_t const& get_state_user_property_names() const;
   states_sorted_t get_states_sorted() const;
   std::string const& get_initial_state_name() const;
   transitions_t const& get_transitions() const;
@@ -97,6 +100,8 @@ private:
   states_t m_states;
   std::string m_initial_state_name;
   transitions_t m_transitions;
+
+  static state_user_property_names_t const m_state_user_property_names;
 };
 
 /* ------------------------------------------------------------------------- */

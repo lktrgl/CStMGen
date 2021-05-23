@@ -13,6 +13,19 @@ namespace cfg
 
 /* ------------------------------------------------------------------------- */
 
+cstmgen_json_machine_structure_t::state_user_property_names_t const
+cstmgen_json_machine_structure_t::m_state_user_property_names =
+{
+  m_key_state_user_code_global,
+  m_key_state_user_code_enter,
+  m_key_state_user_code_input,
+  m_key_state_user_code_run,
+  m_key_state_user_code_output,
+  m_key_state_user_code_leave
+};
+
+/* ------------------------------------------------------------------------- */
+
 cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
@@ -32,6 +45,14 @@ cstmgen_json_machine_structure_t::states_t const&
 cstmgen_json_machine_structure_t::get_states() const
 {
   return m_states;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::state_user_property_names_t const&
+cstmgen_json_machine_structure_t::get_state_user_property_names() const
+{
+  return m_state_user_property_names;
 }
 
 /* ------------------------------------------------------------------------- */
