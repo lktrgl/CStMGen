@@ -311,6 +311,134 @@ void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
 
 /* ------------------------------------------------------------------------- */
 
+void cstmgen_process_t::generate_state_enum ( std::string const& header_folder,
+    std::ios_base::openmode out_file_mode ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_machine_enum_cstm_state_enum_template_h,
+                                data_templates_state_machine_enum_cstm_state_enum_template_h + data_templates_state_machine_enum_cstm_state_enum_template_h_len};
+  process_all_vars ( buffer_file_contents, {} );
+
+  buffer_t buffer_file_name{data_templates_state_machine_enum_cstm_state_enum_file_name_template_h,
+                            data_templates_state_machine_enum_cstm_state_enum_file_name_template_h + data_templates_state_machine_enum_cstm_state_enum_file_name_template_h_len};
+  process_all_vars ( buffer_file_name, {} );
+
+  std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_machine_data_header ( std::string const& header_folder,
+    std::ios_base::openmode out_file_mode ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_h,
+                                data_templates_state_machine_data_cstm_state_data_desc_template_h + data_templates_state_machine_data_cstm_state_data_desc_template_h_len};
+  process_all_vars ( buffer_file_contents, {} );
+
+  buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h,
+                            data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h_len};
+  process_all_vars ( buffer_file_name, {} );
+
+  std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_header ( std::string const& header_folder,
+    std::ios_base::openmode out_file_mode,
+    std::string const& state_name ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_code_cstm_state_template_h,
+                                data_templates_state_code_cstm_state_template_h + data_templates_state_code_cstm_state_template_h_len};
+  process_all_vars ( buffer_file_contents, state_name );
+
+  buffer_t buffer_file_name{data_templates_state_code_cstm_state_file_name_template_h,
+                            data_templates_state_code_cstm_state_file_name_template_h + data_templates_state_code_cstm_state_file_name_template_h_len};
+  process_all_vars ( buffer_file_name, state_name );
+
+  std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_diagram_header ( std::string const& header_folder,
+    std::ios_base::openmode out_file_mode ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_h,
+                                data_templates_state_diagram_code_cstm_state_diagram_template_h + data_templates_state_diagram_code_cstm_state_diagram_template_h_len};
+  process_all_vars ( buffer_file_contents, {} );
+
+  buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h,
+                            data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h_len};
+  process_all_vars ( buffer_file_name, {} );
+
+  std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_machine_data_implementation ( std::string const& implementation_folder,
+    std::ios_base::openmode out_file_mode ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_c,
+                                data_templates_state_machine_data_cstm_state_data_desc_template_c + data_templates_state_machine_data_cstm_state_data_desc_template_c_len};
+  process_all_vars ( buffer_file_contents, {} );
+
+  buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c,
+                            data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c_len};
+  process_all_vars ( buffer_file_name, {} );
+
+  std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_implementation ( std::string const& implementation_folder,
+    std::ios_base::openmode out_file_mode,
+    std::string const& state_name ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_code_cstm_state_template_c,
+                                data_templates_state_code_cstm_state_template_c + data_templates_state_code_cstm_state_template_c_len};
+  process_all_vars ( buffer_file_contents, state_name );
+
+  buffer_t buffer_file_name{data_templates_state_code_cstm_state_file_name_template_c,
+                            data_templates_state_code_cstm_state_file_name_template_c + data_templates_state_code_cstm_state_file_name_template_c_len};
+  process_all_vars ( buffer_file_name, state_name );
+
+  std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::generate_state_diagram_implementation ( std::string const& implementation_folder,
+    std::ios_base::openmode out_file_mode ) const
+{
+  buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_c,
+                                data_templates_state_diagram_code_cstm_state_diagram_template_c + data_templates_state_diagram_code_cstm_state_diagram_template_c_len};
+  process_all_vars ( buffer_file_contents, {} );
+
+  buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c,
+                            data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c_len};
+  process_all_vars ( buffer_file_name, {} );
+
+  std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
+  out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
+  out.flush();
+}
+
+/* ------------------------------------------------------------------------- */
+
 void cstmgen_process_t::generate_files() const
 {
   constexpr static auto const out_file_mode = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
@@ -321,32 +449,12 @@ void cstmgen_process_t::generate_files() const
 
     if ( m_params.is_produce_state_enum() )
     {
-      buffer_t buffer_file_contents{data_templates_state_machine_enum_cstm_state_enum_template_h,
-                                    data_templates_state_machine_enum_cstm_state_enum_template_h + data_templates_state_machine_enum_cstm_state_enum_template_h_len};
-      process_all_vars ( buffer_file_contents, {} );
-
-      buffer_t buffer_file_name{data_templates_state_machine_enum_cstm_state_enum_file_name_template_h,
-                                data_templates_state_machine_enum_cstm_state_enum_file_name_template_h + data_templates_state_machine_enum_cstm_state_enum_file_name_template_h_len};
-      process_all_vars ( buffer_file_name, {} );
-
-      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
-      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-      out.flush();
+      generate_state_enum ( header_folder, out_file_mode );
     }
 
     if ( m_params.is_produce_state_machine_data_header() )
     {
-      buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_h,
-                                    data_templates_state_machine_data_cstm_state_data_desc_template_h + data_templates_state_machine_data_cstm_state_data_desc_template_h_len};
-      process_all_vars ( buffer_file_contents, {} );
-
-      buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h,
-                                data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h_len};
-      process_all_vars ( buffer_file_name, {} );
-
-      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
-      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-      out.flush();
+      generate_state_machine_data_header ( header_folder, out_file_mode );
     }
 
     if ( m_params.is_produce_state_header() )
@@ -355,33 +463,13 @@ void cstmgen_process_t::generate_files() const
 
       for ( auto const& s : states )
       {
-        buffer_t buffer_file_contents{data_templates_state_code_cstm_state_template_h,
-                                      data_templates_state_code_cstm_state_template_h + data_templates_state_code_cstm_state_template_h_len};
-        process_all_vars ( buffer_file_contents, s.first );
-
-        buffer_t buffer_file_name{data_templates_state_code_cstm_state_file_name_template_h,
-                                  data_templates_state_code_cstm_state_file_name_template_h + data_templates_state_code_cstm_state_file_name_template_h_len};
-        process_all_vars ( buffer_file_name, s.first );
-
-        std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
-        out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-        out.flush();
+        generate_state_header ( header_folder, out_file_mode, s.first );
       }
     }
 
     if ( m_params.is_produce_state_diagram_header() )
     {
-      buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_h,
-                                    data_templates_state_diagram_code_cstm_state_diagram_template_h + data_templates_state_diagram_code_cstm_state_diagram_template_h_len};
-      process_all_vars ( buffer_file_contents, {} );
-
-      buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h,
-                                data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_h_len};
-      process_all_vars ( buffer_file_name, {} );
-
-      std::ofstream out ( {header_folder + '/' + buffer_file_name}, out_file_mode );
-      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-      out.flush();
+      generate_state_diagram_header ( header_folder, out_file_mode );
     }
   }
 
@@ -391,17 +479,7 @@ void cstmgen_process_t::generate_files() const
 
     if ( m_params.is_produce_state_machine_data_implementation() )
     {
-      buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_c,
-                                    data_templates_state_machine_data_cstm_state_data_desc_template_c + data_templates_state_machine_data_cstm_state_data_desc_template_c_len};
-      process_all_vars ( buffer_file_contents, {} );
-
-      buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c,
-                                data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c_len};
-      process_all_vars ( buffer_file_name, {} );
-
-      std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
-      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-      out.flush();
+      generate_state_machine_data_implementation ( implementation_folder, out_file_mode );
     }
 
     if ( m_params.is_produce_state_implementation() )
@@ -410,36 +488,15 @@ void cstmgen_process_t::generate_files() const
 
       for ( auto const& s : states )
       {
-        buffer_t buffer_file_contents{data_templates_state_code_cstm_state_template_c,
-                                      data_templates_state_code_cstm_state_template_c + data_templates_state_code_cstm_state_template_c_len};
-        process_all_vars ( buffer_file_contents, s.first );
-
-        buffer_t buffer_file_name{data_templates_state_code_cstm_state_file_name_template_c,
-                                  data_templates_state_code_cstm_state_file_name_template_c + data_templates_state_code_cstm_state_file_name_template_c_len};
-        process_all_vars ( buffer_file_name, s.first );
-
-        std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
-        out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-        out.flush();
+        generate_state_implementation ( implementation_folder, out_file_mode, s.first );
       }
     }
 
     if ( m_params.is_produce_state_diagram_implementation() )
     {
-      buffer_t buffer_file_contents{data_templates_state_diagram_code_cstm_state_diagram_template_c,
-                                    data_templates_state_diagram_code_cstm_state_diagram_template_c + data_templates_state_diagram_code_cstm_state_diagram_template_c_len};
-      process_all_vars ( buffer_file_contents, {} );
-
-      buffer_t buffer_file_name{data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c,
-                                data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c + data_templates_state_diagram_code_cstm_state_diagram_file_name_template_c_len};
-      process_all_vars ( buffer_file_name, {} );
-
-      std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
-      out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
-      out.flush();
+      generate_state_diagram_implementation ( implementation_folder, out_file_mode );
     }
   }
-
 }
 
 /* ------------------------------------------------------------------------- */

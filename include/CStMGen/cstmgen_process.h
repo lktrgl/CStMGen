@@ -71,6 +71,23 @@ private:
                                         TARGET_STR_T const& target_str,
                                         REPLACEMENT_STR_T const& replacement_str ) const;
 
+  void generate_state_enum ( std::string const& header_folder,
+                             std::ios_base::openmode out_file_mode ) const;
+  void generate_state_machine_data_header ( std::string const& header_folder,
+      std::ios_base::openmode out_file_mode ) const;
+  void generate_state_header ( std::string const& header_folder,
+                               std::ios_base::openmode out_file_mode,
+                               std::string const& state_name ) const;
+  void generate_state_diagram_header ( std::string const& header_folder,
+                                       std::ios_base::openmode out_file_mode ) const;
+  void generate_state_machine_data_implementation ( std::string const& implementation_folder,
+      std::ios_base::openmode out_file_mode ) const;
+  void generate_state_implementation ( std::string const& implementation_folder,
+                                       std::ios_base::openmode out_file_mode,
+                                       std::string const& state_name ) const;
+  void generate_state_diagram_implementation ( std::string const& implementation_folder,
+      std::ios_base::openmode out_file_mode ) const;
+
   void generate_files() const;
 
   void process_all_vars ( buffer_t& buffer, buffer_t const& state_name ) const;
