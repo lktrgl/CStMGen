@@ -4,6 +4,7 @@
 #include <CStMGen/cstmgen_json_machine_structure.h>
 
 #include <string>
+#include <ios>
 
 /* ------------------------------------------------------------------------- */
 
@@ -55,31 +56,31 @@ public:
 
 private:
   template<char const* const& VAR_NAME>
-  void find_and_process_var ( buffer_t& buffer, std::string const& new_str );
+  void find_and_process_var ( buffer_t& buffer, std::string const& new_str ) const;
 
   template<char const* const& VAR_NAME>
   void find_and_process_upper_var ( buffer_t& buffer,
-                                    std::string const& replacement_str );
+                                    std::string const& replacement_str ) const;
 
   template<char const* const& VAR_NAME>
   void find_and_process_lower_var ( buffer_t& buffer,
-                                    std::string const& replacement_str );
+                                    std::string const& replacement_str ) const;
 
   template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
   void replace_all_occurences_inplace ( buffer_t& buffer,
                                         TARGET_STR_T const& target_str,
-                                        REPLACEMENT_STR_T const& replacement_str );
+                                        REPLACEMENT_STR_T const& replacement_str ) const;
 
-  void generate_files();
+  void generate_files() const;
 
-  void process_all_vars ( buffer_t& buffer, buffer_t const& state_name );
+  void process_all_vars ( buffer_t& buffer, buffer_t const& state_name ) const;
 
-  buffer_t get_state_enum_state_name ( buffer_t const& state_name );
+  buffer_t get_state_enum_state_name ( buffer_t const& state_name ) const;
   buffer_t get_state_transition_name ( buffer_t const& state_name_from,
-                                       buffer_t const& state_name_to );
+                                       buffer_t const& state_name_to ) const;
 
-  void convert_to_lower_case_inplace ( buffer_t& buffer );
-  void convert_to_upper_case_inplace ( buffer_t& buffer );
+  void convert_to_lower_case_inplace ( buffer_t& buffer ) const;
+  void convert_to_upper_case_inplace ( buffer_t& buffer ) const;
 
 private:
   cfg::cstmgen_params_t const& m_params;

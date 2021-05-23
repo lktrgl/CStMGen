@@ -55,7 +55,7 @@ cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
 /* ------------------------------------------------------------------------- */
 
 template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string const& replacement_str )
+void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string const& replacement_str ) const
 {
   ( void ) buffer;
   ( void ) replacement_str;
@@ -68,7 +68,7 @@ void cstmgen_process_t::find_and_process_var ( buffer_t& buffer, std::string con
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_STATE_NAMES_LIST> (  buffer_t& buffer,
-    std::string const& state_name )
+    std::string const& state_name ) const
 {
   ( void ) state_name;
 
@@ -101,7 +101,7 @@ void cstmgen_process_t::find_and_process_var
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_state_transitions_list> (  buffer_t& buffer,
-    std::string const& state_name )
+    std::string const& state_name ) const
 {
   if ( std::string::npos == buffer.find ( m_var_state_transitions_list ) )
   {
@@ -136,7 +136,7 @@ void cstmgen_process_t::find_and_process_var
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_state_transitions_definition> (  buffer_t& buffer,
-    std::string const& state_name )
+    std::string const& state_name ) const
 {
   if ( std::string::npos == buffer.find ( m_var_state_transitions_definition ) )
   {
@@ -180,7 +180,7 @@ void cstmgen_process_t::find_and_process_var
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_state_includes_list> (  buffer_t& buffer,
-    std::string const& state_name )
+    std::string const& state_name ) const
 {
   ( void ) state_name;
 
@@ -224,7 +224,7 @@ void cstmgen_process_t::find_and_process_var
 template<>
 void cstmgen_process_t::find_and_process_var
 <cstmgen_process_t::m_var_state_nodes_list> (  buffer_t& buffer,
-    std::string const& state_name )
+    std::string const& state_name ) const
 {
   ( void ) state_name;
 
@@ -270,7 +270,7 @@ void cstmgen_process_t::find_and_process_var
 
 template<char const* const& VAR_NAME>
 void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer,
-    std::string const& replacement_str )
+    std::string const& replacement_str ) const
 {
   constexpr std::string_view const target_str{VAR_NAME};
 
@@ -284,7 +284,7 @@ void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer,
 
 template<char const* const& VAR_NAME>
 void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer,
-    std::string const& replacement_str )
+    std::string const& replacement_str ) const
 {
   constexpr std::string_view const target_str{VAR_NAME};
 
@@ -299,7 +299,7 @@ void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer,
 template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
 void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
     TARGET_STR_T const& target_str,
-    REPLACEMENT_STR_T const& replacement_str )
+    REPLACEMENT_STR_T const& replacement_str ) const
 {
   for ( auto pos = buffer.find ( target_str, 0 );
         std::string::npos != pos;
@@ -311,7 +311,7 @@ void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_process_t::generate_files()
+void cstmgen_process_t::generate_files() const
 {
   constexpr static auto const out_file_mode = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
 
@@ -444,7 +444,7 @@ void cstmgen_process_t::generate_files()
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& state_name )
+void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& state_name ) const
 {
   find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer, m_machine_structure.get_machine_name() );
   find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
@@ -461,7 +461,7 @@ void cstmgen_process_t::process_all_vars ( buffer_t& buffer, std::string const& 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_process_t::buffer_t
-cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name )
+cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name ) const
 {
   buffer_t result{data_templates_state_machine_enum_cstm_state_enum_state_name_text,
                   data_templates_state_machine_enum_cstm_state_enum_state_name_text + data_templates_state_machine_enum_cstm_state_enum_state_name_text_len};
@@ -476,7 +476,7 @@ cstmgen_process_t::get_state_enum_state_name ( const buffer_t& state_name )
 
 cstmgen_process_t::buffer_t
 cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
-    buffer_t const& state_name_to )
+    buffer_t const& state_name_to ) const
 {
   buffer_t result{data_templates_state_code_cstm_state_transition_name_template,
                   data_templates_state_code_cstm_state_transition_name_template + data_templates_state_code_cstm_state_transition_name_template_len};
@@ -489,7 +489,7 @@ cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_process_t::convert_to_lower_case_inplace ( buffer_t& buffer )
+void cstmgen_process_t::convert_to_lower_case_inplace ( buffer_t& buffer ) const
 {
   auto& f = std::use_facet<std::ctype<char>> ( std::locale() );
   f.tolower ( buffer.data(), buffer.data() + buffer.size() );
@@ -497,7 +497,7 @@ void cstmgen_process_t::convert_to_lower_case_inplace ( buffer_t& buffer )
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_process_t::convert_to_upper_case_inplace ( buffer_t& buffer )
+void cstmgen_process_t::convert_to_upper_case_inplace ( buffer_t& buffer ) const
 {
   auto& f = std::use_facet<std::ctype<char>> ( std::locale() );
   f.toupper ( buffer.data(), buffer.data() + buffer.size() );
