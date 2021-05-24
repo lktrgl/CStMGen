@@ -47,22 +47,47 @@ public:
                        state_user_code_t user_code_run,
                        state_user_code_t user_code_output,
                        state_user_code_t user_code_leave );
+
+    state_property_t ( state_property_t const& other );
+    state_property_t& operator= ( state_property_t const& other );
+
+    state_property_t ( state_property_t&& ) = delete;
+    state_property_t& operator= ( state_property_t&& ) = delete;
+
+    std::string const& get_property ( std::string_view const& name ) const;
     std::string const& get_property ( std::string const& name ) const;
     std::string const& get_value() const;
 
   private:
-    state_value_t m_value;
-    state_user_code_t m_user_code_global;
-    state_user_code_t m_user_code_enter;
-    state_user_code_t m_user_code_input;
-    state_user_code_t m_user_code_run;
-    state_user_code_t m_user_code_output;
-    state_user_code_t m_user_code_leave;
+    using property_map_t = std::map<std::string_view, std::string>;
+
+  private:
+    property_map_t m_property_map;
+  };
+
+  struct state_user_property_template_t
+  {
+    state_user_property_template_t ( uint8_t const* template_data_ptr,
+                                     size_t template_data_len );
+
+    state_user_property_template_t ( state_user_property_template_t const& ) = delete;
+    state_user_property_template_t& operator= ( state_user_property_template_t const& ) = delete;
+    state_user_property_template_t ( state_user_property_template_t&& ) = delete;
+    state_user_property_template_t& operator= ( state_user_property_template_t&& ) = delete;
+
+    uint8_t const* get_ptr() const;
+    size_t get_length() const;
+
+  private:
+    uint8_t const* const m_template_data_ptr;
+    size_t const m_template_data_len;
   };
 
   using state_property_ptr = std::shared_ptr<state_property_t>;
+  using state_user_property_template_ptr = std::shared_ptr<state_user_property_template_t>;
+
   using states_t = std::map<state_id_t, state_property_ptr>;
-  using state_user_property_names_t = std::set<std::string_view>;
+  using state_user_property_templates_t = std::map<std::string_view, state_user_property_template_ptr>;
   using states_sorted_t = std::vector<std::pair<state_id_t, state_property_ptr>>;
   using transitions_t = std::multimap<state_id_t, state_id_t>;
 
@@ -76,7 +101,7 @@ public:
 
   std::string const& get_machine_name() const;
   states_t const& get_states() const;
-  state_user_property_names_t const& get_state_user_property_names() const;
+  state_user_property_templates_t const& get_state_user_property_templates() const;
   states_sorted_t get_states_sorted() const;
   std::string const& get_initial_state_name() const;
   transitions_t const& get_transitions() const;
@@ -94,7 +119,7 @@ private:
   std::string m_initial_state_name;
   transitions_t m_transitions;
 
-  static state_user_property_names_t const m_state_user_property_names;
+  static state_user_property_templates_t const m_state_user_property_templates;
 };
 
 /* ------------------------------------------------------------------------- */

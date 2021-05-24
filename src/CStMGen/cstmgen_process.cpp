@@ -414,6 +414,39 @@ void cstmgen_process_t::generate_state_implementation ( std::string const& imple
                             data_templates_state_code_cstm_state_file_name_template_c + data_templates_state_code_cstm_state_file_name_template_c_len};
   process_all_vars ( buffer_file_name, state_name );
 
+  auto const& state_properties = m_machine_structure.get_states().at ( state_name );
+  auto const& property_templates = m_machine_structure.get_state_user_property_templates();
+
+  for ( auto const& property_template : property_templates )
+  {
+    auto const& property_value = state_properties->get_property ( property_template.first );
+    auto const& property_template_value = property_template.second;
+
+    buffer_t buffer_property_key{property_template_value->get_ptr(),
+                                 property_template_value->get_ptr() + property_template_value->get_length() };
+
+    process_all_vars ( buffer_property_key, state_name );
+
+    buffer_t const user_property_file_contents = [&property_value]()->auto
+    {
+      buffer_t result;
+
+      if ( property_value.length() )
+      {
+        std::ifstream in ( property_value, std::ios::in );
+
+        if ( in.good() )
+        {
+          // TODO: read the input file contents
+        }
+      }
+
+      return result;
+    }();
+
+    // TODO: replace the 'buffer_property_key' by the 'user_property_file_contents' in 'buffer_file_contents'
+  }
+
   std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
   out.write ( buffer_file_contents.data(), buffer_file_contents.size() );
   out.flush();
