@@ -14,6 +14,7 @@ namespace cfg
 class cstmgen_params_t final
 {
   static constexpr std::string_view const m_param_json_machine_config_file = "--json-machine-config-file=";
+  static constexpr std::string_view const m_param_state_user_code_folder = "--state-user-code-folder=";
   static constexpr std::string_view const m_param_header_folder = "--header-folder=";
   static constexpr std::string_view const m_param_implementation_folder = "--implementation-folder=";
   static constexpr std::string_view const m_param_produce_all = "--produce-all";
@@ -37,6 +38,10 @@ public:
   std::string const& get_json_machine_config_file_name() const
   {
     return m_json_machine_config_file;
+  }
+  std::string const& get_state_user_code_folder_path() const
+  {
+    return m_state_user_code_folder;
   }
   std::string const& get_header_folder_name() const
   {
@@ -90,6 +95,7 @@ private:
   std::vector<std::string> const m_args; // ( argv, argv + argc );
 
   std::string m_json_machine_config_file;
+  std::string m_state_user_code_folder;
   std::string m_header_folder;
   std::string m_implementation_folder;
 
@@ -105,6 +111,7 @@ private:
   std::string m_error_message_text;
 
   bool m_is_valid_config_file_name = false;
+  bool m_is_valid_state_user_code_folder = false;
   bool m_is_valid_produce_state_enum = false;
   bool m_is_valid_produce_state_header = false;
   bool m_is_valid_produce_state_diagram_header = false;

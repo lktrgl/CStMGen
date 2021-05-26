@@ -4,62 +4,62 @@
 		{
 			"id": "INIT",
 			"value": "0",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		},
 		{
 			"id": "SEARCH_DEVICE",
 			"value": "1",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		},
 		{
 			"id": "IDLE",
 			"value": "2",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		},
 		{
 			"id": "READ_DEVICE",
 			"value": "3",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		},
 		{
 			"id": "WRITE_DEVICE",
 			"value": "4",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		},
 		{
 			"id": "FAILURE",
 			"value": "5",
-			"user_code_global": "",
-			"user_code_enter": "",
-			"user_code_input": "",
-			"user_code_run": "",
-			"user_code_output": "",
-			"user_code_leave": ""
+			"user_code_global": "fake_global_data.c",
+			"user_code_enter": "fake_state_enter_code.c",
+			"user_code_input": "fake_state_input_code.c",
+			"user_code_run": "fake_state_run_code.c",
+			"user_code_output": "fake_state_output_code.c",
+			"user_code_leave": "fake_state_leave_code.c"
 		}
 	],
 	"initial-state": "INIT",

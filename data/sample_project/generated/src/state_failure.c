@@ -17,7 +17,10 @@
 /* put here global code for
    the ST_SENS_COMM_FAILURE state scope */
 
-/* %{SENS_COMM_FAILURE-GLOBAL-DATA-DECLARATION-AND-CODE-DEFINITION}% */
+/*
+* fake global data
+*/
+
 
 /* USER GLOBAL DATA AND CODE  FOR 'FAILURE' END */
 
@@ -35,7 +38,10 @@ static void s_enter_failure ( void* data )
   /* put here some code to be executed once
      per each entering the ST_SENS_COMM_FAILURE state */
 
-  /* %{SENS_COMM_FAILURE-ENTER-USER-IMPLEMENTATION}% */
+  /*
+  * fake state enter code
+  */
+
 
   /* USER HANDLER FOR 'FAILURE' 'ENTER' END */
 
@@ -56,7 +62,10 @@ static void s_input_failure ( void* data )
   /* put here some code to be executed every time
      before the 'run' handler */
 
-  /* %{SENS_COMM_FAILURE-INPUT-USER-IMPLEMENTATION}% */
+  /*
+  * fake state input code
+  */
+
 
   /* USER HANDLER FOR 'FAILURE' 'INPUT' END */
 
@@ -79,7 +88,10 @@ static void s_run_failure ( void* data )
      be aware that the code should not lock the execution
      inside this function  */
 
-  /* %{SENS_COMM_FAILURE-RUN-USER-IMPLEMENTATION}% */
+  /*
+  * fake state run code
+  */
+
 
   /* USER HANDLER FOR 'FAILURE' 'RUN' END */
 
@@ -100,7 +112,10 @@ static void s_output_failure ( void* data )
   /* put here some code to be executed every time
      after the 'run' handler */
 
-  /* %{SENS_COMM_FAILURE-OUTPUT-USER-IMPLEMENTATION}% */
+  /*
+  * fake state output code
+  */
+
 
   /* USER HANDLER FOR 'FAILURE' 'OUTPUT' END */
 
@@ -121,7 +136,10 @@ static void s_leave_failure ( void* data )
   /* put here some code to be executed once
      per each leaving the ST_SENS_COMM_FAILURE state */
 
-  /* %{SENS_COMM_FAILURE-LEAVE-USER-IMPLEMENTATION}% */
+  /*
+  * fake state leave code
+  */
+
 
   /* USER HANDLER FOR 'FAILURE' 'LEAVE' END */
 

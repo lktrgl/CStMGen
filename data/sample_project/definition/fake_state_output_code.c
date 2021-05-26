@@ -1,0 +1,3 @@
+/*
+ * fake state output code
+ */

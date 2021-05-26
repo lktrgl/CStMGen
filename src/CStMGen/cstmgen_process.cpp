@@ -419,7 +419,7 @@ void cstmgen_process_t::generate_state_implementation ( std::string const& imple
 
   for ( auto const& property_template : property_templates )
   {
-    auto const& property_value = state_properties->get_property ( property_template.first );
+    auto const& user_property_file_name = state_properties->get_property ( property_template.first );
     auto const& property_template_value = property_template.second;
 
     buffer_t buffer_property_key{property_template_value->get_ptr(),
@@ -427,24 +427,42 @@ void cstmgen_process_t::generate_state_implementation ( std::string const& imple
 
     process_all_vars ( buffer_property_key, state_name );
 
-    buffer_t const user_property_file_contents = [&property_value]()->auto
+    buffer_t const user_property_file_contents = [&user_property_file_name] ( std::string const & path )->auto
     {
       buffer_t result;
 
-      if ( property_value.length() )
+      if ( user_property_file_name.length() )
       {
-        std::ifstream in ( property_value, std::ios::in );
+        std::ifstream in ( {path + '/' + user_property_file_name}, std::ios::in | std::ios::binary );
 
         if ( in.good() )
         {
-          // TODO: read the input file contents
+          std::string tmp;
+          bool is_first = true;
+
+          do
+          {
+            if ( not is_first )
+            {
+              result.append ( "\n" );
+            }
+
+            is_first = false;
+
+            std::getline ( in, tmp );
+
+            result.append ( tmp );
+          }
+          while ( tmp.length() );
         }
       }
 
       return result;
-    }();
+    } ( m_params.get_state_user_code_folder_path() );
 
-    // TODO: replace the 'buffer_property_key' by the 'user_property_file_contents' in 'buffer_file_contents'
+    replace_all_occurences_inplace ( buffer_file_contents,
+                                     buffer_property_key,
+                                     user_property_file_contents );
   }
 
   std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );

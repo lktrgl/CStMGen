@@ -25,6 +25,9 @@ std::string cstmgen_params_t::get_usage_text()
       << m_param_json_machine_config_file << " File pathname to the state machine structure description in JSON format" <<
       std::endl;
   ss
+      << m_param_state_user_code_folder << " Folder where to search for the state implementation user code files" <<
+      std::endl;
+  ss
       << m_param_header_folder << " Folder pathname where to store the declaration files to" << std::endl;
   ss
       << m_param_implementation_folder << " Folder pathname where to store the implementation files to" << std::endl;
@@ -58,6 +61,8 @@ bool cstmgen_params_t::is_valid() const
 {
 
   bool const is_valid = m_is_valid_config_file_name
+                        &&
+                        m_is_valid_state_user_code_folder
                         &&
                         (
                           m_is_valid_produce_state_enum
@@ -103,6 +108,10 @@ void cstmgen_params_t::process_params()
       if ( p.starts_with ( m_param_json_machine_config_file ) )
       {
         m_json_machine_config_file.assign ( p.substr ( m_param_json_machine_config_file.length() ) );
+      }
+      else if ( p.starts_with ( m_param_state_user_code_folder ) )
+      {
+        m_state_user_code_folder.assign ( p.substr ( m_param_state_user_code_folder.length() ) );
       }
       else if ( p.starts_with ( m_param_header_folder ) )
       {
@@ -158,6 +167,13 @@ void cstmgen_params_t::process_params()
     if ( not m_is_valid_config_file_name )
     {
       append_error_message_text ( "Configuration file name is invalid." );
+    }
+
+    m_is_valid_state_user_code_folder = get_state_user_code_folder_path().length();
+
+    if ( not m_is_valid_state_user_code_folder )
+    {
+      append_error_message_text ( "Missing state implementation user code folder." );
     }
 
     m_is_valid_produce_state_enum =
