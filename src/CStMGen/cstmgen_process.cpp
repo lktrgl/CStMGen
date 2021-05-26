@@ -311,6 +311,63 @@ void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
 
 /* ------------------------------------------------------------------------- */
 
+void cstmgen_process_t::replace_state_implementation_user_property_inplace ( buffer_t& buffer_file_contents,
+    std::string const& state_name ) const
+{
+  auto const& state_properties = m_machine_structure.get_states().at ( state_name );
+  auto const& property_templates = m_machine_structure.get_state_user_property_templates();
+
+  for ( auto const& property_template : property_templates )
+  {
+    auto const& user_property_file_name = state_properties->get_property ( property_template.first );
+    auto const& property_template_value = property_template.second;
+
+    buffer_t buffer_property_key{property_template_value->get_ptr(),
+                                 property_template_value->get_ptr() + property_template_value->get_length() };
+
+    process_all_vars ( buffer_property_key, state_name );
+
+    buffer_t const user_property_file_contents = [&user_property_file_name] ( std::string const & path )->auto
+    {
+      buffer_t result;
+
+      if ( user_property_file_name.length() )
+      {
+        std::ifstream in ( {path + '/' + user_property_file_name}, std::ios::in | std::ios::binary );
+
+        if ( in.good() )
+        {
+          std::string tmp;
+          bool is_first = true;
+
+          do
+          {
+            if ( not is_first )
+            {
+              result.append ( "\n" );
+            }
+
+            is_first = false;
+
+            std::getline ( in, tmp );
+
+            result.append ( tmp );
+          }
+          while ( tmp.length() );
+        }
+      }
+
+      return result;
+    } ( m_params.get_state_user_code_folder_path() );
+
+    replace_all_occurences_inplace ( buffer_file_contents,
+                                     buffer_property_key,
+                                     user_property_file_contents );
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+
 void cstmgen_process_t::generate_state_enum ( std::string const& header_folder,
     std::ios_base::openmode out_file_mode ) const
 {
@@ -414,56 +471,7 @@ void cstmgen_process_t::generate_state_implementation ( std::string const& imple
                             data_templates_state_code_cstm_state_file_name_template_c + data_templates_state_code_cstm_state_file_name_template_c_len};
   process_all_vars ( buffer_file_name, state_name );
 
-  auto const& state_properties = m_machine_structure.get_states().at ( state_name );
-  auto const& property_templates = m_machine_structure.get_state_user_property_templates();
-
-  for ( auto const& property_template : property_templates )
-  {
-    auto const& user_property_file_name = state_properties->get_property ( property_template.first );
-    auto const& property_template_value = property_template.second;
-
-    buffer_t buffer_property_key{property_template_value->get_ptr(),
-                                 property_template_value->get_ptr() + property_template_value->get_length() };
-
-    process_all_vars ( buffer_property_key, state_name );
-
-    buffer_t const user_property_file_contents = [&user_property_file_name] ( std::string const & path )->auto
-    {
-      buffer_t result;
-
-      if ( user_property_file_name.length() )
-      {
-        std::ifstream in ( {path + '/' + user_property_file_name}, std::ios::in | std::ios::binary );
-
-        if ( in.good() )
-        {
-          std::string tmp;
-          bool is_first = true;
-
-          do
-          {
-            if ( not is_first )
-            {
-              result.append ( "\n" );
-            }
-
-            is_first = false;
-
-            std::getline ( in, tmp );
-
-            result.append ( tmp );
-          }
-          while ( tmp.length() );
-        }
-      }
-
-      return result;
-    } ( m_params.get_state_user_code_folder_path() );
-
-    replace_all_occurences_inplace ( buffer_file_contents,
-                                     buffer_property_key,
-                                     user_property_file_contents );
-  }
+  replace_state_implementation_user_property_inplace ( buffer_file_contents, state_name );
 
   std::ofstream out ( {implementation_folder + '/' + buffer_file_name}, out_file_mode );
   out.write ( buffer_file_contents.data(), buffer_file_contents.size() );

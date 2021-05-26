@@ -71,6 +71,9 @@ private:
                                         TARGET_STR_T const& target_str,
                                         REPLACEMENT_STR_T const& replacement_str ) const;
 
+  void replace_state_implementation_user_property_inplace ( buffer_t& buffer_file_contents,
+      std::string const& state_name ) const;
+
   void generate_state_enum ( std::string const& header_folder,
                              std::ios_base::openmode out_file_mode ) const;
   void generate_state_machine_data_header ( std::string const& header_folder,
