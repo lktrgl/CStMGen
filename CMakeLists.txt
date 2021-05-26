@@ -53,6 +53,7 @@ set (ascii_to_hex_files_sources
   state_code/cstm_state_file_name_template_c
   state_code/cstm_state_transition_template_c
   state_code/cstm_state_transition_name_template
+  state_code/cstm_state_transition_evaluation_placeholder_name_template
   state_code/cstm_state_global_data_placeholder_name_template
   state_code/cstm_state_handler_enter_placeholder_name_template
   state_code/cstm_state_handler_input_placeholder_name_template

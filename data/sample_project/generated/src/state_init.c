@@ -174,6 +174,17 @@ static uint8_t s_transit_init_to_search_device ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do
+  {
+    /*
+    * fake transit always condition handler init
+    */
+
+    return 1;
+
+  }
+  while ( 0 );
+
   return 1;
 
   /* USER TRANSIT CONDITION  INIT TO SEARCH_DEVICE END */
@@ -202,6 +213,17 @@ static uint8_t s_transit_init_to_failure ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do
+  {
+    /*
+    * fake transit always condition handler init
+    */
+
+    return 1;
+
+  }
+  while ( 0 );
+
   return 1;
 
   /* USER TRANSIT CONDITION  INIT TO FAILURE END */

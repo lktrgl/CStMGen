@@ -32,6 +32,7 @@ class cstmgen_json_machine_structure_t final
 
   constexpr static std::string_view const m_key_transition_from = "from";
   constexpr static std::string_view const m_key_transition_to = "to";
+  constexpr static std::string_view const m_key_transition_condition_user_code = "condition_handler";
 
 public:
   using state_id_t = std::string;
@@ -89,7 +90,31 @@ public:
   using states_t = std::map<state_id_t, state_property_ptr>;
   using state_user_property_templates_t = std::map<std::string_view, state_user_property_template_ptr>;
   using states_sorted_t = std::vector<std::pair<state_id_t, state_property_ptr>>;
-  using transitions_t = std::multimap<state_id_t, state_id_t>;
+
+  struct transition_property_t
+  {
+    transition_property_t ( std::string const& state_to,
+                            std::string const& condition_code );
+
+    transition_property_t ( transition_property_t const& ) = delete;
+    transition_property_t& operator= ( transition_property_t const& ) = delete;
+    transition_property_t ( transition_property_t&& ) = delete;
+    transition_property_t& operator= ( transition_property_t&& ) = delete;
+
+    std::string const& get_property ( std::string_view const& name ) const;
+    std::string const& get_property ( std::string const& name ) const;
+    std::string const& get_state_to() const;
+    std::string const& get_condition_user_code() const;
+
+  private:
+    using property_map_t = std::map<std::string_view, std::string>;
+
+  private:
+    property_map_t m_property_map;
+  };
+
+  using transition_property_ptr = std::shared_ptr<transition_property_t>;
+  using transitions_t = std::multimap<state_id_t, transition_property_ptr>;
 
 public:
   cstmgen_json_machine_structure_t ( std::string const& config_file_pathname );

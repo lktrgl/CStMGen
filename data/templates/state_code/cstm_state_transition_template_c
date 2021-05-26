@@ -13,6 +13,10 @@ static uint8_t s_transit_%{state-name-from}%_to_%{state-name-to}% ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do{
+  %{%{STATE-MACHINE-NAME}%-%{STATE-NAME-FROM}%-%{STATE-NAME-TO}%}%
+  }while(0);
+
   return 1;
 
   /* USER TRANSIT CONDITION  %{STATE-NAME-FROM}% TO %{STATE-NAME-TO}% END */

@@ -156,6 +156,47 @@ cstmgen_json_machine_structure_t::state_user_property_template_t::get_length() c
 
 /* ------------------------------------------------------------------------- */
 
+cstmgen_json_machine_structure_t::transition_property_t::transition_property_t ( std::string const& state_to,
+    std::string const& condition_code )
+{
+  m_property_map[m_key_transition_to] = state_to;
+  m_property_map[m_key_transition_condition_user_code] = condition_code;
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::transition_property_t::get_property ( std::string_view const& name ) const
+{
+  return m_property_map.at ( name );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::transition_property_t::get_property ( std::string const& name ) const
+{
+  return m_property_map.at ( name );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::transition_property_t::get_state_to() const
+{
+  return m_property_map.at ( m_key_transition_to );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::transition_property_t::get_condition_user_code() const
+{
+  return m_property_map.at ( m_key_transition_condition_user_code );
+}
+
+/* ------------------------------------------------------------------------- */
+
 cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
@@ -411,11 +452,26 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         continue;
       }
 
-      rapidjson::Value::ConstMemberIterator from = obj.FindMember ( m_key_transition_from.data() );
-      rapidjson::Value::ConstMemberIterator to = obj.FindMember ( m_key_transition_to.data() );
+      auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+      {
+        if ( obj.MemberEnd() == it or not it->value.IsString() )
+        {
+          return {};
+        }
+        else
+        {
+          return {it->value.GetString() };
+        }
+      };
 
-      if ( obj.MemberEnd() == from or not from->value.IsString()
-           or obj.MemberEnd() == to or not to->value.IsString() )
+      auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      {
+        rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+        return get_string_by_iter_if_exists ( it );
+      };
+
+      if ( not get_string_if_exists ( m_key_transition_from ).length() or
+           not get_string_if_exists ( m_key_transition_to ).length() )
       {
 #ifndef NDEBUG
         std::cerr << "item of the '" << m_key_global_transitions << "' does not have expected members." << std::endl;
@@ -423,7 +479,11 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         continue;
       }
 
-      m_transitions.insert ( std::make_pair ( from->value.GetString(), to->value.GetString() ) );
+      m_transitions.insert ( std::make_pair ( get_string_if_exists ( m_key_transition_from ),
+                                              std::make_shared<transition_property_t> (
+                                                  get_string_if_exists ( m_key_transition_to ),
+                                                  get_string_if_exists ( m_key_transition_condition_user_code )
+                                              ) ) );
     } // for itr
   }
 }

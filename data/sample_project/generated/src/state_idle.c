@@ -174,6 +174,17 @@ static uint8_t s_transit_idle_to_read_device ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do
+  {
+    /*
+    * fake transit always condition handler idle
+    */
+
+    return 1;
+
+  }
+  while ( 0 );
+
   return 1;
 
   /* USER TRANSIT CONDITION  IDLE TO READ_DEVICE END */
@@ -202,6 +213,17 @@ static uint8_t s_transit_idle_to_write_device ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do
+  {
+    /*
+    * fake transit always condition handler idle
+    */
+
+    return 1;
+
+  }
+  while ( 0 );
+
   return 1;
 
   /* USER TRANSIT CONDITION  IDLE TO WRITE_DEVICE END */
@@ -230,6 +252,17 @@ static uint8_t s_transit_idle_to_failure ( void* data )
 
   /* return 1 (one) if the transition is required,
      return 0 (zero) otherwise */
+  do
+  {
+    /*
+    * fake transit always condition handler idle
+    */
+
+    return 1;
+
+  }
+  while ( 0 );
+
   return 1;
 
   /* USER TRANSIT CONDITION  IDLE TO FAILURE END */

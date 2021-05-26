@@ -22,6 +22,7 @@
 #include <CStMGen/data/templates/state_code/cstm_state_file_name_template_c.h>
 #include <CStMGen/data/templates/state_code/cstm_state_transition_template_c.h>
 #include <CStMGen/data/templates/state_code/cstm_state_transition_name_template.h>
+#include <CStMGen/data/templates/state_code/cstm_state_transition_evaluation_placeholder_name_template.h>
 
 #include <CStMGen/data/templates/state_code/cstm_state_global_data_placeholder_name_template.h>
 #include <CStMGen/data/templates/state_code/cstm_state_handler_enter_placeholder_name_template.h>
@@ -121,7 +122,7 @@ void cstmgen_process_t::find_and_process_var
     {
       ss
           << ( first_item ? ( first_item = false, "" ) : ",\n" )
-          << "&" << get_state_transition_name ( state_name, t->second );
+          << "&" << get_state_transition_name ( state_name, t->second->get_state_to() );
     }
 
     return ss.str();
@@ -159,8 +160,13 @@ void cstmgen_process_t::find_and_process_var
       find_and_process_lower_var<m_var_state_machine_name> ( buffer, m_machine_structure.get_machine_name() );
       find_and_process_upper_var<m_var_STATE_NAME_FROM> ( buffer, state_name );
       find_and_process_lower_var<m_var_state_name_from> ( buffer, state_name );
-      find_and_process_lower_var<m_var_state_name_to> ( buffer, t->second );
-      find_and_process_upper_var<m_var_STATE_NAME_TO> ( buffer, t->second );
+      find_and_process_lower_var<m_var_state_name_to> ( buffer, t->second->get_state_to() );
+      find_and_process_upper_var<m_var_STATE_NAME_TO> ( buffer, t->second->get_state_to() );
+
+      replace_transition_evaluation_inplace ( buffer,
+                                              state_name,
+                                              t->second->get_state_to(),
+                                              t->second->get_condition_user_code() );
 
       ss
           << buffer;
@@ -311,7 +317,44 @@ void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_process_t::replace_state_implementation_user_property_inplace ( buffer_t& buffer_file_contents,
+bool cstmgen_process_t::get_text_file_contents ( std::string const& file_pathname, buffer_t& buffer ) const
+{
+  bool result = false;
+
+  if ( file_pathname.length() )
+  {
+    std::ifstream in ( file_pathname, std::ios::in );
+
+    if ( in.good() )
+    {
+      std::string tmp;
+      bool is_first = true;
+
+      do
+      {
+        if ( not is_first )
+        {
+          buffer.append ( "\n" );
+        }
+
+        is_first = false;
+
+        std::getline ( in, tmp );
+
+        buffer.append ( tmp );
+      }
+      while ( not in.eof() );
+
+      result = true;
+    }
+  }
+
+  return result;
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::replace_state_implementation_user_property_inplace ( buffer_t& buffer,
     std::string const& state_name ) const
 {
   auto const& state_properties = m_machine_structure.get_states().at ( state_name );
@@ -327,43 +370,45 @@ void cstmgen_process_t::replace_state_implementation_user_property_inplace ( buf
 
     process_all_vars ( buffer_property_key, state_name );
 
-    buffer_t const user_property_file_contents = [&user_property_file_name] ( std::string const & path )->auto
+    buffer_t user_property_file_contents;
+
+    if ( user_property_file_name.length() )
     {
-      buffer_t result;
+      get_text_file_contents ( {m_params.get_state_user_code_folder_path() + '/' + user_property_file_name},
+                               user_property_file_contents );
+    }
 
-      if ( user_property_file_name.length() )
-      {
-        std::ifstream in ( {path + '/' + user_property_file_name}, std::ios::in | std::ios::binary );
-
-        if ( in.good() )
-        {
-          std::string tmp;
-          bool is_first = true;
-
-          do
-          {
-            if ( not is_first )
-            {
-              result.append ( "\n" );
-            }
-
-            is_first = false;
-
-            std::getline ( in, tmp );
-
-            result.append ( tmp );
-          }
-          while ( tmp.length() );
-        }
-      }
-
-      return result;
-    } ( m_params.get_state_user_code_folder_path() );
-
-    replace_all_occurences_inplace ( buffer_file_contents,
+    replace_all_occurences_inplace ( buffer,
                                      buffer_property_key,
                                      user_property_file_contents );
   }
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::replace_transition_evaluation_inplace ( buffer_t& buffer,
+    std::string const& state_name_from,
+    std::string const& state_name_to,
+    std::string const& user_property_file_name ) const
+{
+  buffer_t buffer_property_key{data_templates_state_code_cstm_state_transition_evaluation_placeholder_name_template,
+                               data_templates_state_code_cstm_state_transition_evaluation_placeholder_name_template + data_templates_state_code_cstm_state_transition_evaluation_placeholder_name_template_len};
+
+  find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer_property_key, m_machine_structure.get_machine_name() );
+  find_and_process_upper_var<m_var_STATE_NAME_FROM> ( buffer_property_key, state_name_from );
+  find_and_process_upper_var<m_var_STATE_NAME_TO> ( buffer_property_key, state_name_to );
+
+  buffer_t user_property_file_contents;
+
+  if ( user_property_file_name.length() )
+  {
+    get_text_file_contents ( {m_params.get_state_user_code_folder_path() + '/' + user_property_file_name},
+                             user_property_file_contents );
+  }
+
+  replace_all_occurences_inplace ( buffer,
+                                   buffer_property_key,
+                                   user_property_file_contents );
 }
 
 /* ------------------------------------------------------------------------- */
