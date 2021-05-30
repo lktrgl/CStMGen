@@ -8,6 +8,8 @@
 #include <CStMGen/data/templates/state_machine_data/cstm_state_data_desc_file_name_template_c.h>
 #include <CStMGen/data/templates/state_machine_data/cstm_state_data_desc_template_h.h>
 #include <CStMGen/data/templates/state_machine_data/cstm_state_data_desc_template_c.h>
+#include <CStMGen/data/templates/state_machine_data/cstm_state_data_decl_placeholder_name_template.h>
+#include <CStMGen/data/templates/state_machine_data/cstm_state_data_init_placeholder_name_template.h>
 
 #include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_template_h.h>
 #include <CStMGen/data/templates/state_diagram_code/cstm_state_diagram_template_c.h>

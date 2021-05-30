@@ -37,6 +37,8 @@ set (ascii_to_hex_files_sources
   state_machine_data/cstm_state_data_desc_template_c
   state_machine_data/cstm_state_data_desc_file_name_template_h
   state_machine_data/cstm_state_data_desc_file_name_template_c
+  state_machine_data/cstm_state_data_decl_placeholder_name_template
+  state_machine_data/cstm_state_data_init_placeholder_name_template
  
   #state diagram code
   state_diagram_code/cstm_state_diagram_template_h

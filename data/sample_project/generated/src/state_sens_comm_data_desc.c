@@ -9,7 +9,7 @@ sens_comm_data_desc_t g_state_data_sens_comm =
   /* put here all the data fields initialization;
      below is a sample field */
 
-  .is_ok = 0xFF
+  /* %{SENS_COMM-STATE-DATA-FIELDS-INITIALIZATION}% */
 
   /* USER DATA FIELDS INIT END */
 };

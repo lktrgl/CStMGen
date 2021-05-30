@@ -9,7 +9,7 @@
   /* put here all the data fields initialization;
      below is a sample field */
 
-  .is_ok = 0xFF
+  /* %{%{STATE-MACHINE-NAME}%-STATE-DATA-FIELDS-INITIALIZATION}% */
 
   /* USER DATA FIELDS INIT END */
 };
