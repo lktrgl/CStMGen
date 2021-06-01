@@ -17,9 +17,13 @@ namespace cfg
 class cstmgen_json_machine_structure_t final
 {
   constexpr static std::string_view const m_key_global_machine_name = "machine-name";
+  constexpr static std::string_view const m_key_global_machine_data = "machine-data";
   constexpr static std::string_view const m_key_global_states = "states";
   constexpr static std::string_view const m_key_global_initial_state = "initial-state";
   constexpr static std::string_view const m_key_global_transitions = "transitions";
+
+  constexpr static std::string_view const m_key_data_user_decl = "fields";
+  constexpr static std::string_view const m_key_data_user_init = "initialization";
 
   constexpr static std::string_view const m_key_state_id = "id";
   constexpr static std::string_view const m_key_state_numeric_value = "value";
@@ -116,6 +120,32 @@ public:
   using transition_property_ptr = std::shared_ptr<transition_property_t>;
   using transitions_t = std::multimap<state_id_t, transition_property_ptr>;
 
+
+  struct machine_data_t
+  {
+    machine_data_t() = default;
+
+    machine_data_t ( std::string const& data_field_decl,
+                     std::string const& data_field_init );
+
+    machine_data_t ( machine_data_t const& ) = delete;
+    machine_data_t& operator= ( machine_data_t const& ) = delete;
+    machine_data_t ( machine_data_t&& ) = delete;
+    machine_data_t& operator= ( machine_data_t&& ) = delete;
+
+    void set_decl ( std::string const& data_field_decl );
+    void set_init ( std::string const& data_field_init );
+
+    std::string const& get_decl() const;
+    std::string const& get_init() const;
+
+  private:
+    using property_map_t = std::map<std::string_view, std::string>;
+
+  private:
+    property_map_t m_property_map;
+  };
+
 public:
   cstmgen_json_machine_structure_t ( std::string const& config_file_pathname );
 
@@ -125,6 +155,7 @@ public:
   cstmgen_json_machine_structure_t& operator= ( cstmgen_json_machine_structure_t&& ) = delete;
 
   std::string const& get_machine_name() const;
+  machine_data_t const& get_machine_data() const;
   states_t const& get_states() const;
   state_user_property_templates_t const& get_state_user_property_templates() const;
   states_sorted_t get_states_sorted() const;
@@ -140,6 +171,7 @@ private:
   std::string const m_config_file_pathname;
 
   std::string m_machine_name;
+  machine_data_t m_machine_data;
   states_t m_states;
   std::string m_initial_state_name;
   transitions_t m_transitions;

@@ -197,6 +197,47 @@ cstmgen_json_machine_structure_t::transition_property_t::get_condition_user_code
 
 /* ------------------------------------------------------------------------- */
 
+cstmgen_json_machine_structure_t::machine_data_t::machine_data_t ( std::string const& data_field_decl,
+    std::string const& data_field_init )
+{
+  m_property_map[m_key_data_user_decl] = data_field_decl;
+  m_property_map[m_key_data_user_init] = data_field_init;
+}
+
+/* ------------------------------------------------------------------------- */
+
+void
+cstmgen_json_machine_structure_t::machine_data_t::set_decl ( std::string const& data_field_decl )
+{
+  m_property_map[m_key_data_user_decl] = data_field_decl;
+}
+
+/* ------------------------------------------------------------------------- */
+
+void
+cstmgen_json_machine_structure_t::machine_data_t::set_init ( std::string const& data_field_init )
+{
+  m_property_map[m_key_data_user_init] = data_field_init;
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::machine_data_t::get_decl() const
+{
+  return m_property_map.at ( m_key_data_user_decl );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::machine_data_t::get_init() const
+{
+  return m_property_map.at ( m_key_data_user_init );
+}
+
+/* ------------------------------------------------------------------------- */
+
 cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
@@ -208,6 +249,14 @@ cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string
 std::string const& cstmgen_json_machine_structure_t::get_machine_name() const
 {
   return m_machine_name;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_data_t const&
+cstmgen_json_machine_structure_t::get_machine_data() const
+{
+  return m_machine_data;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -266,6 +315,7 @@ cstmgen_json_machine_structure_t::get_transitions() const
 bool cstmgen_json_machine_structure_t::valid() const
 {
   bool const is_valid = m_machine_name.length()
+                        && m_machine_data.get_decl().length()
                         && m_states.size()
                         && m_initial_state_name.length()
                         && m_transitions.size();
@@ -330,6 +380,48 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
     {
 #ifndef NDEBUG
       std::cerr << "the '" << m_key_global_machine_name << "' property is empty." << std::endl;
+#endif
+      return;
+    }
+  }
+
+  {
+    // retrieve the "machine-data"
+    rapidjson::Value& obj = d[m_key_global_machine_data.data()];
+
+    if ( not obj.IsObject() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_global_machine_data << "' property is not an object." << std::endl;
+#endif
+      return;
+    }
+
+    auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+    {
+      if ( obj.MemberEnd() == it or not it->value.IsString() )
+      {
+        return {};
+      }
+      else
+      {
+        return {it->value.GetString() };
+      }
+    };
+
+    auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+    {
+      rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+      return get_string_by_iter_if_exists ( it );
+    };
+
+    m_machine_data.set_decl ( get_string_if_exists ( m_key_data_user_decl ) );
+    m_machine_data.set_init ( get_string_if_exists ( m_key_data_user_init ) );
+
+    if ( not m_machine_data.get_decl().length() or not m_machine_data.get_init().length() )
+    {
+#ifndef NDEBUG
+      std::cerr << "item of the '" << m_key_global_machine_data << "' does not have expected members." << std::endl;
 #endif
       return;
     }
