@@ -97,6 +97,7 @@ set (cstmgen_libsources
      include/CStMGen/cstmgen_json_machine_structure.h
      src/CStMGen/cstmgen_process.cpp
      include/CStMGen/cstmgen_process.h
+     include/CStMGen/cstmgen_process_templates.h
      )
 
 add_library ( cstmgen
