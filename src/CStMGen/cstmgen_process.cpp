@@ -6,6 +6,10 @@
 
 /* ------------------------------------------------------------------------- */
 
+#include "cstmgen_process_utils.cpp"
+
+/* ------------------------------------------------------------------------- */
+
 #include <locale>
 #include <iostream>
 #include <sstream>
@@ -22,7 +26,8 @@ namespace gen
 
 cstmgen_process_t::cstmgen_process_t ( cfg::cstmgen_params_t const& params,
                                        cfg::cstmgen_json_machine_structure_t const& machine_structure )
-  : m_params ( params )
+  : gen::utils::cstmgen_process_utils_t<details::buffer_t, std::string, std::string_view>()
+  , m_params ( params )
   , m_machine_structure ( machine_structure )
 {
   generate_files();
@@ -245,86 +250,6 @@ void cstmgen_process_t::find_and_process_var
 
   constexpr std::string_view const target_str{m_var_state_nodes_list};
   replace_all_occurences_inplace ( buffer, target_str, replacement_str );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_upper_var ( buffer_t& buffer,
-    std::string const& replacement_str ) const
-{
-  constexpr std::string_view const target_str{VAR_NAME};
-
-  auto local_replacement_str{replacement_str};
-  convert_to_upper_case_inplace ( local_replacement_str );
-
-  replace_all_occurences_inplace ( buffer, target_str, local_replacement_str );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template<char const* const& VAR_NAME>
-void cstmgen_process_t::find_and_process_lower_var ( buffer_t& buffer,
-    std::string const& replacement_str ) const
-{
-  constexpr std::string_view const target_str{VAR_NAME};
-
-  auto local_replacement_str{replacement_str};
-  convert_to_lower_case_inplace ( local_replacement_str );
-
-  replace_all_occurences_inplace ( buffer, target_str, local_replacement_str );
-}
-
-/* ------------------------------------------------------------------------- */
-
-template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
-void cstmgen_process_t::replace_all_occurences_inplace ( buffer_t& buffer,
-    TARGET_STR_T const& target_str,
-    REPLACEMENT_STR_T const& replacement_str ) const
-{
-  for ( auto pos = buffer.find ( target_str, 0 );
-        std::string::npos != pos;
-        pos = buffer.find ( target_str, 0 ) )
-  {
-    buffer.replace ( pos, target_str.size(), replacement_str );
-  }
-}
-
-/* ------------------------------------------------------------------------- */
-
-bool cstmgen_process_t::get_text_file_contents ( std::string const& file_pathname, buffer_t& buffer ) const
-{
-  bool result = false;
-
-  if ( file_pathname.length() )
-  {
-    std::ifstream in ( file_pathname, std::ios::in );
-
-    if ( in.good() )
-    {
-      std::string tmp;
-      bool is_first = true;
-
-      do
-      {
-        if ( not is_first )
-        {
-          buffer.append ( "\n" );
-        }
-
-        is_first = false;
-
-        std::getline ( in, tmp );
-
-        buffer.append ( tmp );
-      }
-      while ( not in.eof() );
-
-      result = true;
-    }
-  }
-
-  return result;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -621,22 +546,6 @@ cstmgen_process_t::get_state_transition_name ( buffer_t const& state_name_from,
   find_and_process_lower_var<m_var_state_name_to> ( result, state_name_to );
 
   return result;
-}
-
-/* ------------------------------------------------------------------------- */
-
-void cstmgen_process_t::convert_to_lower_case_inplace ( buffer_t& buffer ) const
-{
-  auto& f = std::use_facet<std::ctype<char>> ( std::locale() );
-  f.tolower ( buffer.data(), buffer.data() + buffer.size() );
-}
-
-/* ------------------------------------------------------------------------- */
-
-void cstmgen_process_t::convert_to_upper_case_inplace ( buffer_t& buffer ) const
-{
-  auto& f = std::use_facet<std::ctype<char>> ( std::locale() );
-  f.toupper ( buffer.data(), buffer.data() + buffer.size() );
 }
 
 /* ------------------------------------------------------------------------- */

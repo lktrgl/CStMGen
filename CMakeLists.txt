@@ -98,6 +98,8 @@ set (cstmgen_libsources
      src/CStMGen/cstmgen_process.cpp
      include/CStMGen/cstmgen_process.h
      include/CStMGen/cstmgen_process_templates.h
+     src/CStMGen/cstmgen_process_utils.cpp
+     include/CStMGen/cstmgen_process_utils.h
      )
 
 add_library ( cstmgen

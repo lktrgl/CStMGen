@@ -3,6 +3,12 @@
 #include <CStMGen/cstmgen_params.h>
 #include <CStMGen/cstmgen_json_machine_structure.h>
 
+/* ------------------------------------------------------------------------- */
+
+#include <CStMGen/cstmgen_process_utils.h>
+
+/* ------------------------------------------------------------------------- */
+
 #include <string>
 #include <ios>
 
@@ -22,13 +28,15 @@ struct dependent_false_t
   static bool const value = false;
 };
 
+using buffer_t = std::string;
+
 }  // namespace details
 
 /* ------------------------------------------------------------------------- */
 
-class cstmgen_process_t final
+class cstmgen_process_t final : gen::utils::cstmgen_process_utils_t<details::buffer_t, std::string, std::string_view>
 {
-  using buffer_t = std::string;
+  using buffer_t = details::buffer_t;
 
   static constexpr char const* const m_var_STATE_MACHINE_NAME = "%{STATE-MACHINE-NAME}%";
   static constexpr char const* const m_var_state_machine_name = "%{state-machine-name}%";
@@ -57,21 +65,6 @@ public:
 private:
   template<char const* const& VAR_NAME>
   void find_and_process_var ( buffer_t& buffer, std::string const& new_str ) const;
-
-  template<char const* const& VAR_NAME>
-  void find_and_process_upper_var ( buffer_t& buffer,
-                                    std::string const& replacement_str ) const;
-
-  template<char const* const& VAR_NAME>
-  void find_and_process_lower_var ( buffer_t& buffer,
-                                    std::string const& replacement_str ) const;
-
-  template <typename TARGET_STR_T, typename REPLACEMENT_STR_T>
-  void replace_all_occurences_inplace ( buffer_t& buffer,
-                                        TARGET_STR_T const& target_str,
-                                        REPLACEMENT_STR_T const& replacement_str ) const;
-
-  bool get_text_file_contents ( std::string const& file_pathname, buffer_t& buffer ) const;
 
   void replace_state_implementation_user_property_inplace ( buffer_t& buffer,
       std::string const& state_name ) const;
@@ -105,9 +98,6 @@ private:
   buffer_t get_state_enum_state_name ( buffer_t const& state_name ) const;
   buffer_t get_state_transition_name ( buffer_t const& state_name_from,
                                        buffer_t const& state_name_to ) const;
-
-  void convert_to_lower_case_inplace ( buffer_t& buffer ) const;
-  void convert_to_upper_case_inplace ( buffer_t& buffer ) const;
 
 private:
   cfg::cstmgen_params_t const& m_params;
