@@ -2,7 +2,7 @@
 	"machine-name": "SENS_COMM",
 	"machine-data": {
 		"fields" : "fake_machine_data_fields_decl.c",
-		"initialization" : "face_machine_data_fields_init.c"
+		"initialization" : "fake_machine_data_fields_init.c"
 	},
 	"states": [
 		{

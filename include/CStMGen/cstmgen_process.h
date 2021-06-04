@@ -74,6 +74,9 @@ private:
       std::string const& state_name_to,
       std::string const& user_property_file_name ) const;
 
+  void replace_machine_data_decl_inplace ( buffer_t& buffer ) const;
+  void replace_machine_data_init_inplace ( buffer_t& buffer ) const;
+
   void generate_state_enum ( std::string const& header_folder,
                              std::ios_base::openmode out_file_mode ) const;
   void generate_state_machine_data_header ( std::string const& header_folder,

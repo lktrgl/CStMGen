@@ -9,7 +9,7 @@
   /* put here all the data fields initialization;
      below is a sample field */
 
-  /* %{%{STATE-MACHINE-NAME}%-STATE-DATA-FIELDS-INITIALIZATION}% */
+  %{%{STATE-MACHINE-NAME}%-STATE-DATA-FIELDS-INITIALIZATION}%
 
   /* USER DATA FIELDS INIT END */
 };

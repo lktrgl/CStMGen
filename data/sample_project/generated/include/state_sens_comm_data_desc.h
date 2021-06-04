@@ -13,7 +13,8 @@ typedef struct sens_comm_data_desc_tag
      by SENS_COMM state machine;
      below is a sample field */
 
-  /* %{SENS_COMM-STATE-DATA-FIELDS-DECLARATION}% */
+  uint8_t dummy_field;
+
 
   /* USER DATA FIELDS DECL END */
 } sens_comm_data_desc_t;

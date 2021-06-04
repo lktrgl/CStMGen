@@ -9,7 +9,8 @@ sens_comm_data_desc_t g_state_data_sens_comm =
   /* put here all the data fields initialization;
      below is a sample field */
 
-  /* %{SENS_COMM-STATE-DATA-FIELDS-INITIALIZATION}% */
+  .dummy_field = 0xA5
+
 
   /* USER DATA FIELDS INIT END */
 };

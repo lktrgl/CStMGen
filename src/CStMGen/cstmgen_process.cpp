@@ -313,6 +313,52 @@ void cstmgen_process_t::replace_transition_evaluation_inplace ( buffer_t& buffer
 
 /* ------------------------------------------------------------------------- */
 
+
+void cstmgen_process_t::replace_machine_data_decl_inplace ( buffer_t& buffer ) const
+{
+  buffer_t buffer_property_key{data_templates_state_machine_data_cstm_state_data_decl_placeholder_name_template,
+                               data_templates_state_machine_data_cstm_state_data_decl_placeholder_name_template + data_templates_state_machine_data_cstm_state_data_decl_placeholder_name_template_len};
+
+  find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer_property_key, m_machine_structure.get_machine_name() );
+
+  buffer_t user_property_file_contents;
+
+  if ( m_machine_structure.get_machine_data().get_decl().length() )
+  {
+    get_text_file_contents ( {m_params.get_state_user_code_folder_path() + '/' + m_machine_structure.get_machine_data().get_decl() },
+                             user_property_file_contents );
+  }
+
+  replace_all_occurences_inplace ( buffer,
+                                   buffer_property_key,
+                                   user_property_file_contents );
+}
+
+/* ------------------------------------------------------------------------- */
+
+void cstmgen_process_t::replace_machine_data_init_inplace ( buffer_t& buffer ) const
+{
+  buffer_t buffer_property_key{data_templates_state_machine_data_cstm_state_data_init_placeholder_name_template,
+                               data_templates_state_machine_data_cstm_state_data_init_placeholder_name_template + data_templates_state_machine_data_cstm_state_data_init_placeholder_name_template_len};
+  find_and_process_upper_var<m_var_STATE_MACHINE_NAME> ( buffer_property_key, m_machine_structure.get_machine_name() );
+
+  buffer_t user_property_file_contents;
+
+  auto const& data_init_file = m_machine_structure.get_machine_data().get_init();
+
+  if ( data_init_file.length() )
+  {
+    get_text_file_contents ( {m_params.get_state_user_code_folder_path() + '/' + data_init_file },
+                             user_property_file_contents );
+  }
+
+  replace_all_occurences_inplace ( buffer,
+                                   buffer_property_key,
+                                   user_property_file_contents );
+}
+
+/* ------------------------------------------------------------------------- */
+
 void cstmgen_process_t::generate_state_enum ( std::string const& header_folder,
     std::ios_base::openmode out_file_mode ) const
 {
@@ -337,6 +383,8 @@ void cstmgen_process_t::generate_state_machine_data_header ( std::string const& 
   buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_h,
                                 data_templates_state_machine_data_cstm_state_data_desc_template_h + data_templates_state_machine_data_cstm_state_data_desc_template_h_len};
   process_all_vars ( buffer_file_contents, {} );
+
+  replace_machine_data_decl_inplace ( buffer_file_contents );
 
   buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h,
                             data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_h_len};
@@ -391,7 +439,10 @@ void cstmgen_process_t::generate_state_machine_data_implementation ( std::string
 {
   buffer_t buffer_file_contents{data_templates_state_machine_data_cstm_state_data_desc_template_c,
                                 data_templates_state_machine_data_cstm_state_data_desc_template_c + data_templates_state_machine_data_cstm_state_data_desc_template_c_len};
+
   process_all_vars ( buffer_file_contents, {} );
+
+  replace_machine_data_init_inplace ( buffer_file_contents );
 
   buffer_t buffer_file_name{data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c,
                             data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c + data_templates_state_machine_data_cstm_state_data_desc_file_name_template_c_len};
