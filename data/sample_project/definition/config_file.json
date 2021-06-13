@@ -1,8 +1,12 @@
 {
 	"machine-name": "SENS_COMM",
+	"icon_coord_x" : "0",
+	"icon_coord_y" : "0",
 	"machine-data": {
 		"fields" : "fake_machine_data_fields_decl.c",
-		"initialization" : "fake_machine_data_fields_init.c"
+		"initialization" : "fake_machine_data_fields_init.c",
+		"icon_coord_x" : "0",
+		"icon_coord_y" : "0"
 	},
 	"states": [
 		{
