@@ -75,7 +75,9 @@ cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_val
     state_user_code_t user_code_input,
     state_user_code_t user_code_run,
     state_user_code_t user_code_output,
-    state_user_code_t user_code_leave )
+    state_user_code_t user_code_leave,
+    coord_t x,
+    coord_t y )
 {
   m_property_map[m_key_state_numeric_value] = value;
 
@@ -85,6 +87,9 @@ cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_val
   m_property_map[m_key_state_user_code_run] = user_code_run;
   m_property_map[m_key_state_user_code_output] = user_code_output;
   m_property_map[m_key_state_user_code_leave] = user_code_leave;
+
+  m_property_map[m_key_coord_x] = x;
+  m_property_map[m_key_coord_y] = y;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -198,10 +203,40 @@ cstmgen_json_machine_structure_t::transition_property_t::get_condition_user_code
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::machine_data_t::machine_data_t ( std::string const& data_field_decl,
-    std::string const& data_field_init )
+    std::string const& data_field_init,
+    coord_t x,
+    coord_t y )
 {
   m_property_map[m_key_data_user_decl] = data_field_decl;
   m_property_map[m_key_data_user_init] = data_field_init;
+
+  m_property_map[m_key_coord_x] = x;
+  m_property_map[m_key_coord_y] = y;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_data_t::machine_data_t ( machine_data_t const& other )
+{
+  *this = other;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_data_t&
+cstmgen_json_machine_structure_t::machine_data_t::operator= ( machine_data_t const& other )
+{
+  this->m_property_map = other.m_property_map;
+  return *this;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_data_t&
+cstmgen_json_machine_structure_t::machine_data_t::operator= ( machine_data_t&& other )
+{
+  std::swap ( this->m_property_map, other.m_property_map );
+  return *this;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -386,6 +421,52 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
   }
 
   {
+    // retrieve the "coord_x"
+    rapidjson::Value& s = d[m_key_coord_x.data()];
+
+    if ( not s.IsString() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_coord_x << "' property is not a string." << std::endl;
+#endif
+      return;
+    }
+
+    m_coord_x = s.GetString();
+
+    if ( not m_coord_x.length() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_coord_x << "' property is empty." << std::endl;
+#endif
+      return;
+    }
+  }
+
+  {
+    // retrieve the "coord_y"
+    rapidjson::Value& s = d[m_key_coord_y.data()];
+
+    if ( not s.IsString() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_coord_y << "' property is not a string." << std::endl;
+#endif
+      return;
+    }
+
+    m_coord_y = s.GetString();
+
+    if ( not m_coord_y.length() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_coord_y << "' property is empty." << std::endl;
+#endif
+      return;
+    }
+  }
+
+  {
     // retrieve the "machine-data"
     rapidjson::Value& obj = d[m_key_global_machine_data.data()];
 
@@ -415,8 +496,13 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
       return get_string_by_iter_if_exists ( it );
     };
 
-    m_machine_data.set_decl ( get_string_if_exists ( m_key_data_user_decl ) );
-    m_machine_data.set_init ( get_string_if_exists ( m_key_data_user_init ) );
+    m_machine_data = machine_data_t
+    {
+      get_string_if_exists ( m_key_data_user_decl ),
+      get_string_if_exists ( m_key_data_user_init ),
+      get_string_if_exists ( m_key_coord_x ),
+      get_string_if_exists ( m_key_coord_y )
+    };
 
     if ( not m_machine_data.get_decl().length() or not m_machine_data.get_init().length() )
     {
@@ -488,7 +574,9 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         get_string_if_exists ( m_key_state_user_code_input ),
         get_string_if_exists ( m_key_state_user_code_run ),
         get_string_if_exists ( m_key_state_user_code_output ),
-        get_string_if_exists ( m_key_state_user_code_leave )
+        get_string_if_exists ( m_key_state_user_code_leave ),
+        get_string_if_exists ( m_key_coord_x ),
+        get_string_if_exists ( m_key_coord_y )
       };
 
       m_states.insert (

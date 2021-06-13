@@ -38,10 +38,14 @@ class cstmgen_json_machine_structure_t final
   constexpr static std::string_view const m_key_transition_to = "to";
   constexpr static std::string_view const m_key_transition_condition_user_code = "condition_handler";
 
+  constexpr static std::string_view const m_key_coord_x = "icon_coord_x";
+  constexpr static std::string_view const m_key_coord_y = "icon_coord_y";
+
 public:
   using state_id_t = std::string;
   using state_value_t = std::string;
   using state_user_code_t = std::string;
+  using coord_t = std::string;
 
   struct state_property_t
   {
@@ -51,7 +55,9 @@ public:
                        state_user_code_t user_code_input,
                        state_user_code_t user_code_run,
                        state_user_code_t user_code_output,
-                       state_user_code_t user_code_leave );
+                       state_user_code_t user_code_leave,
+                       coord_t x,
+                       coord_t y );
 
     state_property_t ( state_property_t const& other );
     state_property_t& operator= ( state_property_t const& other );
@@ -126,12 +132,15 @@ public:
     machine_data_t() = default;
 
     machine_data_t ( std::string const& data_field_decl,
-                     std::string const& data_field_init );
+                     std::string const& data_field_init,
+                     coord_t x,
+                     coord_t y );
 
-    machine_data_t ( machine_data_t const& ) = delete;
-    machine_data_t& operator= ( machine_data_t const& ) = delete;
+    machine_data_t ( machine_data_t const& other );
+    machine_data_t& operator= ( machine_data_t const& other );
+
     machine_data_t ( machine_data_t&& ) = delete;
-    machine_data_t& operator= ( machine_data_t&& ) = delete;
+    machine_data_t& operator= ( machine_data_t&& );
 
     void set_decl ( std::string const& data_field_decl );
     void set_init ( std::string const& data_field_init );
@@ -171,6 +180,8 @@ private:
   std::string const m_config_file_pathname;
 
   std::string m_machine_name;
+  coord_t m_coord_x;
+  coord_t m_coord_y;
   machine_data_t m_machine_data;
   states_t m_states;
   std::string m_initial_state_name;
