@@ -1,6 +1,12 @@
 #ifndef STATE_SENS_COMM_ENUM_H_INCLUDED
 #define STATE_SENS_COMM_ENUM_H_INCLUDED
 
+/*---------------------------------------------------------------------------*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* ------------------------------------------------------------------------- */
 
 typedef enum state_sens_comm_enum_tag
@@ -14,6 +20,12 @@ typedef enum state_sens_comm_enum_tag
 
   ST_SENS_COMM_COUNT
 } state_sens_comm_enum_t;
+
+/*---------------------------------------------------------------------------*/
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 /* ------------------------------------------------------------------------- */
 
