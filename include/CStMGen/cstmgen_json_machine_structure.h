@@ -16,7 +16,7 @@ namespace cfg
 
 class cstmgen_json_machine_structure_t final
 {
-  constexpr static std::string_view const m_key_global_machine_name = "machine-name";
+  constexpr static std::string_view const m_key_global_machine = "machine";
   constexpr static std::string_view const m_key_global_machine_data = "machine-data";
   constexpr static std::string_view const m_key_global_states = "states";
   constexpr static std::string_view const m_key_global_initial_state = "initial-state";
@@ -42,10 +42,36 @@ class cstmgen_json_machine_structure_t final
   constexpr static std::string_view const m_key_coord_y = "icon_coord_y";
 
 public:
+  using id_t = std::string;
   using state_id_t = std::string;
   using state_value_t = std::string;
   using state_user_code_t = std::string;
   using coord_t = std::string;
+
+  struct machine_property_t
+  {
+    machine_property_t() = default;
+
+    machine_property_t ( id_t id,
+                         coord_t x,
+                         coord_t y );
+
+    machine_property_t ( machine_property_t const& other );
+    machine_property_t& operator= ( machine_property_t const& other );
+
+    machine_property_t ( machine_property_t&& ) = delete;
+    machine_property_t& operator= ( machine_property_t&& );
+
+    std::string const& get_property ( std::string_view const& name ) const;
+    std::string const& get_property ( std::string const& name ) const;
+    std::string const& get_id() const;
+
+  private:
+    using property_map_t = std::map<std::string_view, std::string>;
+
+  private:
+    property_map_t m_property_map;
+  };
 
   struct state_property_t
   {
@@ -179,9 +205,7 @@ private:
 private:
   std::string const m_config_file_pathname;
 
-  std::string m_machine_name;
-  coord_t m_coord_x;
-  coord_t m_coord_y;
+  machine_property_t m_machine;
   machine_data_t m_machine_data;
   states_t m_states;
   std::string m_initial_state_name;

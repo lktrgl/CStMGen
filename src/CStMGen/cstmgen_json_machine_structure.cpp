@@ -69,6 +69,51 @@ cstmgen_json_machine_structure_t::m_state_user_property_templates =
 
 /* ------------------------------------------------------------------------- */
 
+cstmgen_json_machine_structure_t::machine_property_t::machine_property_t ( id_t id,
+    coord_t x,
+    coord_t y )
+{
+  m_property_map[m_key_state_id] = id;
+
+  m_property_map[m_key_coord_x] = x;
+  m_property_map[m_key_coord_y] = y;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_property_t::machine_property_t ( machine_property_t const& other )
+{
+  *this = other;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_property_t&
+cstmgen_json_machine_structure_t::machine_property_t::operator= ( machine_property_t const& other )
+{
+  this->m_property_map = other.m_property_map;
+  return *this;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::machine_property_t&
+cstmgen_json_machine_structure_t::machine_property_t::operator= ( machine_property_t&& other )
+{
+  std::swap ( this->m_property_map, other.m_property_map );
+  return *this;
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::machine_property_t::get_id() const
+{
+  return m_property_map.at ( m_key_state_id );
+}
+
+/* ------------------------------------------------------------------------- */
+
 cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_value_t value,
     state_user_code_t user_code_global,
     state_user_code_t user_code_enter,
@@ -283,7 +328,7 @@ cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string
 
 std::string const& cstmgen_json_machine_structure_t::get_machine_name() const
 {
-  return m_machine_name;
+  return m_machine.get_id();
 }
 
 /* ------------------------------------------------------------------------- */
@@ -349,7 +394,7 @@ cstmgen_json_machine_structure_t::get_transitions() const
 
 bool cstmgen_json_machine_structure_t::valid() const
 {
-  bool const is_valid = m_machine_name.length()
+  bool const is_valid = m_machine.get_id().length()
                         && m_machine_data.get_decl().length()
                         && m_states.size()
                         && m_initial_state_name.length()
@@ -398,69 +443,46 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
   }
 
   {
-    // retrieve the "machine-name"
-    rapidjson::Value& s = d[m_key_global_machine_name.data()];
+    // retrieve the "machine"
+    rapidjson::Value& obj = d[m_key_global_machine.data()];
 
-    if ( not s.IsString() )
+    if ( not obj.IsObject() )
     {
 #ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_machine_name << "' property is not a string." << std::endl;
+      std::cerr << "the '" << m_key_global_machine << "' property is not an object." << std::endl;
 #endif
       return;
     }
 
-    m_machine_name = s.GetString();
+    auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+    {
+      if ( obj.MemberEnd() == it or not it->value.IsString() )
+      {
+        return {};
+      }
+      else
+      {
+        return {it->value.GetString() };
+      }
+    };
 
-    if ( not m_machine_name.length() )
+    auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+    {
+      rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+      return get_string_by_iter_if_exists ( it );
+    };
+
+    m_machine = machine_property_t
+    {
+      get_string_if_exists ( m_key_state_id ),
+      get_string_if_exists ( m_key_coord_x ),
+      get_string_if_exists ( m_key_coord_y )
+    };
+
+    if ( not m_machine.get_id().length() )
     {
 #ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_machine_name << "' property is empty." << std::endl;
-#endif
-      return;
-    }
-  }
-
-  {
-    // retrieve the "coord_x"
-    rapidjson::Value& s = d[m_key_coord_x.data()];
-
-    if ( not s.IsString() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_coord_x << "' property is not a string." << std::endl;
-#endif
-      return;
-    }
-
-    m_coord_x = s.GetString();
-
-    if ( not m_coord_x.length() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_coord_x << "' property is empty." << std::endl;
-#endif
-      return;
-    }
-  }
-
-  {
-    // retrieve the "coord_y"
-    rapidjson::Value& s = d[m_key_coord_y.data()];
-
-    if ( not s.IsString() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_coord_y << "' property is not a string." << std::endl;
-#endif
-      return;
-    }
-
-    m_coord_y = s.GetString();
-
-    if ( not m_coord_y.length() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_coord_y << "' property is empty." << std::endl;
+      std::cerr << "item of the '" << m_key_global_machine << "' does not have expected members." << std::endl;
 #endif
       return;
     }
