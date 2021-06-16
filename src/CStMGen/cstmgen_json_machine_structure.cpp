@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <optional>
 
 /* ------------------------------------------------------------------------- */
 
@@ -114,7 +115,8 @@ cstmgen_json_machine_structure_t::machine_property_t::get_id() const
 
 /* ------------------------------------------------------------------------- */
 
-cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_value_t value,
+cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_id_t id,
+    state_value_t value,
     state_user_code_t user_code_global,
     state_user_code_t user_code_enter,
     state_user_code_t user_code_input,
@@ -124,6 +126,7 @@ cstmgen_json_machine_structure_t::state_property_t::state_property_t ( state_val
     coord_t x,
     coord_t y )
 {
+  m_property_map[m_key_state_id] = id;
   m_property_map[m_key_state_numeric_value] = value;
 
   m_property_map[m_key_state_user_code_global] = user_code_global;
@@ -151,6 +154,14 @@ std::string const&
 cstmgen_json_machine_structure_t::state_property_t::get_property ( std::string const& name ) const
 {
   return m_property_map.at ( name );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::state_property_t::get_id() const
+{
+  return m_property_map.at ( m_key_state_id );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -206,11 +217,32 @@ cstmgen_json_machine_structure_t::state_user_property_template_t::get_length() c
 
 /* ------------------------------------------------------------------------- */
 
-cstmgen_json_machine_structure_t::transition_property_t::transition_property_t ( std::string const& state_to,
-    std::string const& condition_code )
+cstmgen_json_machine_structure_t::transition_property_t::transition_property_t (
+  std::string const& state_from,
+  std::string const& state_to,
+  std::string const& condition_code )
 {
+  m_property_map[m_key_transition_from] = state_from;
   m_property_map[m_key_transition_to] = state_to;
   m_property_map[m_key_transition_condition_user_code] = condition_code;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::transition_property_t::transition_property_t (
+  transition_property_t const& other )
+{
+  *this = other;
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::transition_property_t&
+cstmgen_json_machine_structure_t::transition_property_t::operator= (
+  transition_property_t const& other )
+{
+  m_property_map = other.m_property_map;
+  return *this;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -227,6 +259,14 @@ std::string const&
 cstmgen_json_machine_structure_t::transition_property_t::get_property ( std::string const& name ) const
 {
   return m_property_map.at ( name );
+}
+
+/* ------------------------------------------------------------------------- */
+
+std::string const&
+cstmgen_json_machine_structure_t::transition_property_t::get_state_from() const
+{
+  return m_property_map.at ( m_key_transition_from );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -321,7 +361,7 @@ cstmgen_json_machine_structure_t::machine_data_t::get_init() const
 cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string const& config_file_pathname )
   : m_config_file_pathname ( config_file_pathname )
 {
-  import ( m_config_file_pathname );
+  load_from_file ( m_config_file_pathname );
 }
 
 /* ------------------------------------------------------------------------- */
@@ -412,7 +452,7 @@ bool cstmgen_json_machine_structure_t::valid() const
 
 /* ------------------------------------------------------------------------- */
 
-void cstmgen_json_machine_structure_t::import ( std::string const& config_file_pathname )
+void cstmgen_json_machine_structure_t::load_from_file ( std::string const& config_file_pathname )
 {
   std::ifstream in { config_file_pathname, std::ios::binary | std::ios::ate};
 
@@ -425,143 +465,65 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
   size_t const in_length = in.tellg();
   in.seekg ( 0, std::ios::beg );
 
-  std::vector<char> buff ( in_length + 1 );
+  buffer_t buff ( in_length + 1 );
 
   in.read ( buff.data(), buff.size() );
 
-  rapidjson::Document d;
-  d.Parse ( buff.data() );
-
-  if ( d.HasParseError() )
+  if ( not load_from_buffer ( buff ) )
   {
 #ifndef NDEBUG
     std::cerr
-        << "the '" << config_file_pathname << "' file does not contain relevant machine structure or is empty."
+        << "the '" << config_file_pathname << "' config file does not contain relevant machine structure or is empty."
         << std::endl;
 #endif
-    return;
+  }
+}
+
+/* ------------------------------------------------------------------------- */
+
+struct json_parser_t
+{
+  using document_t = std::shared_ptr<rapidjson::Document>;
+  using machine_property_t = std::optional<cstmgen_json_machine_structure_t::machine_property_t>;
+  using machine_data_t = std::optional<cstmgen_json_machine_structure_t::machine_data_t>;
+  using state_property_t = std::optional<cstmgen_json_machine_structure_t::state_property_t>;
+  using transition_property_t = std::optional<cstmgen_json_machine_structure_t::transition_property_t>;
+
+  json_parser_t ( cstmgen_json_machine_structure_t& jms )
+    : m_jms ( jms )
+  {
+    /* EMPTY */
   }
 
+  document_t parse_buffer ( cstmgen_json_machine_structure_t::buffer_t const& buff )
   {
-    // retrieve the "machine"
-    rapidjson::Value& obj = d[m_key_global_machine.data()];
+    m_document = std::make_shared<rapidjson::Document>();
 
-    if ( not obj.IsObject() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_machine << "' property is not an object." << std::endl;
-#endif
-      return;
-    }
+    m_document->Parse ( buff.data() );
 
-    auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
-    {
-      if ( obj.MemberEnd() == it or not it->value.IsString() )
-      {
-        return {};
-      }
-      else
-      {
-        return {it->value.GetString() };
-      }
-    };
-
-    auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-    {
-      rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
-      return get_string_by_iter_if_exists ( it );
-    };
-
-    m_machine = machine_property_t
-    {
-      get_string_if_exists ( m_key_state_id ),
-      get_string_if_exists ( m_key_coord_x ),
-      get_string_if_exists ( m_key_coord_y )
-    };
-
-    if ( not m_machine.get_id().length() )
-    {
-#ifndef NDEBUG
-      std::cerr << "item of the '" << m_key_global_machine << "' does not have expected members." << std::endl;
-#endif
-      return;
-    }
+    return m_document;
   }
 
+  machine_property_t
+  get_machine_properties ( rapidjson::Value& machine_obj ) const
   {
-    // retrieve the "machine-data"
-    rapidjson::Value& obj = d[m_key_global_machine_data.data()];
+    machine_property_t result;
 
-    if ( not obj.IsObject() )
+    do
     {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_machine_data << "' property is not an object." << std::endl;
-#endif
-      return;
-    }
-
-    auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
-    {
-      if ( obj.MemberEnd() == it or not it->value.IsString() )
-      {
-        return {};
-      }
-      else
-      {
-        return {it->value.GetString() };
-      }
-    };
-
-    auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-    {
-      rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
-      return get_string_by_iter_if_exists ( it );
-    };
-
-    m_machine_data = machine_data_t
-    {
-      get_string_if_exists ( m_key_data_user_decl ),
-      get_string_if_exists ( m_key_data_user_init ),
-      get_string_if_exists ( m_key_coord_x ),
-      get_string_if_exists ( m_key_coord_y )
-    };
-
-    if ( not m_machine_data.get_decl().length() or not m_machine_data.get_init().length() )
-    {
-#ifndef NDEBUG
-      std::cerr << "item of the '" << m_key_global_machine_data << "' does not have expected members." << std::endl;
-#endif
-      return;
-    }
-  }
-
-  {
-    // retrieve the "states"
-    rapidjson::Value& a = d[m_key_global_states.data()];
-
-    if ( not a.IsArray() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_states << "' property is not an array." << std::endl;
-#endif
-      return;
-    }
-
-    for ( rapidjson::Value::ValueIterator itr = a.Begin(); itr != a.End(); ++itr )
-    {
-      rapidjson::Value& obj = *itr;
-
-      if ( not obj.IsObject() )
+      if ( not machine_obj.IsObject() )
       {
 #ifndef NDEBUG
-        std::cerr << "item of the '" << m_key_global_states << "' array is not a object." << std::endl;
+        std::cerr
+            << "the '" << m_jms.m_key_global_machine << "' property is not an object."
+            << std::endl;
 #endif
-        continue;
+        break;
       }
 
-      auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+      auto get_string_by_iter_if_exists = [& machine_obj] ( auto & it )->std::string
       {
-        if ( obj.MemberEnd() == it or not it->value.IsString() )
+        if ( machine_obj.MemberEnd() == it or not it->value.IsString() )
         {
           return {};
         }
@@ -571,123 +533,389 @@ void cstmgen_json_machine_structure_t::import ( std::string const& config_file_p
         }
       };
 
-      auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      auto get_string_if_exists = [&machine_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
       {
-        rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+        rapidjson::Value::ConstMemberIterator it = machine_obj.FindMember ( token.data() );
         return get_string_by_iter_if_exists ( it );
       };
 
-      if ( not get_string_if_exists ( m_key_state_id ).length()
-           or
-           not get_string_if_exists ( m_key_state_numeric_value ).length() )
+      result.emplace ( get_string_if_exists ( m_jms.m_key_state_id ),
+                       get_string_if_exists ( m_jms.m_key_coord_x ),
+                       get_string_if_exists ( m_jms.m_key_coord_y )
+                     );
+
+      if ( not result.value().get_id().length() )
       {
 #ifndef NDEBUG
-        std::cerr << "item of the '" << m_key_global_states << "' does not have expected members." << std::endl;
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_machine << "' does not have expected members."
+            << std::endl;
 #endif
-        continue;
+        result.reset();
+        break;
+      }
+    }
+    while ( false );
+
+    return result;
+  }
+
+  machine_data_t
+  get_machine_data ( rapidjson::Value& machine_data_obj ) const
+  {
+    machine_data_t result;
+
+    do
+    {
+      if ( not machine_data_obj.IsObject() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "the '" << m_jms.m_key_global_machine_data << "' property is not an object."
+            << std::endl;
+#endif
+        break;
       }
 
-      state_property_t
-      state_property
+      auto get_string_by_iter_if_exists = [& machine_data_obj] ( auto & it )->std::string
       {
-        get_string_if_exists ( m_key_state_numeric_value ),
-        get_string_if_exists ( m_key_state_user_code_global ),
-        get_string_if_exists ( m_key_state_user_code_enter ),
-        get_string_if_exists ( m_key_state_user_code_input ),
-        get_string_if_exists ( m_key_state_user_code_run ),
-        get_string_if_exists ( m_key_state_user_code_output ),
-        get_string_if_exists ( m_key_state_user_code_leave ),
-        get_string_if_exists ( m_key_coord_x ),
-        get_string_if_exists ( m_key_coord_y )
+        if ( machine_data_obj.MemberEnd() == it or not it->value.IsString() )
+        {
+          return {};
+        }
+        else
+        {
+          return {it->value.GetString() };
+        }
       };
 
-      m_states.insert (
-        std::make_pair ( get_string_if_exists ( m_key_state_id ), std::make_shared<state_property_t> ( state_property ) )
+      auto get_string_if_exists = [&machine_data_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      {
+        rapidjson::Value::ConstMemberIterator it = machine_data_obj.FindMember ( token.data() );
+        return get_string_by_iter_if_exists ( it );
+      };
+
+      result.emplace (
+        get_string_if_exists ( m_jms.m_key_data_user_decl ),
+        get_string_if_exists ( m_jms.m_key_data_user_init ),
+        get_string_if_exists ( m_jms.m_key_coord_x ),
+        get_string_if_exists ( m_jms.m_key_coord_y )
       );
+
+      if ( not result.value().get_decl().length() or not result.value().get_init().length() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_machine_data << "' does not have expected members."
+            << std::endl;
+#endif
+        result.reset();
+        break;
+      }
+    }
+    while ( false );
+
+    return result;
+  }
+
+  state_property_t
+  get_state_properties ( rapidjson::Value& state_obj ) const
+  {
+    state_property_t result;
+
+    do
+    {
+
+      if ( not state_obj.IsObject() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_states << "' array is not a object."
+            << std::endl;
+#endif
+        break;
+      }
+
+      auto get_string_by_iter_if_exists = [& state_obj] ( auto & it )->std::string
+      {
+        if ( state_obj.MemberEnd() == it or not it->value.IsString() )
+        {
+          return {};
+        }
+        else
+        {
+          return {it->value.GetString() };
+        }
+      };
+
+      auto get_string_if_exists = [&state_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      {
+        rapidjson::Value::ConstMemberIterator it = state_obj.FindMember ( token.data() );
+        return get_string_by_iter_if_exists ( it );
+      };
+
+      if ( not get_string_if_exists ( m_jms.m_key_state_id ).length()
+           or
+           not get_string_if_exists ( m_jms.m_key_state_numeric_value ).length() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_states << "' does not have expected members."
+            << std::endl;
+#endif
+        break;
+      }
+
+      result.emplace (
+        get_string_if_exists ( m_jms.m_key_state_id ),
+        get_string_if_exists ( m_jms.m_key_state_numeric_value ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_global ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_enter ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_input ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_run ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_output ),
+        get_string_if_exists ( m_jms.m_key_state_user_code_leave ),
+        get_string_if_exists ( m_jms.m_key_coord_x ),
+        get_string_if_exists ( m_jms.m_key_coord_y )
+      );
+    }
+    while ( false );
+
+    return result;
+  }
+
+  transition_property_t
+  get_transition_properties ( rapidjson::Value& transition_obj ) const
+  {
+    transition_property_t result;
+
+    do
+    {
+      if ( not transition_obj.IsObject() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_transitions << "' array is not a object."
+            << std::endl;
+#endif
+        break;
+      }
+
+      auto get_string_by_iter_if_exists = [& transition_obj] ( auto & it )->std::string
+      {
+        if ( transition_obj.MemberEnd() == it or not it->value.IsString() )
+        {
+          return {};
+        }
+        else
+        {
+          return {it->value.GetString() };
+        }
+      };
+
+      auto get_string_if_exists = [&transition_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+      {
+        rapidjson::Value::ConstMemberIterator it = transition_obj.FindMember ( token.data() );
+        return get_string_by_iter_if_exists ( it );
+      };
+
+      if ( not get_string_if_exists ( m_jms.m_key_transition_from ).length() or
+           not get_string_if_exists ( m_jms.m_key_transition_to ).length() )
+      {
+#ifndef NDEBUG
+        std::cerr
+            << "item of the '" << m_jms.m_key_global_transitions << "' does not have expected members."
+            << std::endl;
+#endif
+        break;
+      }
+
+      result.emplace (
+        get_string_if_exists ( m_jms.m_key_transition_from ),
+        get_string_if_exists ( m_jms.m_key_transition_to ),
+        get_string_if_exists ( m_jms.m_key_transition_condition_user_code )
+      );
+    }
+    while ( false );
+
+    return result;
+  }
+
+private:
+  cstmgen_json_machine_structure_t& m_jms;
+  document_t m_document;
+};
+
+/* ------------------------------------------------------------------------- */
+
+bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
+{
+  json_parser_t json_parser ( *this );
+
+  json_parser_t::document_t json_document = json_parser.parse_buffer ( buff );
+
+  if ( not json_document or json_document->HasParseError() )
+  {
+#ifndef NDEBUG
+    std::cerr
+        << "the input does not contain relevant machine structure or is empty."
+        << std::endl;
+#endif
+    return false;
+  }
+
+  auto& json_document_ref = ( *json_document.get() );
+
+  //  {
+  //    // retrieve the "state-machines"
+  //    rapidjson::Value& array_of_state_machines = json_document_ref[m_key_global_state_machines.data()];
+  //
+  //    if ( not array_of_state_machines.IsArray() )
+  //    {
+  //#ifndef NDEBUG
+  //      std::cerr << "the '" << m_key_global_state_machines << "' property is not an array." << std::endl;
+  //#endif
+  //      return false;
+  //    }
+  //
+  //    for ( rapidjson::Value::ValueIterator itr = array_of_state_machines.Begin();
+  //          itr != array_of_state_machines.End();
+  //          ++itr )
+  //    {
+  //      rapidjson::Value& obj = *itr;
+  //
+  //      if ( not obj.IsObject() )
+  //      {
+  //#ifndef NDEBUG
+  //        std::cerr << "item of the '" << m_key_global_states << "' array is not a object." << std::endl;
+  //#endif
+  //        continue;
+  //      }
+  //
+  //      // TODO: put per state machine processing invocation here
+  //    }
+  //  }
+
+  if ( json_document_ref.HasMember ( m_key_global_machine.data() ) )
+  {
+    // retrieve the "machine"
+    auto const optional_machine_properties = json_parser.get_machine_properties (
+          json_document_ref[m_key_global_machine.data()] );
+
+    if ( not optional_machine_properties )
+    {
+      return false;
+    }
+
+    m_machine = optional_machine_properties.value();
+  }
+
+  if ( json_document_ref.HasMember ( m_key_global_machine_data.data() ) )
+  {
+    // retrieve the "machine-data"
+    auto const optional_machine_data = json_parser.get_machine_data (
+                                         json_document_ref[m_key_global_machine_data.data()] );
+
+    if ( not optional_machine_data )
+    {
+      return false;
+    }
+
+    m_machine_data = optional_machine_data.value();
+  }
+
+  if ( json_document_ref.HasMember ( m_key_global_states.data() ) )
+  {
+    // retrieve the "states"
+    rapidjson::Value& array_of_states = json_document_ref[m_key_global_states.data()];
+
+    if ( not array_of_states.IsArray() )
+    {
+#ifndef NDEBUG
+      std::cerr << "the '" << m_key_global_states << "' property is not an array." << std::endl;
+#endif
+      return false;
+    }
+
+    for ( rapidjson::Value::ValueIterator itr = array_of_states.Begin();
+          itr != array_of_states.End();
+          ++itr )
+    {
+      rapidjson::Value& state_obj = *itr;
+
+      auto const optional_state_properties = json_parser.get_state_properties ( state_obj );
+
+      if ( not optional_state_properties )
+      {
+        return false;
+      }
+
+      state_property_t state_property ( optional_state_properties.value() );
+
+      m_states.insert (
+        std::make_pair ( state_property.get_id(),
+                         std::make_shared<state_property_t> ( state_property ) ) );
     } // for itr
   }
 
+  if ( json_document_ref.HasMember ( m_key_global_initial_state.data() ) )
   {
     // retrieve the "initial-state"
-    rapidjson::Value& s = d[m_key_global_initial_state.data()];
+    rapidjson::Value& initial_state_string = json_document_ref[m_key_global_initial_state.data()];
 
-    if ( not s.IsString() )
+    if ( not initial_state_string.IsString() )
     {
 #ifndef NDEBUG
       std::cerr << "the '" << m_key_global_initial_state << "' property is not a string." << std::endl;
 #endif
-      return;
+      return false;
     }
 
-    m_initial_state_name = s.GetString();
+    m_initial_state_name = initial_state_string.GetString();
 
     if ( not m_initial_state_name.length() )
     {
 #ifndef NDEBUG
       std::cerr << "the '" << m_key_global_initial_state << "' property is empty." << std::endl;
 #endif
-      return;
+      return false;
     }
   }
 
+  if ( json_document_ref.HasMember ( m_key_global_transitions.data() ) )
   {
     // retrieve the "transitions"
-    rapidjson::Value& a = d[m_key_global_transitions.data()];
+    rapidjson::Value& array_of_transitions = json_document_ref[m_key_global_transitions.data()];
 
-    if ( not a.IsArray() )
+    if ( not array_of_transitions.IsArray() )
     {
 #ifndef NDEBUG
       std::cerr << "the '" << m_key_global_transitions << "' property is not an array." << std::endl;
 #endif
-      return;
+      return false;
     }
 
-    for ( rapidjson::Value::ValueIterator itr = a.Begin(); itr != a.End(); ++itr )
+    for ( rapidjson::Value::ValueIterator itr = array_of_transitions.Begin();
+          itr != array_of_transitions.End();
+          ++itr )
     {
-      rapidjson::Value& obj = *itr;
+      rapidjson::Value& transition_obj = *itr;
 
-      if ( not obj.IsObject() )
+      auto const optional_transition_properties = json_parser.get_transition_properties ( transition_obj );
+
+      if ( not optional_transition_properties )
       {
-#ifndef NDEBUG
-        std::cerr << "item of the '" << m_key_global_transitions << "' array is not a object." << std::endl;
-#endif
-        continue;
+        return false;
       }
 
-      auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
-      {
-        if ( obj.MemberEnd() == it or not it->value.IsString() )
-        {
-          return {};
-        }
-        else
-        {
-          return {it->value.GetString() };
-        }
-      };
+      transition_property_t transition_properties ( optional_transition_properties.value() );
 
-      auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-      {
-        rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
-        return get_string_by_iter_if_exists ( it );
-      };
-
-      if ( not get_string_if_exists ( m_key_transition_from ).length() or
-           not get_string_if_exists ( m_key_transition_to ).length() )
-      {
-#ifndef NDEBUG
-        std::cerr << "item of the '" << m_key_global_transitions << "' does not have expected members." << std::endl;
-#endif
-        continue;
-      }
-
-      m_transitions.insert ( std::make_pair ( get_string_if_exists ( m_key_transition_from ),
-                                              std::make_shared<transition_property_t> (
-                                                  get_string_if_exists ( m_key_transition_to ),
-                                                  get_string_if_exists ( m_key_transition_condition_user_code )
-                                              ) ) );
+      m_transitions.insert ( std::make_pair ( transition_properties.get_state_from(),
+                                              std::make_shared<transition_property_t> ( transition_properties ) ) );
     } // for itr
   }
+
+  return true;
 }
 
 /* ------------------------------------------------------------------------- */

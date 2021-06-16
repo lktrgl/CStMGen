@@ -16,6 +16,7 @@ namespace cfg
 
 class cstmgen_json_machine_structure_t final
 {
+  constexpr static std::string_view const m_key_global_state_machines = "state-machines";
   constexpr static std::string_view const m_key_global_machine = "machine";
   constexpr static std::string_view const m_key_global_machine_data = "machine-data";
   constexpr static std::string_view const m_key_global_states = "states";
@@ -42,6 +43,11 @@ class cstmgen_json_machine_structure_t final
   constexpr static std::string_view const m_key_coord_y = "icon_coord_y";
 
 public:
+  friend class json_parser_t;
+
+public:
+  using buffer_t = std::vector<char>;
+
   using id_t = std::string;
   using state_id_t = std::string;
   using state_value_t = std::string;
@@ -75,7 +81,8 @@ public:
 
   struct state_property_t
   {
-    state_property_t ( state_value_t value,
+    state_property_t ( state_id_t id,
+                       state_value_t value,
                        state_user_code_t user_code_global,
                        state_user_code_t user_code_enter,
                        state_user_code_t user_code_input,
@@ -93,6 +100,8 @@ public:
 
     std::string const& get_property ( std::string_view const& name ) const;
     std::string const& get_property ( std::string const& name ) const;
+
+    std::string const& get_id() const;
     std::string const& get_value() const;
 
   private:
@@ -129,16 +138,18 @@ public:
 
   struct transition_property_t
   {
-    transition_property_t ( std::string const& state_to,
+    transition_property_t ( std::string const& state_from,
+                            std::string const& state_to,
                             std::string const& condition_code );
 
-    transition_property_t ( transition_property_t const& ) = delete;
-    transition_property_t& operator= ( transition_property_t const& ) = delete;
+    transition_property_t ( transition_property_t const& );
+    transition_property_t& operator= ( transition_property_t const& );
     transition_property_t ( transition_property_t&& ) = delete;
     transition_property_t& operator= ( transition_property_t&& ) = delete;
 
     std::string const& get_property ( std::string_view const& name ) const;
     std::string const& get_property ( std::string const& name ) const;
+    std::string const& get_state_from() const;
     std::string const& get_state_to() const;
     std::string const& get_condition_user_code() const;
 
@@ -200,7 +211,8 @@ public:
   bool valid() const;
 
 private:
-  void import ( std::string const& config_file_pathname );
+  void load_from_file ( std::string const& config_file_pathname );
+  bool load_from_buffer ( buffer_t const& buff );
 
 private:
   std::string const m_config_file_pathname;
