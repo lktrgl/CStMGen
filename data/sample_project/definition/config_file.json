@@ -1,150 +1,150 @@
 {
-	"machine": {
-		"id": "SENS_COMM",
-		"icon_coord_x" : "0",
-		"icon_coord_y" : "0"
-	},
-	"machine-data": {
-		"fields" : "fake_machine_data_fields_decl.c",
-		"initialization" : "fake_machine_data_fields_init.c",
-		"icon_coord_x" : "0",
-		"icon_coord_y" : "0"
-	},
-	"states": [
-		{
-			"id": "INIT",
-			"value": "0",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		},
-		{
-			"id": "SEARCH_DEVICE",
-			"value": "1",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		},
-		{
-			"id": "IDLE",
-			"value": "2",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		},
-		{
-			"id": "READ_DEVICE",
-			"value": "3",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		},
-		{
-			"id": "WRITE_DEVICE",
-			"value": "4",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		},
-		{
-			"id": "FAILURE",
-			"value": "5",
-			"user_code_global": "fake_global_data.c",
-			"user_code_enter": "fake_state_enter_code.c",
-			"user_code_input": "fake_state_input_code.c",
-			"user_code_run": "fake_state_run_code.c",
-			"user_code_output": "fake_state_output_code.c",
-			"user_code_leave": "fake_state_leave_code.c",
-			"icon_coord_x" : "0",
-			"icon_coord_y" : "0"
-		}
-	],
-	"initial-state": "INIT",
-	"transitions": [
-		{
-			"from": "INIT",
-			"to": "SEARCH_DEVICE",
-			"condition_handler": "fake_transit_always_init.c"
-		},
-		{
-			"from": "INIT",
-			"to": "FAILURE",
-			"condition_handler": "fake_transit_always_init.c"
-		},
-		{
-			"from": "SEARCH_DEVICE",
-			"to": "IDLE",
-			"condition_handler": "fake_transit_always_search_device.c"
-		},
-		{
-			"from": "SEARCH_DEVICE",
-			"to": "FAILURE",
-			"condition_handler": "fake_transit_always_search_device.c"
-		},
-		{
-			"from": "IDLE",
-			"to": "READ_DEVICE",
-			"condition_handler": "fake_transit_always_idle.c"
-		},
-		{
-			"from": "IDLE",
-			"to": "WRITE_DEVICE",
-			"condition_handler": "fake_transit_always_idle.c"
-		},
-		{
-			"from": "IDLE",
-			"to": "FAILURE",
-			"condition_handler": "fake_transit_always_idle.c"
-		},
-		{
-			"from": "READ_DEVICE",
-			"to": "IDLE",
-			"condition_handler": "fake_transit_always_read_device.c"
-		},
-		{
-			"from": "READ_DEVICE",
-			"to": "FAILURE",
-			"condition_handler": "fake_transit_always_read_device.c"
-		},
-		{
-			"from": "WRITE_DEVICE",
-			"to": "IDLE",
-			"condition_handler": "fake_transit_always_write_device.c"
-		},
-		{
-			"from": "WRITE_DEVICE",
-			"to": "FAILURE",
-			"condition_handler": "fake_transit_always_write_device.c"
-		},
-		{
-			"from": "FAILURE",
-			"to": "SEARCH_DEVICE",
-			"condition_handler": "fake_transit_always_failure.c"
-		}
-	]
+   "machine": {
+      "id": "SENS_COMM",
+      "icon_coord_x": "0",
+      "icon_coord_y": "0"
+   },
+   "machine-data": {
+      "fields": "fake_machine_data_fields_decl.c",
+      "initialization": "fake_machine_data_fields_init.c",
+      "icon_coord_x": "0",
+      "icon_coord_y": "0"
+   },
+   "states": [
+      {
+         "id": "INIT",
+         "value": "0",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      },
+      {
+         "id": "SEARCH_DEVICE",
+         "value": "1",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      },
+      {
+         "id": "IDLE",
+         "value": "2",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      },
+      {
+         "id": "READ_DEVICE",
+         "value": "3",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      },
+      {
+         "id": "WRITE_DEVICE",
+         "value": "4",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      },
+      {
+         "id": "FAILURE",
+         "value": "5",
+         "user_code_global": "fake_global_data.c",
+         "user_code_enter": "fake_state_enter_code.c",
+         "user_code_input": "fake_state_input_code.c",
+         "user_code_run": "fake_state_run_code.c",
+         "user_code_output": "fake_state_output_code.c",
+         "user_code_leave": "fake_state_leave_code.c",
+         "icon_coord_x": "0",
+         "icon_coord_y": "0"
+      }
+   ],
+   "initial-state": "INIT",
+   "transitions": [
+      {
+         "from": "INIT",
+         "to": "SEARCH_DEVICE",
+         "condition_handler": "fake_transit_always_init.c"
+      },
+      {
+         "from": "INIT",
+         "to": "FAILURE",
+         "condition_handler": "fake_transit_always_init.c"
+      },
+      {
+         "from": "SEARCH_DEVICE",
+         "to": "IDLE",
+         "condition_handler": "fake_transit_always_search_device.c"
+      },
+      {
+         "from": "SEARCH_DEVICE",
+         "to": "FAILURE",
+         "condition_handler": "fake_transit_always_search_device.c"
+      },
+      {
+         "from": "IDLE",
+         "to": "READ_DEVICE",
+         "condition_handler": "fake_transit_always_idle.c"
+      },
+      {
+         "from": "IDLE",
+         "to": "WRITE_DEVICE",
+         "condition_handler": "fake_transit_always_idle.c"
+      },
+      {
+         "from": "IDLE",
+         "to": "FAILURE",
+         "condition_handler": "fake_transit_always_idle.c"
+      },
+      {
+         "from": "READ_DEVICE",
+         "to": "IDLE",
+         "condition_handler": "fake_transit_always_read_device.c"
+      },
+      {
+         "from": "READ_DEVICE",
+         "to": "FAILURE",
+         "condition_handler": "fake_transit_always_read_device.c"
+      },
+      {
+         "from": "WRITE_DEVICE",
+         "to": "IDLE",
+         "condition_handler": "fake_transit_always_write_device.c"
+      },
+      {
+         "from": "WRITE_DEVICE",
+         "to": "FAILURE",
+         "condition_handler": "fake_transit_always_write_device.c"
+      },
+      {
+         "from": "FAILURE",
+         "to": "SEARCH_DEVICE",
+         "condition_handler": "fake_transit_always_failure.c"
+      }
+   ]
 }
