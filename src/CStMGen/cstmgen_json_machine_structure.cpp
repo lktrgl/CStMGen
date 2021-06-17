@@ -737,150 +737,149 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
 
   auto& json_document_ref = ( *json_document.get() );
 
-  //  {
-  //    // retrieve the "state-machines"
-  //    rapidjson::Value& array_of_state_machines = json_document_ref[m_key_global_state_machines.data()];
-  //
-  //    if ( not array_of_state_machines.IsArray() )
-  //    {
-  //#ifndef NDEBUG
-  //      std::cerr << "the '" << m_key_global_state_machines << "' property is not an array." << std::endl;
-  //#endif
-  //      return false;
-  //    }
-  //
-  //    for ( rapidjson::Value::ValueIterator itr = array_of_state_machines.Begin();
-  //          itr != array_of_state_machines.End();
-  //          ++itr )
-  //    {
-  //      rapidjson::Value& obj = *itr;
-  //
-  //      if ( not obj.IsObject() )
-  //      {
-  //#ifndef NDEBUG
-  //        std::cerr << "item of the '" << m_key_global_states << "' array is not a object." << std::endl;
-  //#endif
-  //        continue;
-  //      }
-  //
-  //      // TODO: put per state machine processing invocation here
-  //    }
-  //  }
-
-  if ( json_document_ref.HasMember ( m_key_global_machine.data() ) )
+  if ( json_document_ref.HasMember ( m_key_global_state_machines.data() ) )
   {
-    // retrieve the "machine"
-    auto const optional_machine_properties = json_parser.get_machine_properties_from_obj (
-          json_document_ref[m_key_global_machine.data()] );
+    // retrieve the "state-machines"
+    rapidjson::Value& array_of_state_machines = json_document_ref[m_key_global_state_machines.data()];
 
-    if ( not optional_machine_properties )
-    {
-      return false;
-    }
-
-    m_machine = optional_machine_properties.value();
-  }
-
-  if ( json_document_ref.HasMember ( m_key_global_machine_data.data() ) )
-  {
-    // retrieve the "machine-data"
-    auto const optional_machine_data = json_parser.get_machine_data_from_obj (
-                                         json_document_ref[m_key_global_machine_data.data()] );
-
-    if ( not optional_machine_data )
-    {
-      return false;
-    }
-
-    m_machine_data = optional_machine_data.value();
-  }
-
-  if ( json_document_ref.HasMember ( m_key_global_states.data() ) )
-  {
-    // retrieve the "states"
-    rapidjson::Value& array_of_states = json_document_ref[m_key_global_states.data()];
-
-    if ( not array_of_states.IsArray() )
+    if ( not array_of_state_machines.IsArray() )
     {
 #ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_states << "' property is not an array." << std::endl;
+      std::cerr << "the '" << m_key_global_state_machines << "' property is not an array." << std::endl;
 #endif
       return false;
     }
 
-    for ( rapidjson::Value::ValueIterator itr = array_of_states.Begin();
-          itr != array_of_states.End();
-          ++itr )
+    for ( rapidjson::Value::ValueIterator state_machine_itr = array_of_state_machines.Begin();
+          state_machine_itr != array_of_state_machines.End();
+          ++state_machine_itr )
     {
-      rapidjson::Value& state_obj = *itr;
+      rapidjson::Value& state_machine_obj = *state_machine_itr;
 
-      auto const optional_state_properties = json_parser.get_state_properties_from_obj ( state_obj );
-
-      if ( not optional_state_properties )
+      if ( not state_machine_obj.IsObject() )
       {
-        return false;
+#ifndef NDEBUG
+        std::cerr << "item of the '" << m_key_global_state_machines << "' array is not a object." << std::endl;
+#endif
+        continue;
       }
 
-      state_property_t state_property ( optional_state_properties.value() );
-
-      m_states.insert (
-        std::make_pair ( state_property.get_id(),
-                         std::make_shared<state_property_t> ( state_property ) ) );
-    } // for itr
-  }
-
-  if ( json_document_ref.HasMember ( m_key_global_initial_state.data() ) )
-  {
-    // retrieve the "initial-state"
-    auto const optional_initial_state = json_parser.get_initial_state_from_obj ( json_document_ref );
-
-    if ( not optional_initial_state )
-    {
-      return false;
-    }
-
-    m_initial_state_name = optional_initial_state.value();
-
-    if ( not m_initial_state_name.length() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_initial_state << "' property is empty." << std::endl;
-#endif
-      return false;
-    }
-  }
-
-  if ( json_document_ref.HasMember ( m_key_global_transitions.data() ) )
-  {
-    // retrieve the "transitions"
-    rapidjson::Value& array_of_transitions = json_document_ref[m_key_global_transitions.data()];
-
-    if ( not array_of_transitions.IsArray() )
-    {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_transitions << "' property is not an array." << std::endl;
-#endif
-      return false;
-    }
-
-    for ( rapidjson::Value::ValueIterator itr = array_of_transitions.Begin();
-          itr != array_of_transitions.End();
-          ++itr )
-    {
-      rapidjson::Value& transition_obj = *itr;
-
-      auto const optional_transition_properties = json_parser.get_transition_properties_from_obj ( transition_obj );
-
-      if ( not optional_transition_properties )
+      if ( state_machine_obj.HasMember ( m_key_global_machine.data() ) )
       {
-        return false;
+        // retrieve the "machine"
+        auto const optional_machine_properties = json_parser.get_machine_properties_from_obj (
+              state_machine_obj[m_key_global_machine.data()] );
+
+        if ( not optional_machine_properties )
+        {
+          return false;
+        }
+
+        m_machine = optional_machine_properties.value();
       }
 
-      transition_property_t transition_properties ( optional_transition_properties.value() );
+      if ( state_machine_obj.HasMember ( m_key_global_machine_data.data() ) )
+      {
+        // retrieve the "machine-data"
+        auto const optional_machine_data = json_parser.get_machine_data_from_obj (
+                                             state_machine_obj[m_key_global_machine_data.data()] );
 
-      m_transitions.insert ( std::make_pair ( transition_properties.get_state_from(),
-                                              std::make_shared<transition_property_t> ( transition_properties ) ) );
-    } // for itr
+        if ( not optional_machine_data )
+        {
+          return false;
+        }
+
+        m_machine_data = optional_machine_data.value();
+      }
+
+      if ( state_machine_obj.HasMember ( m_key_global_states.data() ) )
+      {
+        // retrieve the "states"
+        rapidjson::Value& array_of_states = state_machine_obj[m_key_global_states.data()];
+
+        if ( not array_of_states.IsArray() )
+        {
+#ifndef NDEBUG
+          std::cerr << "the '" << m_key_global_states << "' property is not an array." << std::endl;
+#endif
+          return false;
+        }
+
+        for ( rapidjson::Value::ValueIterator itr = array_of_states.Begin();
+              itr != array_of_states.End();
+              ++itr )
+        {
+          rapidjson::Value& state_obj = *itr;
+
+          auto const optional_state_properties = json_parser.get_state_properties_from_obj ( state_obj );
+
+          if ( not optional_state_properties )
+          {
+            return false;
+          }
+
+          state_property_t state_property ( optional_state_properties.value() );
+
+          m_states.insert (
+            std::make_pair ( state_property.get_id(),
+                             std::make_shared<state_property_t> ( state_property ) ) );
+        } // for itr
+      }
+
+      if ( state_machine_obj.HasMember ( m_key_global_initial_state.data() ) )
+      {
+        // retrieve the "initial-state"
+        auto const optional_initial_state = json_parser.get_initial_state_from_obj ( state_machine_obj );
+
+        if ( not optional_initial_state )
+        {
+          return false;
+        }
+
+        m_initial_state_name = optional_initial_state.value();
+
+        if ( not m_initial_state_name.length() )
+        {
+#ifndef NDEBUG
+          std::cerr << "the '" << m_key_global_initial_state << "' property is empty." << std::endl;
+#endif
+          return false;
+        }
+      }
+
+      if ( state_machine_obj.HasMember ( m_key_global_transitions.data() ) )
+      {
+        // retrieve the "transitions"
+        rapidjson::Value& array_of_transitions = state_machine_obj[m_key_global_transitions.data()];
+
+        if ( not array_of_transitions.IsArray() )
+        {
+#ifndef NDEBUG
+          std::cerr << "the '" << m_key_global_transitions << "' property is not an array." << std::endl;
+#endif
+          return false;
+        }
+
+        for ( rapidjson::Value::ValueIterator itr = array_of_transitions.Begin();
+              itr != array_of_transitions.End();
+              ++itr )
+        {
+          rapidjson::Value& transition_obj = *itr;
+
+          auto const optional_transition_properties = json_parser.get_transition_properties_from_obj ( transition_obj );
+
+          if ( not optional_transition_properties )
+          {
+            return false;
+          }
+
+          transition_property_t transition_properties ( optional_transition_properties.value() );
+
+          m_transitions.insert ( std::make_pair ( transition_properties.get_state_from(),
+                                                  std::make_shared<transition_property_t> ( transition_properties ) ) );
+        } // for itr
+      }
+    }
   }
 
   return true;
