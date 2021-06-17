@@ -495,6 +495,29 @@ struct json_parser_t
     /* EMPTY */
   }
 
+  std::string get_string_if_exists ( rapidjson::Value& obj, std::string_view const& token ) const
+  {
+    auto get_string_by_iter_if_exists = [& obj] ( auto & it )->std::string
+    {
+      if ( obj.MemberEnd() == it or not it->value.IsString() )
+      {
+        return {};
+      }
+      else
+      {
+        return {it->value.GetString() };
+      }
+    };
+
+    auto get_string_if_exists = [&obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
+    {
+      rapidjson::Value::ConstMemberIterator it = obj.FindMember ( token.data() );
+      return get_string_by_iter_if_exists ( it );
+    };
+
+    return get_string_if_exists ( token );
+  }
+
   document_t parse_buffer ( cstmgen_json_machine_structure_t::buffer_t const& buff )
   {
     m_document = std::make_shared<rapidjson::Document>();
@@ -505,7 +528,7 @@ struct json_parser_t
   }
 
   machine_property_t
-  get_machine_properties ( rapidjson::Value& machine_obj ) const
+  get_machine_properties_from_obj ( rapidjson::Value& machine_obj ) const
   {
     machine_property_t result;
 
@@ -521,39 +544,20 @@ struct json_parser_t
         break;
       }
 
-      auto get_string_by_iter_if_exists = [& machine_obj] ( auto & it )->std::string
-      {
-        if ( machine_obj.MemberEnd() == it or not it->value.IsString() )
-        {
-          return {};
-        }
-        else
-        {
-          return {it->value.GetString() };
-        }
-      };
-
-      auto get_string_if_exists = [&machine_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-      {
-        rapidjson::Value::ConstMemberIterator it = machine_obj.FindMember ( token.data() );
-        return get_string_by_iter_if_exists ( it );
-      };
-
-      result.emplace ( get_string_if_exists ( m_jms.m_key_state_id ),
-                       get_string_if_exists ( m_jms.m_key_coord_x ),
-                       get_string_if_exists ( m_jms.m_key_coord_y )
-                     );
-
-      if ( not result.value().get_id().length() )
+      if ( not get_string_if_exists ( machine_obj, m_jms.m_key_state_id ).length() )
       {
 #ifndef NDEBUG
         std::cerr
             << "item of the '" << m_jms.m_key_global_machine << "' does not have expected members."
             << std::endl;
 #endif
-        result.reset();
         break;
       }
+
+      result.emplace ( get_string_if_exists ( machine_obj, m_jms.m_key_state_id ),
+                       get_string_if_exists ( machine_obj, m_jms.m_key_coord_x ),
+                       get_string_if_exists ( machine_obj, m_jms.m_key_coord_y )
+                     );
     }
     while ( false );
 
@@ -561,7 +565,7 @@ struct json_parser_t
   }
 
   machine_data_t
-  get_machine_data ( rapidjson::Value& machine_data_obj ) const
+  get_machine_data_from_obj ( rapidjson::Value& machine_data_obj ) const
   {
     machine_data_t result;
 
@@ -577,41 +581,23 @@ struct json_parser_t
         break;
       }
 
-      auto get_string_by_iter_if_exists = [& machine_data_obj] ( auto & it )->std::string
-      {
-        if ( machine_data_obj.MemberEnd() == it or not it->value.IsString() )
-        {
-          return {};
-        }
-        else
-        {
-          return {it->value.GetString() };
-        }
-      };
-
-      auto get_string_if_exists = [&machine_data_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-      {
-        rapidjson::Value::ConstMemberIterator it = machine_data_obj.FindMember ( token.data() );
-        return get_string_by_iter_if_exists ( it );
-      };
-
-      result.emplace (
-        get_string_if_exists ( m_jms.m_key_data_user_decl ),
-        get_string_if_exists ( m_jms.m_key_data_user_init ),
-        get_string_if_exists ( m_jms.m_key_coord_x ),
-        get_string_if_exists ( m_jms.m_key_coord_y )
-      );
-
-      if ( not result.value().get_decl().length() or not result.value().get_init().length() )
+      if ( not get_string_if_exists ( machine_data_obj, m_jms.m_key_data_user_decl ).length()
+           or not get_string_if_exists ( machine_data_obj, m_jms.m_key_data_user_init ).length() )
       {
 #ifndef NDEBUG
         std::cerr
             << "item of the '" << m_jms.m_key_global_machine_data << "' does not have expected members."
             << std::endl;
 #endif
-        result.reset();
         break;
       }
+
+      result.emplace (
+        get_string_if_exists ( machine_data_obj, m_jms.m_key_data_user_decl ),
+        get_string_if_exists ( machine_data_obj, m_jms.m_key_data_user_init ),
+        get_string_if_exists ( machine_data_obj, m_jms.m_key_coord_x ),
+        get_string_if_exists ( machine_data_obj, m_jms.m_key_coord_y )
+      );
     }
     while ( false );
 
@@ -619,13 +605,12 @@ struct json_parser_t
   }
 
   state_property_t
-  get_state_properties ( rapidjson::Value& state_obj ) const
+  get_state_properties_from_obj ( rapidjson::Value& state_obj ) const
   {
     state_property_t result;
 
     do
     {
-
       if ( not state_obj.IsObject() )
       {
 #ifndef NDEBUG
@@ -636,27 +621,9 @@ struct json_parser_t
         break;
       }
 
-      auto get_string_by_iter_if_exists = [& state_obj] ( auto & it )->std::string
-      {
-        if ( state_obj.MemberEnd() == it or not it->value.IsString() )
-        {
-          return {};
-        }
-        else
-        {
-          return {it->value.GetString() };
-        }
-      };
-
-      auto get_string_if_exists = [&state_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-      {
-        rapidjson::Value::ConstMemberIterator it = state_obj.FindMember ( token.data() );
-        return get_string_by_iter_if_exists ( it );
-      };
-
-      if ( not get_string_if_exists ( m_jms.m_key_state_id ).length()
+      if ( not get_string_if_exists ( state_obj, m_jms.m_key_state_id ).length()
            or
-           not get_string_if_exists ( m_jms.m_key_state_numeric_value ).length() )
+           not get_string_if_exists ( state_obj, m_jms.m_key_state_numeric_value ).length() )
       {
 #ifndef NDEBUG
         std::cerr
@@ -667,16 +634,16 @@ struct json_parser_t
       }
 
       result.emplace (
-        get_string_if_exists ( m_jms.m_key_state_id ),
-        get_string_if_exists ( m_jms.m_key_state_numeric_value ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_global ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_enter ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_input ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_run ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_output ),
-        get_string_if_exists ( m_jms.m_key_state_user_code_leave ),
-        get_string_if_exists ( m_jms.m_key_coord_x ),
-        get_string_if_exists ( m_jms.m_key_coord_y )
+        get_string_if_exists ( state_obj, m_jms.m_key_state_id ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_numeric_value ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_global ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_enter ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_input ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_run ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_output ),
+        get_string_if_exists ( state_obj, m_jms.m_key_state_user_code_leave ),
+        get_string_if_exists ( state_obj, m_jms.m_key_coord_x ),
+        get_string_if_exists ( state_obj, m_jms.m_key_coord_y )
       );
     }
     while ( false );
@@ -685,7 +652,7 @@ struct json_parser_t
   }
 
   transition_property_t
-  get_transition_properties ( rapidjson::Value& transition_obj ) const
+  get_transition_properties_from_obj ( rapidjson::Value& transition_obj ) const
   {
     transition_property_t result;
 
@@ -701,26 +668,8 @@ struct json_parser_t
         break;
       }
 
-      auto get_string_by_iter_if_exists = [& transition_obj] ( auto & it )->std::string
-      {
-        if ( transition_obj.MemberEnd() == it or not it->value.IsString() )
-        {
-          return {};
-        }
-        else
-        {
-          return {it->value.GetString() };
-        }
-      };
-
-      auto get_string_if_exists = [&transition_obj, &get_string_by_iter_if_exists] ( auto & token )->std::string
-      {
-        rapidjson::Value::ConstMemberIterator it = transition_obj.FindMember ( token.data() );
-        return get_string_by_iter_if_exists ( it );
-      };
-
-      if ( not get_string_if_exists ( m_jms.m_key_transition_from ).length() or
-           not get_string_if_exists ( m_jms.m_key_transition_to ).length() )
+      if ( not get_string_if_exists ( transition_obj, m_jms.m_key_transition_from ).length() or
+           not get_string_if_exists ( transition_obj, m_jms.m_key_transition_to ).length() )
       {
 #ifndef NDEBUG
         std::cerr
@@ -731,9 +680,9 @@ struct json_parser_t
       }
 
       result.emplace (
-        get_string_if_exists ( m_jms.m_key_transition_from ),
-        get_string_if_exists ( m_jms.m_key_transition_to ),
-        get_string_if_exists ( m_jms.m_key_transition_condition_user_code )
+        get_string_if_exists ( transition_obj, m_jms.m_key_transition_from ),
+        get_string_if_exists ( transition_obj, m_jms.m_key_transition_to ),
+        get_string_if_exists ( transition_obj, m_jms.m_key_transition_condition_user_code )
       );
     }
     while ( false );
@@ -799,7 +748,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
   if ( json_document_ref.HasMember ( m_key_global_machine.data() ) )
   {
     // retrieve the "machine"
-    auto const optional_machine_properties = json_parser.get_machine_properties (
+    auto const optional_machine_properties = json_parser.get_machine_properties_from_obj (
           json_document_ref[m_key_global_machine.data()] );
 
     if ( not optional_machine_properties )
@@ -813,7 +762,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
   if ( json_document_ref.HasMember ( m_key_global_machine_data.data() ) )
   {
     // retrieve the "machine-data"
-    auto const optional_machine_data = json_parser.get_machine_data (
+    auto const optional_machine_data = json_parser.get_machine_data_from_obj (
                                          json_document_ref[m_key_global_machine_data.data()] );
 
     if ( not optional_machine_data )
@@ -843,7 +792,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
     {
       rapidjson::Value& state_obj = *itr;
 
-      auto const optional_state_properties = json_parser.get_state_properties ( state_obj );
+      auto const optional_state_properties = json_parser.get_state_properties_from_obj ( state_obj );
 
       if ( not optional_state_properties )
       {
@@ -901,7 +850,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
     {
       rapidjson::Value& transition_obj = *itr;
 
-      auto const optional_transition_properties = json_parser.get_transition_properties ( transition_obj );
+      auto const optional_transition_properties = json_parser.get_transition_properties_from_obj ( transition_obj );
 
       if ( not optional_transition_properties )
       {
