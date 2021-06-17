@@ -366,25 +366,25 @@ cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string
 
 /* ------------------------------------------------------------------------- */
 
-std::string const& cstmgen_json_machine_structure_t::get_machine_name() const
+std::string const& cstmgen_json_machine_structure_t::get_machine_name ( size_t idx ) const
 {
-  return m_machine.get_id();
+  return m_state_machines.at ( idx ).m_machine.get_id();
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::machine_data_t const&
-cstmgen_json_machine_structure_t::get_machine_data() const
+cstmgen_json_machine_structure_t::get_machine_data ( size_t idx ) const
 {
-  return m_machine_data;
+  return m_state_machines.at ( idx ).m_machine_data;
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::states_t const&
-cstmgen_json_machine_structure_t::get_states() const
+cstmgen_json_machine_structure_t::get_states ( size_t idx ) const
 {
-  return m_states;
+  return m_state_machines.at ( idx ).m_states;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -398,9 +398,9 @@ cstmgen_json_machine_structure_t::get_state_user_property_templates() const
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::states_sorted_t
-cstmgen_json_machine_structure_t::get_states_sorted() const
+cstmgen_json_machine_structure_t::get_states_sorted ( size_t idx ) const
 {
-  states_sorted_t result{m_states.cbegin(), m_states.cend() };
+  states_sorted_t result{m_state_machines.at ( idx ).m_states.cbegin(), m_state_machines.at ( idx ).m_states.cend() };
 
   if ( not result.empty() )
   {
@@ -417,28 +417,28 @@ cstmgen_json_machine_structure_t::get_states_sorted() const
 
 /* ------------------------------------------------------------------------- */
 
-std::string const& cstmgen_json_machine_structure_t::get_initial_state_name() const
+std::string const& cstmgen_json_machine_structure_t::get_initial_state_name ( size_t idx ) const
 {
-  return m_initial_state_name;
+  return m_state_machines.at ( idx ).m_initial_state_name;
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::transitions_t const&
-cstmgen_json_machine_structure_t::get_transitions() const
+cstmgen_json_machine_structure_t::get_transitions ( size_t idx ) const
 {
-  return m_transitions;
+  return m_state_machines.at ( idx ).m_transitions;
 }
 
 /* ------------------------------------------------------------------------- */
 
-bool cstmgen_json_machine_structure_t::valid() const
+bool cstmgen_json_machine_structure_t::valid ( size_t idx ) const
 {
-  bool const is_valid = m_machine.get_id().length()
-                        && m_machine_data.get_decl().length()
-                        && m_states.size()
-                        && m_initial_state_name.length()
-                        && m_transitions.size();
+  bool const is_valid = m_state_machines.at ( idx ).m_machine.get_id().length()
+                        && m_state_machines.at ( idx ).m_machine_data.get_decl().length()
+                        && m_state_machines.at ( idx ).m_states.size()
+                        && m_state_machines.at ( idx ).m_initial_state_name.length()
+                        && m_state_machines.at ( idx ).m_transitions.size();
 #ifndef NDEBUG
 
   if ( not is_valid )
@@ -764,6 +764,8 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
         continue;
       }
 
+      state_machine_t state_machine;
+
       if ( state_machine_obj.HasMember ( m_key_global_machine.data() ) )
       {
         // retrieve the "machine"
@@ -775,7 +777,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
           return false;
         }
 
-        m_machine = optional_machine_properties.value();
+        state_machine.m_machine = optional_machine_properties.value();
       }
 
       if ( state_machine_obj.HasMember ( m_key_global_machine_data.data() ) )
@@ -789,7 +791,7 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
           return false;
         }
 
-        m_machine_data = optional_machine_data.value();
+        state_machine.m_machine_data = optional_machine_data.value();
       }
 
       if ( state_machine_obj.HasMember ( m_key_global_states.data() ) )
@@ -805,11 +807,11 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
           return false;
         }
 
-        for ( rapidjson::Value::ValueIterator itr = array_of_states.Begin();
-              itr != array_of_states.End();
-              ++itr )
+        for ( rapidjson::Value::ValueIterator states_itr = array_of_states.Begin();
+              states_itr != array_of_states.End();
+              ++states_itr )
         {
-          rapidjson::Value& state_obj = *itr;
+          rapidjson::Value& state_obj = *states_itr;
 
           auto const optional_state_properties = json_parser.get_state_properties_from_obj ( state_obj );
 
@@ -820,10 +822,10 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
 
           state_property_t state_property ( optional_state_properties.value() );
 
-          m_states.insert (
+          state_machine.m_states.insert (
             std::make_pair ( state_property.get_id(),
                              std::make_shared<state_property_t> ( state_property ) ) );
-        } // for itr
+        } // for states_itr
       }
 
       if ( state_machine_obj.HasMember ( m_key_global_initial_state.data() ) )
@@ -836,9 +838,9 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
           return false;
         }
 
-        m_initial_state_name = optional_initial_state.value();
+        state_machine.m_initial_state_name = optional_initial_state.value();
 
-        if ( not m_initial_state_name.length() )
+        if ( not state_machine.m_initial_state_name.length() )
         {
 #ifndef NDEBUG
           std::cerr << "the '" << m_key_global_initial_state << "' property is empty." << std::endl;
@@ -860,11 +862,11 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
           return false;
         }
 
-        for ( rapidjson::Value::ValueIterator itr = array_of_transitions.Begin();
-              itr != array_of_transitions.End();
-              ++itr )
+        for ( rapidjson::Value::ValueIterator transitions_itr = array_of_transitions.Begin();
+              transitions_itr != array_of_transitions.End();
+              ++transitions_itr )
         {
-          rapidjson::Value& transition_obj = *itr;
+          rapidjson::Value& transition_obj = *transitions_itr;
 
           auto const optional_transition_properties = json_parser.get_transition_properties_from_obj ( transition_obj );
 
@@ -875,11 +877,14 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
 
           transition_property_t transition_properties ( optional_transition_properties.value() );
 
-          m_transitions.insert ( std::make_pair ( transition_properties.get_state_from(),
-                                                  std::make_shared<transition_property_t> ( transition_properties ) ) );
-        } // for itr
+          state_machine.m_transitions.insert ( std::make_pair ( transition_properties.get_state_from(),
+                                               std::make_shared<transition_property_t> ( transition_properties ) ) );
+        } // for transitions_itr
       }
-    }
+
+      m_state_machines.push_back ( state_machine );
+
+    } // for state_machine_itr
   }
 
   return true;
