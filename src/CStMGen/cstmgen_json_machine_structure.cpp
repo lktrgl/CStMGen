@@ -488,6 +488,7 @@ struct json_parser_t
   using machine_data_t = std::optional<cstmgen_json_machine_structure_t::machine_data_t>;
   using state_property_t = std::optional<cstmgen_json_machine_structure_t::state_property_t>;
   using transition_property_t = std::optional<cstmgen_json_machine_structure_t::transition_property_t>;
+  using string_t = std::optional<std::string>;
 
   json_parser_t ( cstmgen_json_machine_structure_t& jms )
     : m_jms ( jms )
@@ -690,6 +691,27 @@ struct json_parser_t
     return result;
   }
 
+  string_t get_initial_state_from_obj ( rapidjson::Value& state_machine_obj ) const
+  {
+    string_t result;
+
+    do
+    {
+      if ( not get_string_if_exists ( state_machine_obj, m_jms.m_key_global_initial_state ).length() )
+      {
+#ifndef NDEBUG
+        std::cerr << "the '" << m_jms.m_key_global_initial_state << "' property is not a string." << std::endl;
+#endif
+        break;
+      }
+
+      result.emplace ( get_string_if_exists ( state_machine_obj, m_jms.m_key_global_initial_state ) );
+    }
+    while ( false );
+
+    return result;
+  }
+
 private:
   cstmgen_json_machine_structure_t& m_jms;
   document_t m_document;
@@ -810,17 +832,14 @@ bool cstmgen_json_machine_structure_t::load_from_buffer ( buffer_t const& buff )
   if ( json_document_ref.HasMember ( m_key_global_initial_state.data() ) )
   {
     // retrieve the "initial-state"
-    rapidjson::Value& initial_state_string = json_document_ref[m_key_global_initial_state.data()];
+    auto const optional_initial_state = json_parser.get_initial_state_from_obj ( json_document_ref );
 
-    if ( not initial_state_string.IsString() )
+    if ( not optional_initial_state )
     {
-#ifndef NDEBUG
-      std::cerr << "the '" << m_key_global_initial_state << "' property is not a string." << std::endl;
-#endif
       return false;
     }
 
-    m_initial_state_name = initial_state_string.GetString();
+    m_initial_state_name = optional_initial_state.value();
 
     if ( not m_initial_state_name.length() )
     {
