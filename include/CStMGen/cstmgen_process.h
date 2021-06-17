@@ -55,6 +55,7 @@ class cstmgen_process_t final : gen::utils::cstmgen_process_utils_t<details::buf
 
 public:
   cstmgen_process_t ( cfg::cstmgen_params_t const& params,
+                      size_t idx,
                       cfg::cstmgen_json_machine_structure_t const& machine_structure );
 
   cstmgen_process_t ( cstmgen_process_t const& ) = delete;
@@ -104,6 +105,7 @@ private:
 
 private:
   cfg::cstmgen_params_t const& m_params;
+  size_t const m_idx;
   cfg::cstmgen_json_machine_structure_t const& m_machine_structure;
 };
 

@@ -366,6 +366,33 @@ cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string
 
 /* ------------------------------------------------------------------------- */
 
+size_t cstmgen_json_machine_structure_t::get_state_machines_count() const
+{
+  return m_state_machines.size();
+}
+
+/* ------------------------------------------------------------------------- */
+
+bool cstmgen_json_machine_structure_t::is_state_machine_valid ( size_t idx ) const
+{
+  bool const is_valid = m_state_machines.at ( idx ).m_machine.get_id().length()
+                        && m_state_machines.at ( idx ).m_machine_data.get_decl().length()
+                        && m_state_machines.at ( idx ).m_states.size()
+                        && m_state_machines.at ( idx ).m_initial_state_name.length()
+                        && m_state_machines.at ( idx ).m_transitions.size();
+#ifndef NDEBUG
+
+  if ( not is_valid )
+  {
+    std::cerr << "the '" << m_config_file_pathname << "' file does not contain valid machine structure." << std::endl;
+  }
+
+#endif
+  return is_valid;
+}
+
+/* ------------------------------------------------------------------------- */
+
 std::string const& cstmgen_json_machine_structure_t::get_machine_name ( size_t idx ) const
 {
   return m_state_machines.at ( idx ).m_machine.get_id();
@@ -428,26 +455,6 @@ cstmgen_json_machine_structure_t::transitions_t const&
 cstmgen_json_machine_structure_t::get_transitions ( size_t idx ) const
 {
   return m_state_machines.at ( idx ).m_transitions;
-}
-
-/* ------------------------------------------------------------------------- */
-
-bool cstmgen_json_machine_structure_t::valid ( size_t idx ) const
-{
-  bool const is_valid = m_state_machines.at ( idx ).m_machine.get_id().length()
-                        && m_state_machines.at ( idx ).m_machine_data.get_decl().length()
-                        && m_state_machines.at ( idx ).m_states.size()
-                        && m_state_machines.at ( idx ).m_initial_state_name.length()
-                        && m_state_machines.at ( idx ).m_transitions.size();
-#ifndef NDEBUG
-
-  if ( not is_valid )
-  {
-    std::cerr << "the '" << m_config_file_pathname << "' file does not contain valid machine structure." << std::endl;
-  }
-
-#endif
-  return is_valid;
 }
 
 /* ------------------------------------------------------------------------- */

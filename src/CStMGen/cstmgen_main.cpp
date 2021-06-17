@@ -24,15 +24,18 @@ int cstmgen_main ( int argc, char** argv )
 
   cfg::cstmgen_json_machine_structure_t const machine_structure ( parameters.get_json_machine_config_file_name() );
 
-  if ( not machine_structure.valid() )
+  for ( size_t i = 0; i < machine_structure.get_state_machines_count(); ++i )
   {
+    if ( not machine_structure.is_state_machine_valid ( i ) )
+    {
 #ifndef NDEBUG
-    std::cerr << "Invalid machine structure occurred" << std::endl;
+      std::cerr << "Invalid machine structure occurred" << std::endl;
 #endif
-    return 1;
-  }
+      return 1;
+    }
 
-  gen::cstmgen_process_t process ( parameters, machine_structure );
+    gen::cstmgen_process_t process ( parameters, i, machine_structure );
+  }
 
   return 0;
 }

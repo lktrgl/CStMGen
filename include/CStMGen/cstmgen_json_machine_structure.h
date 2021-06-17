@@ -210,15 +210,16 @@ public:
   cstmgen_json_machine_structure_t ( cstmgen_json_machine_structure_t&& ) = delete;
   cstmgen_json_machine_structure_t& operator= ( cstmgen_json_machine_structure_t&& ) = delete;
 
-  std::string const& get_machine_name ( size_t idx = 0 ) const;
-  machine_data_t const& get_machine_data ( size_t idx = 0 ) const;
-  states_t const& get_states ( size_t idx = 0 ) const;
-  state_user_property_templates_t const& get_state_user_property_templates() const;
-  states_sorted_t get_states_sorted ( size_t idx = 0 ) const;
-  std::string const& get_initial_state_name ( size_t idx = 0 ) const;
-  transitions_t const& get_transitions ( size_t idx = 0 ) const;
+  size_t get_state_machines_count() const;
+  bool is_state_machine_valid ( size_t idx ) const;
+  std::string const& get_machine_name ( size_t idx ) const;
+  machine_data_t const& get_machine_data ( size_t idx ) const;
+  states_t const& get_states ( size_t idx ) const;
+  states_sorted_t get_states_sorted ( size_t idx ) const;
+  std::string const& get_initial_state_name ( size_t idx ) const;
+  transitions_t const& get_transitions ( size_t idx ) const;
 
-  bool valid ( size_t idx = 0 ) const;
+  state_user_property_templates_t const& get_state_user_property_templates() const;
 
 private:
   void load_from_file ( std::string const& config_file_pathname );
