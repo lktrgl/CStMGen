@@ -366,25 +366,19 @@ cstmgen_json_machine_structure_t::cstmgen_json_machine_structure_t ( std::string
 
 /* ------------------------------------------------------------------------- */
 
-size_t cstmgen_json_machine_structure_t::get_state_machines_count() const
+bool
+cstmgen_json_machine_structure_t::state_machine_t::is_state_machine_valid () const
 {
-  return m_state_machines.size();
-}
-
-/* ------------------------------------------------------------------------- */
-
-bool cstmgen_json_machine_structure_t::is_state_machine_valid ( size_t idx ) const
-{
-  bool const is_valid = m_state_machines.at ( idx ).m_machine.get_id().length()
-                        && m_state_machines.at ( idx ).m_machine_data.get_decl().length()
-                        && m_state_machines.at ( idx ).m_states.size()
-                        && m_state_machines.at ( idx ).m_initial_state_name.length()
-                        && m_state_machines.at ( idx ).m_transitions.size();
+  bool const is_valid = state_machine_agregator_t::m_machine.get_id().length()
+                        && state_machine_agregator_t::m_machine_data.get_decl().length()
+                        && state_machine_agregator_t::m_states.size()
+                        && state_machine_agregator_t::m_initial_state_name.length()
+                        && state_machine_agregator_t::m_transitions.size();
 #ifndef NDEBUG
 
   if ( not is_valid )
   {
-    std::cerr << "the '" << m_config_file_pathname << "' file does not contain valid machine structure." << std::endl;
+    std::cerr << "Config file does not contain valid machine structure." << std::endl;
   }
 
 #endif
@@ -393,41 +387,34 @@ bool cstmgen_json_machine_structure_t::is_state_machine_valid ( size_t idx ) con
 
 /* ------------------------------------------------------------------------- */
 
-std::string const& cstmgen_json_machine_structure_t::get_machine_name ( size_t idx ) const
+std::string const&
+cstmgen_json_machine_structure_t::state_machine_t::get_machine_name () const
 {
-  return m_state_machines.at ( idx ).m_machine.get_id();
+  return state_machine_agregator_t::m_machine.get_id();
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::machine_data_t const&
-cstmgen_json_machine_structure_t::get_machine_data ( size_t idx ) const
+cstmgen_json_machine_structure_t::state_machine_t::get_machine_data () const
 {
-  return m_state_machines.at ( idx ).m_machine_data;
+  return state_machine_agregator_t::m_machine_data;
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::states_t const&
-cstmgen_json_machine_structure_t::get_states ( size_t idx ) const
+cstmgen_json_machine_structure_t::state_machine_t::get_states () const
 {
-  return m_state_machines.at ( idx ).m_states;
-}
-
-/* ------------------------------------------------------------------------- */
-
-cstmgen_json_machine_structure_t::state_user_property_templates_t const&
-cstmgen_json_machine_structure_t::get_state_user_property_templates() const
-{
-  return m_state_user_property_templates;
+  return state_machine_agregator_t::m_states;
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::states_sorted_t
-cstmgen_json_machine_structure_t::get_states_sorted ( size_t idx ) const
+cstmgen_json_machine_structure_t::state_machine_t::get_states_sorted () const
 {
-  states_sorted_t result{m_state_machines.at ( idx ).m_states.cbegin(), m_state_machines.at ( idx ).m_states.cend() };
+  states_sorted_t result{state_machine_agregator_t::m_states.cbegin(), state_machine_agregator_t::m_states.cend() };
 
   if ( not result.empty() )
   {
@@ -444,17 +431,41 @@ cstmgen_json_machine_structure_t::get_states_sorted ( size_t idx ) const
 
 /* ------------------------------------------------------------------------- */
 
-std::string const& cstmgen_json_machine_structure_t::get_initial_state_name ( size_t idx ) const
+std::string const&
+cstmgen_json_machine_structure_t::state_machine_t::get_initial_state_name () const
 {
-  return m_state_machines.at ( idx ).m_initial_state_name;
+  return state_machine_agregator_t::m_initial_state_name;
 }
 
 /* ------------------------------------------------------------------------- */
 
 cstmgen_json_machine_structure_t::transitions_t const&
-cstmgen_json_machine_structure_t::get_transitions ( size_t idx ) const
+cstmgen_json_machine_structure_t::state_machine_t::get_transitions () const
 {
-  return m_state_machines.at ( idx ).m_transitions;
+  return state_machine_agregator_t::m_transitions;
+}
+
+/* ------------------------------------------------------------------------- */
+
+size_t cstmgen_json_machine_structure_t::get_state_machines_count() const
+{
+  return m_state_machines.size();
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::state_machine_t const&
+cstmgen_json_machine_structure_t::get_state_machine ( size_t idx ) const
+{
+  return m_state_machines.at ( idx );
+}
+
+/* ------------------------------------------------------------------------- */
+
+cstmgen_json_machine_structure_t::state_user_property_templates_t const&
+cstmgen_json_machine_structure_t::get_state_user_property_templates()
+{
+  return m_state_user_property_templates;
 }
 
 /* ------------------------------------------------------------------------- */

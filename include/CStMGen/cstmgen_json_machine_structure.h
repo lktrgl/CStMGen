@@ -191,13 +191,24 @@ public:
     property_map_t m_property_map;
   };
 
-  struct state_machine_t
+  struct state_machine_agregator_t
   {
     machine_property_t m_machine;
     machine_data_t m_machine_data;
     states_t m_states;
     std::string m_initial_state_name;
     transitions_t m_transitions;
+  };
+
+  struct state_machine_t: state_machine_agregator_t
+  {
+    bool is_state_machine_valid () const;
+    std::string const& get_machine_name () const;
+    machine_data_t const& get_machine_data () const;
+    states_t const& get_states () const;
+    states_sorted_t get_states_sorted () const;
+    std::string const& get_initial_state_name () const;
+    transitions_t const& get_transitions () const;
   };
 
   using state_machines_t = std::vector<state_machine_t>;
@@ -211,15 +222,9 @@ public:
   cstmgen_json_machine_structure_t& operator= ( cstmgen_json_machine_structure_t&& ) = delete;
 
   size_t get_state_machines_count() const;
-  bool is_state_machine_valid ( size_t idx ) const;
-  std::string const& get_machine_name ( size_t idx ) const;
-  machine_data_t const& get_machine_data ( size_t idx ) const;
-  states_t const& get_states ( size_t idx ) const;
-  states_sorted_t get_states_sorted ( size_t idx ) const;
-  std::string const& get_initial_state_name ( size_t idx ) const;
-  transitions_t const& get_transitions ( size_t idx ) const;
+  state_machine_t const& get_state_machine ( size_t idx ) const;
 
-  state_user_property_templates_t const& get_state_user_property_templates() const;
+  static state_user_property_templates_t const& get_state_user_property_templates();
 
 private:
   void load_from_file ( std::string const& config_file_pathname );

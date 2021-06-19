@@ -26,7 +26,9 @@ int cstmgen_main ( int argc, char** argv )
 
   for ( size_t i = 0; i < machine_structure.get_state_machines_count(); ++i )
   {
-    if ( not machine_structure.is_state_machine_valid ( i ) )
+    auto const& state_machine = machine_structure.get_state_machine ( i );
+
+    if ( not state_machine.is_state_machine_valid () )
     {
 #ifndef NDEBUG
       std::cerr << "Invalid machine structure occurred" << std::endl;
@@ -34,7 +36,7 @@ int cstmgen_main ( int argc, char** argv )
       return 1;
     }
 
-    gen::cstmgen_process_t process ( parameters, i, machine_structure );
+    gen::cstmgen_process_t process ( parameters, state_machine );
   }
 
   return 0;
