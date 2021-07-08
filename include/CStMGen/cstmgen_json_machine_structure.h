@@ -17,7 +17,7 @@ namespace cfg
 class cstmgen_json_machine_structure_t final
 {
   constexpr static std::string_view const m_key_global_state_machines = "state-machines";
-  constexpr static std::string_view const m_key_global_machine = "machine";
+  constexpr static std::string_view const m_key_global_machine = "machine-id";
   constexpr static std::string_view const m_key_global_machine_data = "machine-data";
   constexpr static std::string_view const m_key_global_states = "states";
   constexpr static std::string_view const m_key_global_initial_state = "initial-state";
@@ -28,19 +28,19 @@ class cstmgen_json_machine_structure_t final
 
   constexpr static std::string_view const m_key_state_id = "id";
   constexpr static std::string_view const m_key_state_numeric_value = "value";
-  constexpr static std::string_view const m_key_state_user_code_global = "user_code_global";
-  constexpr static std::string_view const m_key_state_user_code_enter = "user_code_enter";
-  constexpr static std::string_view const m_key_state_user_code_input = "user_code_input";
-  constexpr static std::string_view const m_key_state_user_code_run = "user_code_run";
-  constexpr static std::string_view const m_key_state_user_code_output = "user_code_output";
-  constexpr static std::string_view const m_key_state_user_code_leave = "user_code_leave";
+  constexpr static std::string_view const m_key_state_user_code_global = "user-code-global";
+  constexpr static std::string_view const m_key_state_user_code_enter = "user-code-enter";
+  constexpr static std::string_view const m_key_state_user_code_input = "user-code-input";
+  constexpr static std::string_view const m_key_state_user_code_run = "user-code-run";
+  constexpr static std::string_view const m_key_state_user_code_output = "user-code-output";
+  constexpr static std::string_view const m_key_state_user_code_leave = "user-code-leave";
 
   constexpr static std::string_view const m_key_transition_from = "from";
   constexpr static std::string_view const m_key_transition_to = "to";
-  constexpr static std::string_view const m_key_transition_condition_user_code = "condition_handler";
+  constexpr static std::string_view const m_key_transition_condition_user_code = "condition-handler";
 
-  constexpr static std::string_view const m_key_coord_x = "icon_coord_x";
-  constexpr static std::string_view const m_key_coord_y = "icon_coord_y";
+  constexpr static std::string_view const m_key_coord_x = "icon-coord-x";
+  constexpr static std::string_view const m_key_coord_y = "icon-coord-y";
 
 public:
   friend class json_parser_t;
